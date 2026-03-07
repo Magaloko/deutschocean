@@ -1,16 +1,10 @@
 import React from 'react'
-import { NavLink, useNavigate } from 'react-router-dom'
+import { NavLink } from 'react-router-dom'
 import styles from './NavBar.module.css'
 import { useAuth } from '../../hooks/useAuth.jsx'
 
 export default function NavBar() {
-  const { profile, logout } = useAuth()
-  const navigate = useNavigate()
-
-  const handleLogout = () => {
-    logout()
-    navigate('/start')
-  }
+  const { profile } = useAuth()
 
   return (
     <nav className={styles.nav}>
@@ -41,9 +35,8 @@ export default function NavBar() {
                 <span>{profile.xp ?? 0} XP</span>
               </div>
               <div className={styles.avatar} title={profile.name}>
-                {profile.avatar || profile.name?.[0]?.toUpperCase() || '?'}
+                {profile.avatar || '🐬'}
               </div>
-              <button className={styles.signOut} onClick={handleLogout}>Abmelden</button>
             </>
           )}
         </div>

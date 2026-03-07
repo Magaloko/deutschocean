@@ -5,8 +5,6 @@ import AppLayout from './components/layout/AppLayout.jsx'
 import Spinner from './components/ui/Spinner.jsx'
 
 // Lazy-load aller Seiten
-const StartPage        = lazy(() => import('./pages/StartPage.jsx'))
-const LandingPage      = lazy(() => import('./pages/LandingPage.jsx'))
 const DashboardPage    = lazy(() => import('./pages/app/DashboardPage.jsx'))
 const MissionenPage    = lazy(() => import('./pages/app/MissionenPage.jsx'))
 const FehlerDetektiv   = lazy(() => import('./pages/app/games/FehlerDetektiv.jsx'))
@@ -33,11 +31,11 @@ export default function App() {
     <AuthProvider>
       <Suspense fallback={<PageLoader />}>
         <Routes>
-          {/* Öffentliche Seiten */}
-          <Route path="/"      element={<LandingPage />} />
-          <Route path="/start" element={<StartPage />} />
+          {/* Direkt zur App — kein Login */}
+          <Route path="/"      element={<Navigate to="/app" replace />} />
+          <Route path="/start" element={<Navigate to="/app" replace />} />
 
-          {/* Geschützte App-Seiten */}
+          {/* App-Seiten */}
           <Route path="/app" element={<AppLayout />}>
             <Route index element={<DashboardPage />} />
             <Route path="missionen" element={<MissionenPage />} />
@@ -53,7 +51,7 @@ export default function App() {
             <Route path="spiel/memory"                 element={<MemorySpiel />} />
           </Route>
 
-          <Route path="*" element={<Navigate to="/start" replace />} />
+          <Route path="*" element={<Navigate to="/app" replace />} />
         </Routes>
       </Suspense>
     </AuthProvider>

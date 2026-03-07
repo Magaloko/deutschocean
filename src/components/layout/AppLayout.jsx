@@ -1,5 +1,5 @@
 import React from 'react'
-import { Outlet, Navigate } from 'react-router-dom'
+import { Outlet } from 'react-router-dom'
 import NavBar from './NavBar.jsx'
 import { useAuth } from '../../hooks/useAuth.jsx'
 import Spinner from '../ui/Spinner.jsx'
@@ -15,8 +15,6 @@ export default function AppLayout() {
       </div>
     )
   }
-
-  if (!profile) return <Navigate to="/start" replace />
 
   return (
     <div className={styles.layout}>

@@ -45,7 +45,14 @@ export function AuthProvider({ children }) {
 
   useEffect(() => {
     const saved = loadProfile()
-    if (saved) setProfileState(saved)
+    if (saved) {
+      setProfileState(saved)
+    } else {
+      // Kein Login nötig — automatisch ein Profil anlegen
+      const p = createProfile('Spieler', '🐬')
+      saveProfile(p)
+      setProfileState(p)
+    }
     setLoading(false)
   }, [])
 
