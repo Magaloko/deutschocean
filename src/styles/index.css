@@ -1,0 +1,128 @@
+/* =============================================
+   CSS-Variablen — einzige Quelle der Wahrheit
+   ============================================= */
+:root {
+  /* Brand */
+  --primary:        #4f46e5;
+  --primary-light:  #818cf8;
+  --primary-dark:   #3730a3;
+  --secondary:      #06b6d4;
+  --accent:         #f59e0b;
+  --accent-green:   #10b981;
+  --danger:         #ef4444;
+  --warning:        #f59e0b;
+  --success:        #10b981;
+
+  /* Neutral */
+  --bg:             #f8fafc;
+  --surface:        #ffffff;
+  --surface-2:      #f1f5f9;
+  --border:         #e2e8f0;
+  --border-strong:  #cbd5e1;
+
+  /* Text */
+  --text:           #0f172a;
+  --text-muted:     #64748b;
+  --text-light:     #94a3b8;
+  --text-on-primary:#ffffff;
+
+  /* Spacing */
+  --radius-sm:  6px;
+  --radius:     12px;
+  --radius-lg:  20px;
+  --radius-xl:  28px;
+
+  /* Shadow */
+  --shadow-sm:  0 1px 3px rgba(0,0,0,.08);
+  --shadow:     0 4px 16px rgba(0,0,0,.08);
+  --shadow-lg:  0 8px 32px rgba(0,0,0,.12);
+
+  /* Game-spezifisch */
+  --star-gold:  #fbbf24;
+  --xp-purple:  #8b5cf6;
+}
+
+/* =============================================
+   Reset & Base
+   ============================================= */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+a { color: inherit; text-decoration: none; }
+
+img, svg { display: block; max-width: 100%; }
+
+/* =============================================
+   Utility-Klassen
+   ============================================= */
+.sr-only {
+  position: absolute; width: 1px; height: 1px;
+  padding: 0; margin: -1px; overflow: hidden;
+  clip: rect(0,0,0,0); white-space: nowrap; border-width: 0;
+}
+
+.page-width {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+}
+
+.flex { display: flex; }
+.flex-col { display: flex; flex-direction: column; }
+.items-center { align-items: center; }
+.justify-center { justify-content: center; }
+.justify-between { justify-content: space-between; }
+.gap-1 { gap: 0.25rem; }
+.gap-2 { gap: 0.5rem; }
+.gap-3 { gap: 0.75rem; }
+.gap-4 { gap: 1rem; }
+.gap-6 { gap: 1.5rem; }
+.gap-8 { gap: 2rem; }
+
+.text-center { text-align: center; }
+.text-sm { font-size: 0.875rem; }
+.text-lg { font-size: 1.125rem; }
+.text-xl { font-size: 1.25rem; }
+.text-2xl { font-size: 1.5rem; }
+.text-3xl { font-size: 1.875rem; }
+.font-bold { font-weight: 700; }
+.font-semibold { font-weight: 600; }
+
+.w-full { width: 100%; }
+.h-full { height: 100%; }
+
+/* Fade-in animation */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.fade-in { animation: fadeIn 0.3s ease; }
+
+/* Bounce for rewards */
+@keyframes bounce {
+  0%, 100% { transform: translateY(0) scale(1); }
+  50%       { transform: translateY(-8px) scale(1.05); }
+}
+.bounce { animation: bounce 0.6s ease; }
+
+/* Shake for wrong answer */
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  25%       { transform: translateX(-6px); }
+  75%       { transform: translateX(6px); }
+}
+.shake { animation: shake 0.4s ease; }
+
+/* Pulse for active elements */
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.6; }
+}
+.pulse { animation: pulse 1.5s ease infinite; }

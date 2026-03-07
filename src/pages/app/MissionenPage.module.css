@@ -1,0 +1,54 @@
+.page { display: flex; flex-direction: column; gap: 2rem; }
+.header { margin-bottom: 0.5rem; }
+.title { font-size: 1.8rem; font-weight: 800; margin-bottom: 0.35rem; }
+.sub { color: var(--text-muted); }
+
+.groupHeader {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+}
+.groupTitle { font-size: 1.1rem; font-weight: 700; }
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 1rem;
+}
+
+.cardLink { text-decoration: none; color: inherit; }
+.card { display: flex; flex-direction: column; gap: 0.6rem; }
+
+.cardTop {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+}
+.iconBox {
+  width: 52px;
+  height: 52px;
+  border-radius: var(--radius);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.icon { font-size: 1.6rem; }
+
+.doneCheck {
+  width: 24px;
+  height: 24px;
+  background: var(--success);
+  color: #fff;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.75rem;
+  font-weight: 800;
+}
+
+.cardTitle { font-size: 1rem; font-weight: 700; }
+.cardDesc  { font-size: 0.83rem; color: var(--text-muted); flex: 1; }
+.rewards   { display: flex; align-items: center; gap: 0.5rem; margin-top: auto; }
+.stars     { font-size: 0.85rem; }
