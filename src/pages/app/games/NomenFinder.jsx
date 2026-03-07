@@ -108,7 +108,9 @@ export default function NomenFinder() {
             const isSelected = selected.has(word)
             let cls = styles.token
             if (checked) {
-              cls += isNoun ? ` ${styles.tokenError}` : ` ${styles.tokenOk}`
+              if (isNoun && isSelected)   cls += ` ${styles.tokenOk}`    // richtig gefunden
+              else if (isNoun)            cls += ` ${styles.tokenError}`  // verpasst
+              else if (isSelected)        cls += ` ${styles.tokenError}`  // falsch ausgewählt
             } else if (isSelected) {
               cls += ` ${styles.tokenSelected}`
             }

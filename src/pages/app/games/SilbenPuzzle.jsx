@@ -18,7 +18,7 @@ export default function SilbenPuzzle() {
   const [words]    = useState(() => shuffle(SILBEN_WOERTER).slice(0, TOTAL))
   const [idx, setIdx]       = useState(0)
   const [placed, setPlaced] = useState([])
-  const [bank, setBank]     = useState(() => shuffle([...shuffle(SILBEN_WOERTER)[0].silben]))
+  const [bank, setBank]     = useState([])
   const [checked, setChecked] = useState(false)
   const [score, setScore]   = useState(0)
   const [phase, setPhase]   = useState('playing')

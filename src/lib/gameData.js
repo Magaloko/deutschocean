@@ -234,6 +234,7 @@ export const FEHLER_DETEKTIV_TASKS = [
     text: 'im winter liegt viel schnee auf dem berg.',
     errors: [
       { word: 'im',     correct: 'Im',     reason: 'Satzanfang → Großschreibung' },
+      { word: 'winter', correct: 'Winter', reason: 'Nomen → Großschreibung' },
       { word: 'schnee', correct: 'Schnee', reason: 'Nomen → Großschreibung' },
       { word: 'berg',   correct: 'Berg',   reason: 'Nomen → Großschreibung' },
     ],
@@ -436,7 +437,7 @@ export const SILBEN_WOERTER = [
   { word: 'Fahrrad',       silben: ['Fahr', 'rad'] },
   { word: 'Supermarkt',    silben: ['Su', 'per', 'markt'] },
   { word: 'Taschenlampe',  silben: ['Ta', 'schen', 'lam', 'pe'] },
-  { word: 'Schmetterling', silben: ['Schmet', 'ter', 'ling'] },
+  { word: 'Handschuh',     silben: ['Hand', 'schuh'] },
   { word: 'Winterjacke',   silben: ['Win', 'ter', 'jack', 'e'] },
   { word: 'Blumenvase',    silben: ['Blu', 'men', 'va', 'se'] },
   { word: 'Apfelbaum',     silben: ['Ap', 'fel', 'baum'] },

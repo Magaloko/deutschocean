@@ -17,7 +17,7 @@ export default function SatzBuilder() {
 
   const [tasks]   = useState(() => shuffle(SATZ_AUFGABEN).slice(0, TOTAL))
   const [idx, setIdx]         = useState(0)
-  const [bank, setBank]       = useState(() => shuffle([...shuffle(SATZ_AUFGABEN)[0].words]))
+  const [bank, setBank]       = useState([])
   const [placed, setPlaced]   = useState([])
   const [checked, setChecked] = useState(false)
   const [score, setScore]     = useState(0)
