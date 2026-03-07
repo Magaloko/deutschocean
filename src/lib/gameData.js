@@ -15,6 +15,41 @@ export const BADGES = [
 ]
 
 export const MISSIONS = [
+  // ---- Für Kleine (3–7 Jahre) ----
+  {
+    id: 'farben-jaeger-1',
+    type: 'farbenJaeger',
+    title: 'Farbenjäger',
+    description: 'Tippe alle richtigen Farben!',
+    icon: '🎨',
+    xp: 10,
+    stars: 3,
+    level: 0,
+    color: '#ec4899',
+  },
+  {
+    id: 'tier-geraeusche-1',
+    type: 'tierGeraeusche',
+    title: 'Tiergeräusche',
+    description: 'Welches Tier macht dieses Geräusch?',
+    icon: '🐾',
+    xp: 10,
+    stars: 3,
+    level: 0,
+    color: '#10b981',
+  },
+  {
+    id: 'memory-1',
+    type: 'memorySpiel',
+    title: 'Memory',
+    description: 'Finde alle gleichen Paare!',
+    icon: '🃏',
+    xp: 15,
+    stars: 3,
+    level: 0,
+    color: '#f97316',
+  },
+  // ---- Schule (6–10 Jahre) ----
   {
     id: 'fehler-detektiv-1',
     type: 'fehlerDetektiv',
@@ -552,4 +587,114 @@ export const SATZ_AUFGABEN = [
     words: ['Wir', 'spielen', 'nach', 'der', 'Schule', 'Fußball.'],
     correct: 'Wir spielen nach der Schule Fußball.',
   },
+]
+
+// =============================================
+// KINDER-SPIELE (3–7 Jahre)
+// =============================================
+
+// Farbenjäger – Runden (6 Farben)
+export const FARBEN_RUNDEN = [
+  {
+    id: 'fc1', targetColor: 'Rot', targetHex: '#ef4444',
+    items: [
+      { id: 1, hex: '#ef4444', emoji: '🍎', isTarget: true  },
+      { id: 2, hex: '#3b82f6', emoji: '🐳', isTarget: false },
+      { id: 3, hex: '#ef4444', emoji: '🌷', isTarget: true  },
+      { id: 4, hex: '#fbbf24', emoji: '⭐', isTarget: false },
+      { id: 5, hex: '#ef4444', emoji: '🎈', isTarget: true  },
+      { id: 6, hex: '#10b981', emoji: '🐸', isTarget: false },
+    ],
+  },
+  {
+    id: 'fc2', targetColor: 'Blau', targetHex: '#3b82f6',
+    items: [
+      { id: 1, hex: '#3b82f6', emoji: '🌊', isTarget: true  },
+      { id: 2, hex: '#ef4444', emoji: '🍅', isTarget: false },
+      { id: 3, hex: '#3b82f6', emoji: '💎', isTarget: true  },
+      { id: 4, hex: '#10b981', emoji: '🌿', isTarget: false },
+      { id: 5, hex: '#3b82f6', emoji: '🫐', isTarget: true  },
+      { id: 6, hex: '#fbbf24', emoji: '🌻', isTarget: false },
+    ],
+  },
+  {
+    id: 'fc3', targetColor: 'Grün', targetHex: '#10b981',
+    items: [
+      { id: 1, hex: '#10b981', emoji: '🌳', isTarget: true  },
+      { id: 2, hex: '#ef4444', emoji: '🌷', isTarget: false },
+      { id: 3, hex: '#10b981', emoji: '🥦', isTarget: true  },
+      { id: 4, hex: '#3b82f6', emoji: '🐟', isTarget: false },
+      { id: 5, hex: '#10b981', emoji: '🍀', isTarget: true  },
+      { id: 6, hex: '#fbbf24', emoji: '🌟', isTarget: false },
+    ],
+  },
+  {
+    id: 'fc4', targetColor: 'Gelb', targetHex: '#fbbf24',
+    items: [
+      { id: 1, hex: '#fbbf24', emoji: '🌻', isTarget: true  },
+      { id: 2, hex: '#ef4444', emoji: '🎈', isTarget: false },
+      { id: 3, hex: '#fbbf24', emoji: '🍌', isTarget: true  },
+      { id: 4, hex: '#8b5cf6', emoji: '🍇', isTarget: false },
+      { id: 5, hex: '#fbbf24', emoji: '⭐', isTarget: true  },
+      { id: 6, hex: '#10b981', emoji: '🐸', isTarget: false },
+    ],
+  },
+  {
+    id: 'fc5', targetColor: 'Lila', targetHex: '#8b5cf6',
+    items: [
+      { id: 1, hex: '#8b5cf6', emoji: '🍇', isTarget: true  },
+      { id: 2, hex: '#ef4444', emoji: '🍎', isTarget: false },
+      { id: 3, hex: '#8b5cf6', emoji: '🔮', isTarget: true  },
+      { id: 4, hex: '#fbbf24', emoji: '🌟', isTarget: false },
+      { id: 5, hex: '#3b82f6', emoji: '🌊', isTarget: false },
+      { id: 6, hex: '#10b981', emoji: '🌳', isTarget: false },
+    ],
+  },
+  {
+    id: 'fc6', targetColor: 'Orange', targetHex: '#f97316',
+    items: [
+      { id: 1, hex: '#f97316', emoji: '🍊', isTarget: true  },
+      { id: 2, hex: '#3b82f6', emoji: '💎', isTarget: false },
+      { id: 3, hex: '#f97316', emoji: '🦊', isTarget: true  },
+      { id: 4, hex: '#10b981', emoji: '🍀', isTarget: false },
+      { id: 5, hex: '#ef4444', emoji: '🌷', isTarget: false },
+      { id: 6, hex: '#fbbf24', emoji: '🌻', isTarget: false },
+    ],
+  },
+]
+
+// Tiergeräusche
+export const TIER_SOUNDS = [
+  { id: 'ts1',  animal: 'Katze',   emoji: '🐱', sound: 'Miau!',      tts: 'Miau! Miau! Miau!'    },
+  { id: 'ts2',  animal: 'Hund',    emoji: '🐶', sound: 'Wau Wau!',   tts: 'Wau! Wau! Wau!'       },
+  { id: 'ts3',  animal: 'Kuh',     emoji: '🐮', sound: 'Muuh!',      tts: 'Muuuh! Muuh!'          },
+  { id: 'ts4',  animal: 'Schwein', emoji: '🐷', sound: 'Oink Oink!', tts: 'Oink! Oink! Oink!'    },
+  { id: 'ts5',  animal: 'Ente',    emoji: '🦆', sound: 'Quak Quak!', tts: 'Quak! Quak! Quak!'    },
+  { id: 'ts6',  animal: 'Frosch',  emoji: '🐸', sound: 'Quak!',      tts: 'Quak, Quak!'           },
+  { id: 'ts7',  animal: 'Pferd',   emoji: '🐴', sound: 'Wiehern!',   tts: 'Wiiieh! Wiiieeh!'     },
+  { id: 'ts8',  animal: 'Schaf',   emoji: '🐑', sound: 'Mäh!',       tts: 'Määäh! Mäh! Mäh!'     },
+  { id: 'ts9',  animal: 'Löwe',    emoji: '🦁', sound: 'Brüllen!',   tts: 'Raaaah! Raaah!'        },
+  { id: 'ts10', animal: 'Biene',   emoji: '🐝', sound: 'Summen!',    tts: 'Bzzzzzz! Bzzz!'        },
+]
+
+// Memory – Karten-Pool
+export const MEMORY_KARTEN = [
+  { id: 'mk1',  emoji: '🐶', name: 'Hund'          },
+  { id: 'mk2',  emoji: '🐱', name: 'Katze'         },
+  { id: 'mk3',  emoji: '🐮', name: 'Kuh'           },
+  { id: 'mk4',  emoji: '🐷', name: 'Schwein'       },
+  { id: 'mk5',  emoji: '🦆', name: 'Ente'          },
+  { id: 'mk6',  emoji: '🐸', name: 'Frosch'        },
+  { id: 'mk7',  emoji: '🦁', name: 'Löwe'          },
+  { id: 'mk8',  emoji: '🐘', name: 'Elefant'       },
+  { id: 'mk9',  emoji: '🦒', name: 'Giraffe'       },
+  { id: 'mk10', emoji: '🐧', name: 'Pinguin'       },
+  { id: 'mk11', emoji: '🦋', name: 'Schmetterling' },
+  { id: 'mk12', emoji: '🌺', name: 'Blume'         },
+  { id: 'mk13', emoji: '🍎', name: 'Apfel'         },
+  { id: 'mk14', emoji: '🍌', name: 'Banane'        },
+  { id: 'mk15', emoji: '⭐', name: 'Stern'         },
+  { id: 'mk16', emoji: '🚀', name: 'Rakete'        },
+  { id: 'mk17', emoji: '🌈', name: 'Regenbogen'    },
+  { id: 'mk18', emoji: '🎈', name: 'Ballon'        },
 ]

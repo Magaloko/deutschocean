@@ -343,3 +343,165 @@
 
 /* ---- Nomen-Finder ---- */
 .nomenHint { display: flex; }
+
+/* ============================================
+   KINDER-SPIELE (3–7 Jahre)
+   ============================================ */
+
+/* Farben-Ziel-Anzeige */
+.targetDisplay {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.85rem 1.25rem;
+  background: var(--surface-2);
+  border-radius: var(--radius-lg);
+  font-size: 1.3rem;
+  font-weight: 800;
+}
+.colorSwatch {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: 2px solid rgba(0,0,0,0.12);
+  flex-shrink: 0;
+}
+
+/* Farben-Kachel-Grid */
+.kidsGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.75rem;
+}
+.colorTile {
+  height: 90px;
+  border-radius: var(--radius-lg);
+  border: 4px solid transparent;
+  cursor: pointer;
+  font-size: 2.4rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.15s, border-color 0.15s, box-shadow 0.15s;
+  user-select: none;
+  font-family: inherit;
+}
+.colorTile:hover:not(:disabled) { transform: scale(1.06); }
+.colorTileSelected {
+  border-color: #1e293b;
+  transform: scale(1.06);
+  box-shadow: 0 0 0 3px rgba(30,41,59,0.25);
+}
+.colorTileCorrect  { border-color: var(--success) !important; box-shadow: 0 0 0 3px rgba(16,185,129,0.3) !important; }
+.colorTileWrong    { border-color: var(--danger)  !important; box-shadow: 0 0 0 3px rgba(239,68,68,0.3)  !important; }
+.colorTileMissed   { opacity: 0.5; border-color: var(--success) !important; border-style: dashed !important; }
+
+/* Tiergeräusche */
+.soundBubble {
+  text-align: center;
+  padding: 1.5rem 1rem;
+  background: var(--surface-2);
+  border-radius: var(--radius-lg);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+}
+.soundText {
+  font-size: 2rem;
+  font-weight: 900;
+  letter-spacing: 0.02em;
+}
+.soundPlayBtn {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.6rem 1.25rem;
+  background: var(--primary);
+  color: #fff;
+  border: none;
+  border-radius: var(--radius-lg);
+  font-size: 0.95rem;
+  font-weight: 700;
+  cursor: pointer;
+  font-family: inherit;
+  transition: transform 0.15s;
+}
+.soundPlayBtn:hover { transform: scale(1.04); }
+.animalGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.75rem;
+}
+.animalBtn {
+  padding: 1rem 0.5rem;
+  border-radius: var(--radius-lg);
+  border: 3px solid var(--border);
+  background: var(--surface);
+  cursor: pointer;
+  font-size: 3rem;
+  text-align: center;
+  transition: all 0.15s;
+  font-family: inherit;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.3rem;
+  min-height: 100px;
+}
+.animalBtn:hover:not(:disabled) { border-color: var(--primary); transform: scale(1.04); }
+.animalBtnCorrect { border-color: var(--success) !important; background: #d1fae5 !important; }
+.animalBtnWrong   { border-color: var(--danger)  !important; background: #fee2e2 !important; }
+.animalName { font-size: 0.8rem; font-weight: 700; color: var(--text-muted); }
+
+/* Memory */
+.memoryGrid {
+  display: grid;
+  gap: 0.6rem;
+  justify-content: center;
+}
+.memoryCard {
+  width: 76px;
+  height: 76px;
+  border-radius: var(--radius-lg);
+  border: 3px solid var(--primary);
+  background: var(--primary);
+  cursor: pointer;
+  font-size: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.2s, background 0.2s, border-color 0.2s;
+  user-select: none;
+  font-family: inherit;
+  color: rgba(255,255,255,0.5);
+}
+.memoryCard:hover:not(:disabled):not([class*="Matched"]) { transform: scale(1.07); }
+.memoryCardFaceDown::after { content: '?'; font-size: 1.8rem; color: rgba(255,255,255,0.7); font-weight: 900; }
+.memoryCardFlipped {
+  background: var(--surface);
+  border-color: var(--primary);
+  font-size: 2.4rem;
+}
+.memoryCardMatched {
+  background: #d1fae5;
+  border-color: var(--success);
+  font-size: 2.4rem;
+  cursor: default;
+}
+.memoryStats {
+  text-align: center;
+  font-size: 0.875rem;
+  color: var(--text-muted);
+  font-weight: 600;
+}
+.levelBanner {
+  text-align: center;
+  padding: 2rem 1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+}
+.levelBannerEmoji { font-size: 4rem; }
+.levelBannerTitle { font-size: 1.5rem; font-weight: 900; }

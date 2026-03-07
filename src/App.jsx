@@ -16,6 +16,9 @@ const SilbenPuzzle     = lazy(() => import('./pages/app/games/SilbenPuzzle.jsx')
 const BuchstabenChaos  = lazy(() => import('./pages/app/games/BuchstabenChaos.jsx'))
 const NomenFinder      = lazy(() => import('./pages/app/games/NomenFinder.jsx'))
 const SatzBuilder      = lazy(() => import('./pages/app/games/SatzBuilder.jsx'))
+const FarbenJaeger     = lazy(() => import('./pages/app/games/FarbenJaeger.jsx'))
+const TierGeraeusche   = lazy(() => import('./pages/app/games/TierGeraeusche.jsx'))
+const MemorySpiel      = lazy(() => import('./pages/app/games/MemorySpiel.jsx'))
 
 function PageLoader() {
   return (
@@ -45,6 +48,9 @@ export default function App() {
             <Route path="spiel/buchstaben-chaos"      element={<BuchstabenChaos />} />
             <Route path="spiel/nomen-finder"          element={<NomenFinder />} />
             <Route path="spiel/satz-builder"          element={<SatzBuilder />} />
+            <Route path="spiel/farben-jaeger"          element={<FarbenJaeger />} />
+            <Route path="spiel/tier-geraeusche"        element={<TierGeraeusche />} />
+            <Route path="spiel/memory"                 element={<MemorySpiel />} />
           </Route>
 
           <Route path="*" element={<Navigate to="/start" replace />} />
