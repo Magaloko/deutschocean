@@ -21,6 +21,7 @@ const GAME_ROUTES = {
   nomenFinder:          '/app/spiel/nomen-finder',
   satzBuilder:          '/app/spiel/satz-builder',
   fahrzeugLenker:       '/app/spiel/fahrzeug-lenker',
+  tierWissen:           '/app/spiel/tier-wissen',
 }
 
 const LEVEL_META = {
