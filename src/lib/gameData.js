@@ -160,6 +160,78 @@ export const MISSIONS = [
     level: 2,
     color: '#ec4899',
   },
+  // ---- Für Kleine – Fahrzeug-Lenker ----
+  {
+    id: 'fahrzeug-lenker-1',
+    type: 'fahrzeugLenker',
+    title: 'Fahrzeug-Lenker',
+    description: 'Lenke dein Fahrzeug und sammle die richtigen Wörter!',
+    icon: '🚗',
+    xp: 16,
+    stars: 0,
+    level: 0,
+    color: '#f97316',
+  },
+]
+
+// ── Fahrzeug-Lenker Welten ────────────────────────────────────────────────
+export const FAHRZEUG_WELTEN = [
+  {
+    id: 'auto',
+    vehicle: '🚗',
+    label: 'Auto-Fahrt',
+    sceneBg: 'linear-gradient(180deg, #87CEEB 0%, #b8e4a3 65%, #5a8a3a 100%)',
+    items: [
+      { emoji: '🍎', word: 'Apfel' },
+      { emoji: '🍌', word: 'Banane' },
+      { emoji: '🍓', word: 'Erdbeere' },
+      { emoji: '🍊', word: 'Orange' },
+      { emoji: '🍇', word: 'Trauben' },
+      { emoji: '🍋', word: 'Zitrone' },
+    ],
+  },
+  {
+    id: 'flugzeug',
+    vehicle: '✈️',
+    label: 'Flieger-Fahrt',
+    sceneBg: 'linear-gradient(180deg, #0f4c8a 0%, #1976D2 40%, #64B5F6 100%)',
+    items: [
+      { emoji: '☀️', word: 'Sonne' },
+      { emoji: '🌙', word: 'Mond' },
+      { emoji: '⭐', word: 'Stern' },
+      { emoji: '🌈', word: 'Regenbogen' },
+      { emoji: '🦋', word: 'Schmetterling' },
+      { emoji: '🐦', word: 'Vogel' },
+    ],
+  },
+  {
+    id: 'boot',
+    vehicle: '⛵',
+    label: 'Boots-Fahrt',
+    sceneBg: 'linear-gradient(180deg, #0277BD 0%, #0288D1 40%, #01579B 100%)',
+    items: [
+      { emoji: '🐟', word: 'Fisch' },
+      { emoji: '🦀', word: 'Krabbe' },
+      { emoji: '🐙', word: 'Oktopus' },
+      { emoji: '🐚', word: 'Muschel' },
+      { emoji: '🦈', word: 'Hai' },
+      { emoji: '🐬', word: 'Delfin' },
+    ],
+  },
+  {
+    id: 'rakete',
+    vehicle: '🚀',
+    label: 'Raketen-Fahrt',
+    sceneBg: 'linear-gradient(180deg, #0d0d2b 0%, #1a1a4e 50%, #2d1b69 100%)',
+    items: [
+      { emoji: '⭐', word: 'Stern' },
+      { emoji: '🌙', word: 'Mond' },
+      { emoji: '🪐', word: 'Planet' },
+      { emoji: '☄️', word: 'Komet' },
+      { emoji: '👽', word: 'Alien' },
+      { emoji: '🌌', word: 'Galaxie' },
+    ],
+  },
 ]
 
 // Fehler-Detektiv Aufgaben (15 Stück)

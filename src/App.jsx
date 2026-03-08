@@ -20,6 +20,7 @@ const MemorySpiel      = lazy(() => import('./pages/app/games/MemorySpiel.jsx'))
 const WasFehlt         = lazy(() => import('./pages/app/games/WasFehlt.jsx'))
 const FalscherGegenstand = lazy(() => import('./pages/app/games/FalscherGegenstand.jsx'))
 const EmotionenSpiel   = lazy(() => import('./pages/app/games/EmotionenSpiel.jsx'))
+const FahrzeugLenker   = lazy(() => import('./pages/app/games/FahrzeugLenker.jsx'))
 
 function PageLoader() {
   return (
@@ -55,6 +56,7 @@ export default function App() {
             <Route path="spiel/was-fehlt"              element={<WasFehlt />} />
             <Route path="spiel/falscher-gegenstand"    element={<FalscherGegenstand />} />
             <Route path="spiel/emotionen"              element={<EmotionenSpiel />} />
+            <Route path="spiel/fahrzeug-lenker"        element={<FahrzeugLenker />} />
           </Route>
 
           <Route path="*" element={<Navigate to="/app" replace />} />

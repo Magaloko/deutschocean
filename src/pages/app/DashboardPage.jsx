@@ -20,6 +20,7 @@ const GAME_ROUTES = {
   buchstabenChaos:      '/app/spiel/buchstaben-chaos',
   nomenFinder:          '/app/spiel/nomen-finder',
   satzBuilder:          '/app/spiel/satz-builder',
+  fahrzeugLenker:       '/app/spiel/fahrzeug-lenker',
 }
 
 const LEVEL_META = {

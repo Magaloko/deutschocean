@@ -623,3 +623,169 @@
 .emotionBtn:disabled { opacity: 0.85; }
 .emotionEmoji { font-size: 3.5rem; }
 .emotionLabel { font-size: 0.8rem; font-weight: 700; color: var(--text-muted); }
+
+/* ═══════════════════════════════════════════
+   FahrzeugLenker
+   ═══════════════════════════════════════════ */
+
+.vehicleSelectTitle {
+  text-align: center;
+  font-size: 1.35rem;
+  font-weight: 800;
+  color: #1e293b;
+  margin: 0;
+}
+
+.vehicleSelectGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+
+.vehicleCard {
+  border: 3px solid transparent;
+  border-radius: 20px;
+  padding: 22px 12px 16px;
+  text-align: center;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  transition: transform 0.18s, box-shadow 0.18s;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.18);
+}
+.vehicleCard:hover  { transform: scale(1.05); box-shadow: 0 8px 20px rgba(0,0,0,0.25); }
+.vehicleCard:active { transform: scale(0.97); }
+
+.vehicleCardEmoji { font-size: 3.2rem; line-height: 1; }
+.vehicleCardLabel {
+  font-weight: 800;
+  font-size: 1rem;
+  color: #fff;
+  text-shadow: 0 1px 4px rgba(0,0,0,0.5);
+}
+
+/* ── Scene ──────────────────────────────── */
+
+.vehicleScene {
+  position: relative;
+  height: 285px;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.25);
+}
+
+.vehicleTargetBar {
+  position: relative;
+  z-index: 10;
+  background: rgba(0,0,0,0.45);
+  color: #fff;
+  text-align: center;
+  padding: 8px 14px;
+  font-size: 1.15rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  letter-spacing: 0.5px;
+}
+
+.laneDivLine {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background: rgba(255,255,255,0.22);
+  z-index: 2;
+  pointer-events: none;
+}
+
+/* Falling items */
+@keyframes fallItem {
+  from { top: -70px; }
+  to   { top: 310px; }
+}
+
+.fallingItemEl {
+  position: absolute;
+  width: 33.33%;
+  font-size: 2.8rem;
+  text-align: center;
+  z-index: 5;
+  pointer-events: none;
+  top: -70px;
+  line-height: 1;
+  filter: drop-shadow(0 2px 4px rgba(0,0,0,0.35));
+}
+.lane0 { left: 0%; }
+.lane1 { left: 33.33%; }
+.lane2 { left: 66.66%; }
+.doFall { animation: fallItem var(--fall-ms, 2.3s) linear forwards; }
+
+/* Vehicle */
+.vehicleEmojiChar {
+  position: absolute;
+  bottom: 8px;
+  width: 33.33%;
+  font-size: 2.6rem;
+  text-align: center;
+  z-index: 8;
+  line-height: 1;
+  transition: left 0.16s cubic-bezier(0.34, 1.56, 0.64, 1);
+  filter: drop-shadow(0 3px 6px rgba(0,0,0,0.5));
+}
+
+/* Feedback overlay */
+.feedbackOverlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 6rem;
+  font-weight: 900;
+  z-index: 20;
+  border-radius: 16px;
+  animation: popIn 0.25s ease;
+}
+.feedbackCorrect { background: rgba(34, 197, 94, 0.5); }
+.feedbackWrong   { background: rgba(239, 68, 68, 0.5);  }
+
+/* ── Steering controls ──────────────────── */
+
+.steerRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.steerBtn {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  border: none;
+  background: var(--primary, #4f46e5);
+  color: #fff;
+  font-size: 1.9rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  box-shadow: 0 4px 12px rgba(79,70,229,0.4);
+  transition: transform 0.1s, opacity 0.15s, box-shadow 0.1s;
+}
+.steerBtn:active { transform: scale(0.88); box-shadow: 0 2px 6px rgba(79,70,229,0.3); }
+.steerBtn:disabled { opacity: 0.3; cursor: default; box-shadow: none; }
+
+.steerScore {
+  text-align: center;
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: #1e293b;
+}
