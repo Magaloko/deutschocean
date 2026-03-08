@@ -5,6 +5,7 @@ import Button from '../../../components/ui/Button.jsx'
 import Badge from '../../../components/ui/Badge.jsx'
 import { SATZ_AUFGABEN } from '../../../lib/gameData.js'
 import { useProgress } from '../../../hooks/useProgress.jsx'
+import { playCorrect, playWrong, playComplete } from '../../../lib/sounds.js'
 import styles from './Game.module.css'
 
 function shuffle(arr) { return [...arr].sort(() => Math.random() - 0.5) }
@@ -47,7 +48,7 @@ export default function SatzBuilder() {
 
   function handleCheck() {
     const attempt = placed.join(' ')
-    if (attempt === task.correct) setScore((s) => s + 1)
+    if (attempt === task.correct) { setScore((s) => s + 1); playCorrect() } else { playWrong() }
     setChecked(true)
   }
 
@@ -61,6 +62,7 @@ export default function SatzBuilder() {
 
   async function handleFinish() {
     const stars = score === TOTAL ? 3 : score >= TOTAL * 0.6 ? 2 : 1
+    playComplete()
     await completeSession({
       missionId: 'satz-builder-1',
       xpEarned: score * 4,

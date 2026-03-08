@@ -5,6 +5,7 @@ import Button from '../../../components/ui/Button.jsx'
 import Badge from '../../../components/ui/Badge.jsx'
 import { FEHLER_DETEKTIV_TASKS } from '../../../lib/gameData.js'
 import { useProgress } from '../../../hooks/useProgress.jsx'
+import { playCorrect, playWrong, playComplete } from '../../../lib/sounds.js'
 import styles from './Game.module.css'
 
 function shuffle(arr) {
@@ -42,7 +43,7 @@ export default function FehlerDetektiv() {
   function handleCheck() {
     const correct = task.errors.every((e) => selected.has(e.word)) &&
       [...selected].every((w) => errorWords.has(w))
-    if (correct) setScore((s) => s + 1)
+    if (correct) { setScore((s) => s + 1); playCorrect() } else { playWrong() }
     setChecked(true)
   }
 
@@ -58,6 +59,7 @@ export default function FehlerDetektiv() {
 
   async function handleFinish() {
     const stars = score === TOTAL ? 3 : score >= TOTAL * 0.6 ? 2 : 1
+    playComplete()
     await completeSession({
       missionId: 'fehler-detektiv-1',
       xpEarned: score * 5,

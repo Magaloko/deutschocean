@@ -6,6 +6,7 @@ import Badge from '../../../components/ui/Badge.jsx'
 import Input from '../../../components/ui/Input.jsx'
 import { CHAOS_WOERTER } from '../../../lib/gameData.js'
 import { useProgress } from '../../../hooks/useProgress.jsx'
+import { playCorrect, playWrong, playComplete } from '../../../lib/sounds.js'
 import styles from './Game.module.css'
 
 function shuffle(arr) { return [...arr].sort(() => Math.random() - 0.5) }
@@ -30,7 +31,9 @@ export default function BuchstabenChaos() {
     const correct = answer.toUpperCase().trim() === item.word
     if (correct) {
       setScore((s) => s + 1)
+      playCorrect()
     } else {
+      playWrong()
       setShake(true)
       setTimeout(() => setShake(false), 500)
     }
@@ -49,6 +52,7 @@ export default function BuchstabenChaos() {
 
   async function handleFinish() {
     const stars = score === TOTAL ? 3 : score >= TOTAL * 0.6 ? 2 : 1
+    playComplete()
     await completeSession({
       missionId: 'buchstaben-chaos-1',
       xpEarned: score * 2,

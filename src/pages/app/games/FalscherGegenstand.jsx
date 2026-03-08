@@ -5,6 +5,7 @@ import Button from '../../../components/ui/Button.jsx'
 import Badge from '../../../components/ui/Badge.jsx'
 import { FALSCHER_GEGENSTAND_RUNDEN } from '../../../lib/gameData.js'
 import { useProgress } from '../../../hooks/useProgress.jsx'
+import { playCorrect, playWrong, playComplete } from '../../../lib/sounds.js'
 import styles from './Game.module.css'
 
 function shuffle(arr) { return [...arr].sort(() => Math.random() - 0.5) }
@@ -34,7 +35,7 @@ export default function FalscherGegenstand() {
   function handleSelect(item) {
     if (selected) return
     setSelected(item)
-    if (item.isWrong) setScore((s) => s + 1)
+    if (item.isWrong) { setScore((s) => s + 1); playCorrect() } else { playWrong() }
   }
 
   function handleNext() {
@@ -48,6 +49,7 @@ export default function FalscherGegenstand() {
 
   async function handleFinish() {
     const stars = score === TOTAL ? 3 : score >= 3 ? 2 : 1
+    playComplete()
     await completeSession({ missionId: 'falscher-gegenstand-1', xpEarned: score * 2, stars, correct: score, total: TOTAL })
     navigate('/app')
   }

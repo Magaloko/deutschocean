@@ -28,6 +28,13 @@ const LEVEL_META = {
   2: { label: 'Profi',       emoji: '🏆', color: '#f97316' },
 }
 
+function getTagesaufgabe(completed) {
+  const uncompleted = MISSIONS.filter((m) => !completed.includes(m.id) && GAME_ROUTES[m.type])
+  if (!uncompleted.length) return null
+  const dayOfYear = Math.floor(Date.now() / 86400000)
+  return uncompleted[dayOfYear % uncompleted.length]
+}
+
 export default function DashboardPage() {
   const { profile } = useAuth()
 
@@ -35,8 +42,12 @@ export default function DashboardPage() {
   const stars     = profile?.stars ?? 0
   const badges    = profile?.unlockedBadges ?? []
   const completed = profile?.completedMissions ?? []
+  const name      = profile?.name || 'Spieler'
   const level     = Math.floor(xp / 100) + 1
   const xpInLevel = xp % 100
+  const xpToNext  = 100 - xpInLevel
+
+  const featured = getTagesaufgabe(completed)
 
   return (
     <div className={`${styles.page} fade-in`}>
@@ -45,8 +56,14 @@ export default function DashboardPage() {
       <div className={styles.hero}>
         <div className={styles.heroWave}>🌊</div>
         <div className={styles.heroText}>
-          <h1 className={styles.heroTitle}>DeutschOcean</h1>
-          <p className={styles.heroSub}>Lern Deutsch — Spiel für Spiel!</p>
+          <h1 className={styles.heroTitle}>Hallo, {name}! 👋</h1>
+          <p className={styles.heroSub}>
+            {xp === 0
+              ? 'Wähle ein Spiel und leg los!'
+              : xpInLevel < 50
+                ? `Noch ${xpToNext} XP bis Level ${level + 1}!`
+                : `Du bist auf Level ${level} — weiter so!`}
+          </p>
         </div>
         <div className={styles.heroStats}>
           <div className={styles.heroStat}>
@@ -61,7 +78,7 @@ export default function DashboardPage() {
           <div className={styles.heroStatDiv} />
           <div className={styles.heroStat}>
             <span className={styles.heroStatNum}>{completed.length}</span>
-            <span className={styles.heroStatLabel}>🏅 Missionen</span>
+            <span className={styles.heroStatLabel}>🏅 Spiele</span>
           </div>
         </div>
         <div className={styles.xpBarWrap}>
@@ -72,6 +89,29 @@ export default function DashboardPage() {
           <span className={styles.xpBarLabel}>Lvl {level + 1}</span>
         </div>
       </div>
+
+      {/* ── Tagesaufgabe ── */}
+      {featured && (
+        <section className={styles.featuredSection}>
+          <div className={styles.featuredBadge}>⭐ Tagesaufgabe</div>
+          <Link
+            to={GAME_ROUTES[featured.type]}
+            className={styles.featuredCard}
+            style={{ '--accent': featured.color }}
+          >
+            <div className={styles.featuredIcon}>{featured.icon}</div>
+            <div className={styles.featuredInfo}>
+              <div className={styles.featuredTitle}>{featured.title}</div>
+              <div className={styles.featuredDesc}>{featured.description}</div>
+              <div className={styles.featuredMeta}>
+                <Badge color="purple">+{featured.xp} XP</Badge>
+                <span>{'⭐'.repeat(featured.stars)}</span>
+              </div>
+              <div className={styles.featuredPlayBtn}>▶ JETZT SPIELEN</div>
+            </div>
+          </Link>
+        </section>
+      )}
 
       {/* ── Spiele nach Level ── */}
       {[0, 1, 2].map((lvl) => {
@@ -96,18 +136,18 @@ export default function DashboardPage() {
                 if (!route) return null
                 return (
                   <Link key={m.id} to={route} className={styles.gameLink}>
-                    <div className={`${styles.gameCard} ${done ? styles.gameCardDone : ''}`} style={{ '--accent': m.color }}>
-                      <div className={styles.gameCardTop}>
-                        <div className={styles.gameIconWrap} style={{ background: `${m.color}20` }}>
-                          <span className={styles.gameIcon}>{m.icon}</span>
-                        </div>
-                        {done && <span className={styles.doneCheck}>✓</span>}
-                      </div>
+                    <div
+                      className={`${styles.gameCard} ${done ? styles.gameCardDone : ''}`}
+                      style={{ '--accent': m.color }}
+                    >
+                      <div className={styles.gameIconBig}>{m.icon}</div>
                       <div className={styles.gameTitle}>{m.title}</div>
-                      <div className={styles.gameDesc}>{m.description}</div>
-                      <div className={styles.gameRewards}>
-                        <Badge color="purple">+{m.xp} XP</Badge>
+                      <div className={styles.gameCardMeta}>
                         <span className={styles.gameStars}>{'⭐'.repeat(m.stars)}</span>
+                        <span className={styles.gameXp}>+{m.xp} XP</span>
+                      </div>
+                      <div className={`${styles.gamePlayBtn} ${done ? styles.gameDoneBtn : ''}`}>
+                        {done ? '✓ Gespielt' : '▶ Spielen'}
                       </div>
                     </div>
                   </Link>

@@ -56,6 +56,71 @@
 }
 .xpBarLabel { font-size: 0.75rem; font-weight: 700; opacity: 0.9; white-space: nowrap; }
 
+/* ── Tagesaufgabe (Featured) ── */
+.featuredSection {
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+}
+.featuredBadge {
+  font-size: 0.85rem;
+  font-weight: 800;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+.featuredCard {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+  background: var(--surface);
+  border: 2.5px solid var(--accent, #4f46e5);
+  border-radius: var(--radius-lg);
+  padding: 1.25rem;
+  text-decoration: none;
+  color: inherit;
+  transition: transform 0.15s, box-shadow 0.15s;
+  position: relative;
+  overflow: hidden;
+}
+.featuredCard::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 4px;
+  background: var(--accent, #4f46e5);
+}
+.featuredCard:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 28px rgba(0,0,0,0.13);
+}
+.featuredIcon {
+  font-size: 4rem;
+  flex-shrink: 0;
+  filter: drop-shadow(0 4px 8px rgba(0,0,0,0.15));
+}
+.featuredInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  flex: 1;
+  min-width: 0;
+}
+.featuredTitle { font-size: 1.1rem; font-weight: 900; }
+.featuredDesc  { font-size: 0.8rem; color: var(--text-muted); }
+.featuredMeta  { display: flex; align-items: center; gap: 0.5rem; }
+.featuredPlayBtn {
+  background: var(--primary);
+  color: #fff;
+  border-radius: var(--radius);
+  padding: 0.45rem 1rem;
+  font-size: 0.85rem;
+  font-weight: 800;
+  align-self: flex-start;
+  letter-spacing: 0.03em;
+  margin-top: 0.1rem;
+}
+
 /* ── Level Sections ── */
 .levelHeader {
   display: flex;
@@ -77,39 +142,42 @@
   font-weight: 600;
 }
 
-/* ── Game Cards Grid ── */
+/* ── Game Cards (spielerisches Design) ── */
 .gameGrid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(155px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
   gap: 0.85rem;
 }
 
-.gameLink { text-decoration: none; color: inherit; }
+.gameLink { text-decoration: none; color: inherit; display: block; height: 100%; }
 
 .gameCard {
   background: var(--surface);
   border: 2px solid var(--border);
   border-radius: var(--radius-lg);
-  padding: 1rem;
+  padding: 1rem 0.75rem 0.85rem;
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
+  align-items: center;
+  gap: 0.45rem;
   cursor: pointer;
   transition: transform 0.15s, box-shadow 0.15s, border-color 0.15s;
   position: relative;
   overflow: hidden;
+  text-align: center;
+  height: 100%;
 }
 .gameCard::before {
   content: '';
   position: absolute;
   top: 0; left: 0; right: 0;
-  height: 3px;
+  height: 4px;
   background: var(--accent, #4f46e5);
   border-radius: var(--radius-lg) var(--radius-lg) 0 0;
 }
 .gameCard:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+  transform: translateY(-4px);
+  box-shadow: 0 10px 28px rgba(0,0,0,0.12);
   border-color: var(--accent, #4f46e5);
 }
 .gameCardDone {
@@ -118,38 +186,52 @@
 }
 .gameCardDone::before { background: #22c55e; }
 
-.gameCardTop {
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-}
-.gameIconWrap {
-  width: 46px;
-  height: 46px;
-  border-radius: var(--radius);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-.gameIcon { font-size: 1.6rem; }
-.doneCheck {
-  background: #22c55e;
-  color: #fff;
-  border-radius: 50%;
-  width: 22px;
-  height: 22px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 0.75rem;
-  font-weight: 900;
-  flex-shrink: 0;
+/* Big centered emoji icon */
+.gameIconBig {
+  font-size: 2.8rem;
+  line-height: 1;
+  padding: 0.4rem 0 0.2rem;
+  filter: drop-shadow(0 2px 4px rgba(0,0,0,0.12));
 }
 
-.gameTitle { font-size: 0.875rem; font-weight: 800; line-height: 1.25; }
-.gameDesc  { font-size: 0.75rem; color: var(--text-muted); line-height: 1.4; }
-.gameRewards { display: flex; align-items: center; gap: 0.35rem; flex-wrap: wrap; margin-top: 0.15rem; }
+.gameTitle {
+  font-size: 0.82rem;
+  font-weight: 800;
+  line-height: 1.25;
+}
+
+.gameCardMeta {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  flex-wrap: wrap;
+  justify-content: center;
+}
 .gameStars { font-size: 0.7rem; }
+.gameXp {
+  font-size: 0.68rem;
+  font-weight: 700;
+  color: var(--xp-purple);
+  background: rgba(139,92,246,0.1);
+  border-radius: 999px;
+  padding: 0.1rem 0.45rem;
+}
+
+/* Play / Done button at bottom of card */
+.gamePlayBtn {
+  width: 100%;
+  background: var(--accent, #4f46e5);
+  color: #fff;
+  border-radius: var(--radius-sm);
+  padding: 0.38rem 0.5rem;
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.03em;
+  margin-top: auto;
+}
+.gameDoneBtn {
+  background: #22c55e;
+}
 
 /* ── Section title ── */
 .sectionTitle { font-size: 1.1rem; font-weight: 800; margin-bottom: 0.75rem; }

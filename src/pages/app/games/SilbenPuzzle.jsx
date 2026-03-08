@@ -5,6 +5,7 @@ import Button from '../../../components/ui/Button.jsx'
 import Badge from '../../../components/ui/Badge.jsx'
 import { SILBEN_WOERTER } from '../../../lib/gameData.js'
 import { useProgress } from '../../../hooks/useProgress.jsx'
+import { playCorrect, playWrong, playComplete } from '../../../lib/sounds.js'
 import styles from './Game.module.css'
 
 function shuffle(arr) { return [...arr].sort(() => Math.random() - 0.5) }
@@ -52,7 +53,7 @@ export default function SilbenPuzzle() {
 
   function handleCheck() {
     const attempt = placed.join('')
-    if (attempt === word.word) setScore((s) => s + 1)
+    if (attempt === word.word) { setScore((s) => s + 1); playCorrect() } else { playWrong() }
     setChecked(true)
   }
 
@@ -66,6 +67,7 @@ export default function SilbenPuzzle() {
 
   async function handleFinish() {
     const stars = score === TOTAL ? 3 : score >= TOTAL * 0.6 ? 2 : 1
+    playComplete()
     await completeSession({
       missionId: 'silben-1',
       xpEarned: score * 3,

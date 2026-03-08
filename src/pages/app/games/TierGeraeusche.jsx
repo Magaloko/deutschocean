@@ -5,6 +5,7 @@ import Button from '../../../components/ui/Button.jsx'
 import Badge from '../../../components/ui/Badge.jsx'
 import { TIER_SOUNDS } from '../../../lib/gameData.js'
 import { useProgress } from '../../../hooks/useProgress.jsx'
+import { playCorrect, playWrong, playComplete } from '../../../lib/sounds.js'
 import styles from './Game.module.css'
 
 function shuffle(arr) { return [...arr].sort(() => Math.random() - 0.5) }
@@ -52,7 +53,7 @@ export default function TierGeraeusche() {
   function handleSelect(animal) {
     if (selected) return
     setSelected(animal.id)
-    if (animal.id === current.id) setScore(s => s + 1)
+    if (animal.id === current.id) { setScore(s => s + 1); playCorrect() } else { playWrong() }
     setTimeout(() => {
       if (idx + 1 >= TOTAL) {
         setPhase('result')
@@ -64,6 +65,7 @@ export default function TierGeraeusche() {
 
   async function handleFinish() {
     const stars = score === TOTAL ? 3 : score >= Math.ceil(TOTAL * 0.6) ? 2 : 1
+    playComplete()
     await completeSession({ missionId: 'tier-geraeusche-1', xpEarned: score * 2, stars, correct: score, total: TOTAL })
     navigate('/app')
   }

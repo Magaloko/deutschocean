@@ -5,6 +5,7 @@ import Button from '../../../components/ui/Button.jsx'
 import Badge from '../../../components/ui/Badge.jsx'
 import { EMOTIONEN_RUNDEN } from '../../../lib/gameData.js'
 import { useProgress } from '../../../hooks/useProgress.jsx'
+import { playCorrect, playWrong, playComplete } from '../../../lib/sounds.js'
 import styles from './Game.module.css'
 
 function shuffle(arr) { return [...arr].sort(() => Math.random() - 0.5) }
@@ -33,7 +34,7 @@ export default function EmotionenSpiel() {
   function handleSelect(face) {
     if (selected) return
     setSelected(face)
-    if (face.isTarget) setScore((s) => s + 1)
+    if (face.isTarget) { setScore((s) => s + 1); playCorrect() } else { playWrong() }
   }
 
   function handleNext() {
@@ -47,6 +48,7 @@ export default function EmotionenSpiel() {
 
   async function handleFinish() {
     const stars = score === TOTAL ? 3 : score >= 3 ? 2 : 1
+    playComplete()
     await completeSession({ missionId: 'emotionen-1', xpEarned: score * 2, stars, correct: score, total: TOTAL })
     navigate('/app')
   }

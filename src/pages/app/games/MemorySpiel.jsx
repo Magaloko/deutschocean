@@ -5,6 +5,7 @@ import Button from '../../../components/ui/Button.jsx'
 import Badge from '../../../components/ui/Badge.jsx'
 import { MEMORY_KARTEN } from '../../../lib/gameData.js'
 import { useProgress } from '../../../hooks/useProgress.jsx'
+import { playCoin, playWrong, playComplete } from '../../../lib/sounds.js'
 import styles from './Game.module.css'
 
 function shuffle(arr) { return [...arr].sort(() => Math.random() - 0.5) }
@@ -60,6 +61,7 @@ export default function MemorySpiel() {
       setMoves(m => m + 1)
       const [c1, c2] = next.map(uid => cards.find(c => c.uid === uid))
       if (c1.pairId === c2.pairId) {
+        playCoin()
         const newMatched = new Set([...matched, c1.pairId])
         setMatched(newMatched)
         setFlipped([])
@@ -67,6 +69,7 @@ export default function MemorySpiel() {
           setTimeout(() => setLevelDone(true), 400)
         }
       } else {
+        playWrong()
         setLocked(true)
         setTimeout(() => { setFlipped([]); setLocked(false) }, 900)
       }
@@ -82,6 +85,7 @@ export default function MemorySpiel() {
   }
 
   async function handleFinish() {
+    playComplete()
     await completeSession({ missionId: 'memory-1', xpEarned: 15, stars: 3, correct: 3, total: 3 })
     navigate('/app')
   }
