@@ -49,6 +49,39 @@ export const MISSIONS = [
     level: 0,
     color: '#f97316',
   },
+  {
+    id: 'was-fehlt-1',
+    type: 'wasFehlt',
+    title: 'Was fehlt?',
+    description: 'Merke dir die Bilder — was ist verschwunden?',
+    icon: '🔍',
+    xp: 10,
+    stars: 3,
+    level: 0,
+    color: '#6366f1',
+  },
+  {
+    id: 'falscher-gegenstand-1',
+    type: 'falscherGegenstand',
+    title: 'Falscher Gegenstand',
+    description: 'Tippe auf das Bild, das nicht passt!',
+    icon: '🎯',
+    xp: 10,
+    stars: 3,
+    level: 0,
+    color: '#f59e0b',
+  },
+  {
+    id: 'emotionen-1',
+    type: 'emotionenSpiel',
+    title: 'Gefühle',
+    description: 'Erkenne die Gefühle!',
+    icon: '😊',
+    xp: 10,
+    stars: 3,
+    level: 0,
+    color: '#a855f7',
+  },
   // ---- Schule (6–10 Jahre) ----
   {
     id: 'fehler-detektiv-1',
@@ -698,4 +731,166 @@ export const MEMORY_KARTEN = [
   { id: 'mk16', emoji: '🚀', name: 'Rakete'        },
   { id: 'mk17', emoji: '🌈', name: 'Regenbogen'    },
   { id: 'mk18', emoji: '🎈', name: 'Ballon'        },
+]
+
+// Was fehlt? – Bilder-Runden (8 Stück)
+export const WAS_FEHLT_RUNDEN = [
+  { emoji: ['🍎', '🍌', '🍇', '🍊'], labels: ['Apfel', 'Banane', 'Traube', 'Orange'] },
+  { emoji: ['🐶', '🐱', '🐰', '🦊'], labels: ['Hund', 'Katze', 'Hase', 'Fuchs'] },
+  { emoji: ['⚽', '🏀', '🎾', '🎱'], labels: ['Fußball', 'Basketball', 'Tennis', 'Billard'] },
+  { emoji: ['🌞', '🌙', '⭐', '☁️'], labels: ['Sonne', 'Mond', 'Stern', 'Wolke'] },
+  { emoji: ['🚗', '✈️', '🚂', '🚢'], labels: ['Auto', 'Flugzeug', 'Zug', 'Schiff'] },
+  { emoji: ['🎈', '🎁', '🎂', '🎉'], labels: ['Ballon', 'Geschenk', 'Kuchen', 'Party'] },
+  { emoji: ['🦁', '🐘', '🦒', '🐧'], labels: ['Löwe', 'Elefant', 'Giraffe', 'Pinguin'] },
+  { emoji: ['🍕', '🍔', '🌮', '🥗'], labels: ['Pizza', 'Burger', 'Taco', 'Salat'] },
+]
+
+// Falscher Gegenstand – Odd-One-Out Runden (8 Stück)
+export const FALSCHER_GEGENSTAND_RUNDEN = [
+  {
+    items: [
+      { emoji: '🐶', label: 'Hund' },
+      { emoji: '🐱', label: 'Katze' },
+      { emoji: '🐰', label: 'Hase' },
+      { emoji: '🚗', label: 'Auto' },
+    ],
+    wrongIdx: 3, category: 'Tiere',
+  },
+  {
+    items: [
+      { emoji: '🍎', label: 'Apfel' },
+      { emoji: '🍌', label: 'Banane' },
+      { emoji: '⚽', label: 'Ball' },
+      { emoji: '🍇', label: 'Traube' },
+    ],
+    wrongIdx: 2, category: 'Früchte',
+  },
+  {
+    items: [
+      { emoji: '✈️', label: 'Flugzeug' },
+      { emoji: '🚂', label: 'Zug' },
+      { emoji: '🚢', label: 'Schiff' },
+      { emoji: '🍕', label: 'Pizza' },
+    ],
+    wrongIdx: 3, category: 'Fahrzeuge',
+  },
+  {
+    items: [
+      { emoji: '🌹', label: 'Rose' },
+      { emoji: '🌻', label: 'Sonnenblume' },
+      { emoji: '🌷', label: 'Tulpe' },
+      { emoji: '🦁', label: 'Löwe' },
+    ],
+    wrongIdx: 3, category: 'Blumen',
+  },
+  {
+    items: [
+      { emoji: '🎸', label: 'Gitarre' },
+      { emoji: '🎹', label: 'Klavier' },
+      { emoji: '🎺', label: 'Trompete' },
+      { emoji: '🍔', label: 'Burger' },
+    ],
+    wrongIdx: 3, category: 'Instrumente',
+  },
+  {
+    items: [
+      { emoji: '⚽', label: 'Fußball' },
+      { emoji: '🏀', label: 'Basketball' },
+      { emoji: '🎾', label: 'Tennis' },
+      { emoji: '🐘', label: 'Elefant' },
+    ],
+    wrongIdx: 3, category: 'Bälle',
+  },
+  {
+    items: [
+      { emoji: '👒', label: 'Hut' },
+      { emoji: '👗', label: 'Kleid' },
+      { emoji: '🎂', label: 'Kuchen' },
+      { emoji: '👠', label: 'Schuh' },
+    ],
+    wrongIdx: 2, category: 'Kleidung',
+  },
+  {
+    items: [
+      { emoji: '🖊️', label: 'Stift' },
+      { emoji: '📚', label: 'Buch' },
+      { emoji: '📏', label: 'Lineal' },
+      { emoji: '🦊', label: 'Fuchs' },
+    ],
+    wrongIdx: 3, category: 'Schulsachen',
+  },
+]
+
+// Emotionen-Spiel – Gefühle-Runden (7 Stück)
+export const EMOTIONEN_RUNDEN = [
+  {
+    question: 'Wer ist traurig?',
+    targetEmotion: 'traurig',
+    faces: [
+      { emoji: '😊', label: 'glücklich', isTarget: false },
+      { emoji: '😢', label: 'traurig',   isTarget: true  },
+      { emoji: '😡', label: 'wütend',    isTarget: false },
+      { emoji: '😴', label: 'müde',      isTarget: false },
+    ],
+  },
+  {
+    question: 'Wer ist glücklich?',
+    targetEmotion: 'glücklich',
+    faces: [
+      { emoji: '😊', label: 'glücklich', isTarget: true  },
+      { emoji: '😢', label: 'traurig',   isTarget: false },
+      { emoji: '😡', label: 'wütend',    isTarget: false },
+      { emoji: '😴', label: 'müde',      isTarget: false },
+    ],
+  },
+  {
+    question: 'Wer ist wütend?',
+    targetEmotion: 'wütend',
+    faces: [
+      { emoji: '😊', label: 'glücklich', isTarget: false },
+      { emoji: '😢', label: 'traurig',   isTarget: false },
+      { emoji: '😡', label: 'wütend',    isTarget: true  },
+      { emoji: '😴', label: 'müde',      isTarget: false },
+    ],
+  },
+  {
+    question: 'Wer ist müde?',
+    targetEmotion: 'müde',
+    faces: [
+      { emoji: '😊', label: 'glücklich', isTarget: false },
+      { emoji: '😢', label: 'traurig',   isTarget: false },
+      { emoji: '😡', label: 'wütend',    isTarget: false },
+      { emoji: '😴', label: 'müde',      isTarget: true  },
+    ],
+  },
+  {
+    question: 'Wer ist überrascht?',
+    targetEmotion: 'überrascht',
+    faces: [
+      { emoji: '😮', label: 'überrascht',    isTarget: true  },
+      { emoji: '😁', label: 'fröhlich',      isTarget: false },
+      { emoji: '😰', label: 'ängstlich',     isTarget: false },
+      { emoji: '🤔', label: 'nachdenklich',  isTarget: false },
+    ],
+  },
+  {
+    question: 'Wer ist fröhlich?',
+    targetEmotion: 'fröhlich',
+    faces: [
+      { emoji: '😮', label: 'überrascht',   isTarget: false },
+      { emoji: '😁', label: 'fröhlich',     isTarget: true  },
+      { emoji: '😰', label: 'ängstlich',    isTarget: false },
+      { emoji: '🤔', label: 'nachdenklich', isTarget: false },
+    ],
+  },
+  {
+    question: 'Wer ist ängstlich?',
+    targetEmotion: 'ängstlich',
+    faces: [
+      { emoji: '😮', label: 'überrascht',   isTarget: false },
+      { emoji: '😁', label: 'fröhlich',     isTarget: false },
+      { emoji: '😰', label: 'ängstlich',    isTarget: true  },
+      { emoji: '🤔', label: 'nachdenklich', isTarget: false },
+    ],
+  },
 ]

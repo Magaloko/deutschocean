@@ -505,3 +505,121 @@
 }
 .levelBannerEmoji { font-size: 4rem; }
 .levelBannerTitle { font-size: 1.5rem; font-weight: 900; }
+
+/* ============================================
+   WAS FEHLT? – neue Klassen
+   ============================================ */
+
+/* Schrumpfende Timer-Bar */
+.timerShrink {
+  animation: timerShrink 3s linear forwards;
+}
+@keyframes timerShrink {
+  from { width: 100%; }
+  to   { width: 0%; }
+}
+
+/* Großes Emoji-Display (passiv) */
+.kidsEmojiBig {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 3.2rem;
+  height: 90px;
+  background: var(--surface-2);
+  border-radius: var(--radius-lg);
+}
+
+/* Fragezeichen-Slot */
+.emojiMissing {
+  border: 3px dashed var(--border);
+  background: transparent;
+  font-size: 2.4rem;
+}
+
+/* Antwort-Auswahl-Reihe (3 Buttons) */
+.choiceRow {
+  display: flex;
+  gap: 0.75rem;
+  justify-content: center;
+}
+.emojiChoiceBtn {
+  flex: 1;
+  max-width: 130px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.9rem 0.5rem;
+  background: var(--surface);
+  border: 3px solid var(--border);
+  border-radius: var(--radius-lg);
+  cursor: pointer;
+  transition: all 0.15s;
+  font-family: inherit;
+}
+.emojiChoiceBtn:hover:not(:disabled) { border-color: var(--primary); transform: scale(1.05); }
+.emojiChoiceBtn:disabled { opacity: 0.8; }
+.choiceEmoji { font-size: 2.6rem; }
+.choiceLabel { font-size: 0.78rem; font-weight: 700; color: var(--text-muted); }
+
+/* Feedback-Farben */
+.choiceCorrect { border-color: var(--success) !important; background: #d1fae5 !important; }
+.choiceWrong   { border-color: var(--danger)  !important; background: #fee2e2 !important; }
+.btnCorrect    { border-color: var(--success) !important; background: #d1fae5 !important; }
+.btnWrong      { border-color: var(--danger)  !important; background: #fee2e2 !important; }
+
+/* ============================================
+   FALSCHER GEGENSTAND – klickbare Emoji-Kacheln
+   ============================================ */
+.kidsEmojiBtn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 1rem 0.5rem;
+  background: var(--surface);
+  border: 3px solid var(--border);
+  border-radius: var(--radius-lg);
+  cursor: pointer;
+  transition: all 0.15s;
+  font-family: inherit;
+  height: 100px;
+  justify-content: center;
+}
+.kidsEmojiBtn:hover:not(:disabled) { border-color: var(--primary); transform: scale(1.06); }
+.kidsEmojiBtn:disabled { opacity: 0.85; }
+.kidsEmojiBtnEmoji { font-size: 3rem; }
+.kidsEmojiBtnLabel { font-size: 0.75rem; font-weight: 700; color: var(--text-muted); }
+
+/* ============================================
+   EMOTIONEN-SPIEL
+   ============================================ */
+.emotionQuestion {
+  text-align: center;
+  font-size: 1.5rem;
+  font-weight: 900;
+  padding: 0.5rem 0;
+}
+.emotionGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.75rem;
+}
+.emotionBtn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 1.1rem 0.5rem;
+  background: var(--surface);
+  border: 3px solid var(--border);
+  border-radius: var(--radius-lg);
+  cursor: pointer;
+  transition: all 0.15s;
+  font-family: inherit;
+}
+.emotionBtn:hover:not(:disabled) { border-color: var(--primary); transform: scale(1.05); }
+.emotionBtn:disabled { opacity: 0.85; }
+.emotionEmoji { font-size: 3.5rem; }
+.emotionLabel { font-size: 0.8rem; font-weight: 700; color: var(--text-muted); }

@@ -17,6 +17,9 @@ const SatzBuilder      = lazy(() => import('./pages/app/games/SatzBuilder.jsx'))
 const FarbenJaeger     = lazy(() => import('./pages/app/games/FarbenJaeger.jsx'))
 const TierGeraeusche   = lazy(() => import('./pages/app/games/TierGeraeusche.jsx'))
 const MemorySpiel      = lazy(() => import('./pages/app/games/MemorySpiel.jsx'))
+const WasFehlt         = lazy(() => import('./pages/app/games/WasFehlt.jsx'))
+const FalscherGegenstand = lazy(() => import('./pages/app/games/FalscherGegenstand.jsx'))
+const EmotionenSpiel   = lazy(() => import('./pages/app/games/EmotionenSpiel.jsx'))
 
 function PageLoader() {
   return (
@@ -49,6 +52,9 @@ export default function App() {
             <Route path="spiel/farben-jaeger"          element={<FarbenJaeger />} />
             <Route path="spiel/tier-geraeusche"        element={<TierGeraeusche />} />
             <Route path="spiel/memory"                 element={<MemorySpiel />} />
+            <Route path="spiel/was-fehlt"              element={<WasFehlt />} />
+            <Route path="spiel/falscher-gegenstand"    element={<FalscherGegenstand />} />
+            <Route path="spiel/emotionen"              element={<EmotionenSpiel />} />
           </Route>
 
           <Route path="*" element={<Navigate to="/app" replace />} />
