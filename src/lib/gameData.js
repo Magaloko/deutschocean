@@ -184,6 +184,30 @@ export const MISSIONS = [
     level: 0,
     color: '#14b8a6',
   },
+  // ---- Für Kleine – Emoji-Geschichten ----
+  {
+    id: 'emoji-geschichte-1',
+    type: 'emojiGeschichte',
+    title: 'Emoji-Geschichten',
+    description: 'Was erzählen die Emojis? Rate die Geschichte!',
+    icon: '📖',
+    xp: 14,
+    stars: 0,
+    level: 0,
+    color: '#f97316',
+  },
+  // ---- Für Kleine – Emoji-Baukasten ----
+  {
+    id: 'emoji-baukasten-1',
+    type: 'emojiBaukasten',
+    title: 'Emoji-Baukasten',
+    description: 'Wähle die richtigen Emojis als Antwort!',
+    icon: '🧩',
+    xp: 16,
+    stars: 0,
+    level: 0,
+    color: '#8b5cf6',
+  },
 ]
 
 // ── Fahrzeug-Lenker Welten ────────────────────────────────────────────────
@@ -977,6 +1001,87 @@ export const EMOTIONEN_RUNDEN = [
       { emoji: '🤔', label: 'nachdenklich', isTarget: false },
     ],
   },
+  // ── 8 neue Emotionen ──────────────────────────────────────────────────────
+  {
+    question: 'Wer ist verliebt?',
+    targetEmotion: 'verliebt',
+    faces: [
+      { emoji: '🥰', label: 'verliebt',    isTarget: true  },
+      { emoji: '😡', label: 'wütend',      isTarget: false },
+      { emoji: '😴', label: 'müde',        isTarget: false },
+      { emoji: '😢', label: 'traurig',     isTarget: false },
+    ],
+  },
+  {
+    question: 'Wer ist aufgeregt?',
+    targetEmotion: 'aufgeregt',
+    faces: [
+      { emoji: '😊', label: 'glücklich',   isTarget: false },
+      { emoji: '🤩', label: 'aufgeregt',   isTarget: true  },
+      { emoji: '😰', label: 'ängstlich',   isTarget: false },
+      { emoji: '😑', label: 'gelangweilt', isTarget: false },
+    ],
+  },
+  {
+    question: 'Wer ist stolz?',
+    targetEmotion: 'stolz',
+    faces: [
+      { emoji: '😤', label: 'stolz',        isTarget: true  },
+      { emoji: '😢', label: 'traurig',      isTarget: false },
+      { emoji: '🤔', label: 'nachdenklich', isTarget: false },
+      { emoji: '😮', label: 'überrascht',   isTarget: false },
+    ],
+  },
+  {
+    question: 'Wer ist gelangweilt?',
+    targetEmotion: 'gelangweilt',
+    faces: [
+      { emoji: '🤩', label: 'aufgeregt',   isTarget: false },
+      { emoji: '😑', label: 'gelangweilt', isTarget: true  },
+      { emoji: '😊', label: 'glücklich',   isTarget: false },
+      { emoji: '😡', label: 'wütend',      isTarget: false },
+    ],
+  },
+  {
+    question: 'Wer ist verwirrt?',
+    targetEmotion: 'verwirrt',
+    faces: [
+      { emoji: '😴', label: 'müde',        isTarget: false },
+      { emoji: '😁', label: 'fröhlich',    isTarget: false },
+      { emoji: '😕', label: 'verwirrt',    isTarget: true  },
+      { emoji: '🥰', label: 'verliebt',    isTarget: false },
+    ],
+  },
+  {
+    question: 'Wer ist krank?',
+    targetEmotion: 'krank',
+    faces: [
+      { emoji: '😊', label: 'glücklich',  isTarget: false },
+      { emoji: '🤒', label: 'krank',      isTarget: true  },
+      { emoji: '😤', label: 'stolz',      isTarget: false },
+      { emoji: '😮', label: 'überrascht', isTarget: false },
+    ],
+  },
+  {
+    question: 'Wer ist neugierig?',
+    targetEmotion: 'neugierig',
+    faces: [
+      { emoji: '😡', label: 'wütend',    isTarget: false },
+      { emoji: '😑', label: 'gelangweilt', isTarget: false },
+      { emoji: '🧐', label: 'neugierig', isTarget: true  },
+      { emoji: '😢', label: 'traurig',   isTarget: false },
+    ],
+  },
+  {
+    question: 'Wer ist eifersüchtig?',
+    targetEmotion: 'eifersüchtig',
+    faces: [
+      { emoji: '🥰', label: 'verliebt',     isTarget: false },
+      { emoji: '🤔', label: 'nachdenklich', isTarget: false },
+      { emoji: '😊', label: 'glücklich',    isTarget: false },
+      { emoji: '😒', label: 'eifersüchtig', isTarget: true  },
+    ],
+  },
 ]
 
 // ─── Tier-Wissen ─────────────────────────────────────────────────────────────
@@ -1144,5 +1249,247 @@ export const TIER_WISSEN_FRAGEN = [
     falsch:  [{ emoji: '🌴', text: 'Tropen' }, { emoji: '🏜️', text: 'Wüste' }],
     fakt: '❄️ Eisbären haben schwarze Haut unter ihrem weißen Fell!',
     kategorie: 'Zuhause 🌍',
+  },
+]
+
+// ─── Emoji-Geschichten ───────────────────────────────────────────────────────
+export const EMOJI_GESCHICHTEN = [
+  {
+    story: ['🎂','🎁','🎉','😊'],
+    frage: 'Was feiern die Emojis?',
+    richtig: { emojis: ['🎂','🎉'], text: 'Geburtstag' },
+    falsch:  [
+      { emojis: ['📚','✏️'], text: 'Schulstart' },
+      { emojis: ['⛄','❄️'], text: 'Winter' },
+    ],
+    fakt: '🎂 Am Geburtstag gibt es Kuchen, Geschenke und viel Freude!',
+  },
+  {
+    story: ['❄️','🌨️','⛄','🧤'],
+    frage: 'Was macht das Kind draußen?',
+    richtig: { emojis: ['⛄','❄️'], text: 'Schneemann bauen' },
+    falsch:  [
+      { emojis: ['🌊','🏖️'], text: 'Am Strand spielen' },
+      { emojis: ['🌸','🌷'], text: 'Blumen pflücken' },
+    ],
+    fakt: '⛄ Für einen Schneemann braucht man viel Schnee und Geduld!',
+  },
+  {
+    story: ['🌸','🌷','🐝','☀️'],
+    frage: 'Welche Jahreszeit zeigen die Emojis?',
+    richtig: { emojis: ['🌸','☀️'], text: 'Frühling' },
+    falsch:  [
+      { emojis: ['❄️','🌨️'], text: 'Winter' },
+      { emojis: ['🍂','🍁'], text: 'Herbst' },
+    ],
+    fakt: '🌸 Im Frühling blühen Blumen und Bienen sammeln Nektar!',
+  },
+  {
+    story: ['🐉','👑','🏰','⚔️'],
+    frage: 'Was ist das für eine Geschichte?',
+    richtig: { emojis: ['🏰','👑'], text: 'Märchen' },
+    falsch:  [
+      { emojis: ['🚀','🌕'], text: 'Weltall-Abenteuer' },
+      { emojis: ['🌊','🐠'], text: 'Unterwasser-Abenteuer' },
+    ],
+    fakt: '🐉 In Märchen gibt es Drachen, Ritter und Prinzessinnen!',
+  },
+  {
+    story: ['🌙','⭐','😴','💤'],
+    frage: 'Was macht das Kind?',
+    richtig: { emojis: ['😴','🌙'], text: 'Schlafen gehen' },
+    falsch:  [
+      { emojis: ['🎮','😊'], text: 'Spielen' },
+      { emojis: ['🏃','⚽'], text: 'Sport machen' },
+    ],
+    fakt: '💤 Kinder brauchen mindestens 10 Stunden Schlaf pro Nacht!',
+  },
+  {
+    story: ['☀️','🌊','🏖️','👙'],
+    frage: 'Wohin fährt die Familie?',
+    richtig: { emojis: ['🏖️','🌊'], text: 'Ans Meer' },
+    falsch:  [
+      { emojis: ['⛷️','🏔️'], text: 'In die Berge' },
+      { emojis: ['🌲','⛺'], text: 'Zum Camping' },
+    ],
+    fakt: '🏖️ Am Meer kann man schwimmen, sandburgen bauen und Muscheln sammeln!',
+  },
+  {
+    story: ['✏️','📚','🏫','👧'],
+    frage: 'Was macht das Mädchen?',
+    richtig: { emojis: ['🏫','📚'], text: 'In die Schule gehen' },
+    falsch:  [
+      { emojis: ['🎂','🎉'], text: 'Geburtstag feiern' },
+      { emojis: ['🛒','🛍️'], text: 'Einkaufen gehen' },
+    ],
+    fakt: '📚 In der Schule lernt man lesen, schreiben und rechnen!',
+  },
+  {
+    story: ['🌊','🐠','🐙','🤿'],
+    frage: 'Was macht die Person?',
+    richtig: { emojis: ['🤿','🌊'], text: 'Tauchen' },
+    falsch:  [
+      { emojis: ['🏃','🌲'], text: 'Im Wald laufen' },
+      { emojis: ['🎣','🐟'], text: 'Angeln' },
+    ],
+    fakt: '🤿 Beim Tauchen kann man bunte Fische und Korallen sehen!',
+  },
+  {
+    story: ['🌧️','☁️','☀️','🌈'],
+    frage: 'Was entsteht nach dem Regen?',
+    richtig: { emojis: ['🌈','☀️'], text: 'Regenbogen' },
+    falsch:  [
+      { emojis: ['⛄','❄️'], text: 'Schnee' },
+      { emojis: ['🌊','🌬️'], text: 'Sturm' },
+    ],
+    fakt: '🌈 Ein Regenbogen entsteht wenn Sonne und Regen zusammenkommen!',
+  },
+  {
+    story: ['🎪','🤹','🎭','🎈'],
+    frage: 'Wo sind die Kinder?',
+    richtig: { emojis: ['🎪','🤹'], text: 'Im Zirkus' },
+    falsch:  [
+      { emojis: ['🏫','📚'], text: 'In der Schule' },
+      { emojis: ['🛒','🍎'], text: 'Im Supermarkt' },
+    ],
+    fakt: '🎪 Im Zirkus gibt es Akrobaten, Clowns und Zauberer!',
+  },
+  {
+    story: ['🧁','🍰','👩‍🍳','✨'],
+    frage: 'Was macht die Person in der Küche?',
+    richtig: { emojis: ['🍰','👩‍🍳'], text: 'Kuchen backen' },
+    falsch:  [
+      { emojis: ['🍕','🔥'], text: 'Pizza machen' },
+      { emojis: ['🥗','🥣'], text: 'Salat zubereiten' },
+    ],
+    fakt: '🍰 Kuchen backen macht Spaß – und schmeckt noch besser!',
+  },
+  {
+    story: ['🚂','🚃','🏔️','🌲'],
+    frage: 'Womit reist die Familie?',
+    richtig: { emojis: ['🚂','🛤️'], text: 'Mit dem Zug' },
+    falsch:  [
+      { emojis: ['✈️','🌤️'], text: 'Mit dem Flugzeug' },
+      { emojis: ['🚗','🛣️'], text: 'Mit dem Auto' },
+    ],
+    fakt: '🚂 Züge fahren auf Schienen und können sehr schnell sein!',
+  },
+  {
+    story: ['⛺','🔦','🌲','🪵'],
+    frage: 'Was macht die Familie?',
+    richtig: { emojis: ['⛺','🌲'], text: 'Camping im Wald' },
+    falsch:  [
+      { emojis: ['🏖️','☀️'], text: 'Strand-Urlaub' },
+      { emojis: ['🏙️','🏨'], text: 'In der Stadt' },
+    ],
+    fakt: '⛺ Beim Camping schläft man im Zelt und kocht am Lagerfeuer!',
+  },
+  {
+    story: ['🤒','🌡️','🛏️','💊'],
+    frage: 'Wie geht es dem Kind?',
+    richtig: { emojis: ['🤒','🛏️'], text: 'Krank im Bett' },
+    falsch:  [
+      { emojis: ['🏃','⚽'], text: 'Fußball spielen' },
+      { emojis: ['😊','🎉'], text: 'Party feiern' },
+    ],
+    fakt: '🤒 Wenn man krank ist, braucht man Ruhe, Tee und viel Schlaf!',
+  },
+  {
+    story: ['🚀','🌕','⭐','👨‍🚀'],
+    frage: 'Wo ist der Astronaut?',
+    richtig: { emojis: ['🚀','🌕'], text: 'Im Weltall' },
+    falsch:  [
+      { emojis: ['🌊','🐠'], text: 'Im Ozean' },
+      { emojis: ['🏔️','🌲'], text: 'In den Bergen' },
+    ],
+    fakt: '🚀 Astronauten reisen ins Weltall und landen auf dem Mond!',
+  },
+]
+
+// ─── Emoji-Baukasten ─────────────────────────────────────────────────────────
+export const EMOJI_BAUKASTEN_AUFGABEN = [
+  {
+    frage: 'Was braucht man für einen Schneemann?',
+    frageEmojis: ['⛄','❓'],
+    richtige: ['❄️','🥕','🪨'],
+    falsche:  ['🔥','🌺','🍦'],
+    fakt: '⛄ Schnee formen, Karotte als Nase, Steine als Augen – fertig!',
+  },
+  {
+    frage: 'Was braucht man zum Kuchen backen?',
+    frageEmojis: ['🎂','❓'],
+    richtige: ['🥚','🍫','🧈'],
+    falsche:  ['🥕','🧂','🐟'],
+    fakt: '🎂 Eier, Schokolade und Butter machen den Kuchen lecker!',
+  },
+  {
+    frage: 'Was nimmt man mit an den Strand?',
+    frageEmojis: ['🏖️','❓'],
+    richtige: ['🏊','🕶️','☀️'],
+    falsche:  ['🧥','❄️','🎿'],
+    fakt: '🏖️ Sonnencreme, Badehose und Sonnenbrille nicht vergessen!',
+  },
+  {
+    frage: 'Was braucht man zum Schlafen?',
+    frageEmojis: ['😴','❓'],
+    richtige: ['🌙','🧸','🛏️'],
+    falsche:  ['☕','🎮','📱'],
+    fakt: '😴 Schlafanzug, Kuscheltier und dunkles Zimmer – gute Nacht!',
+  },
+  {
+    frage: 'Was braucht man zum Blumen giessen?',
+    frageEmojis: ['🌱','❓'],
+    richtige: ['💧','🌞','🪴'],
+    falsche:  ['🔥','🧊','❄️'],
+    fakt: '🌱 Blumen brauchen Wasser, Sonne und Erde zum Wachsen!',
+  },
+  {
+    frage: 'Was braucht man zum Geburtstag feiern?',
+    frageEmojis: ['🥳','❓'],
+    richtige: ['🎂','🎁','🎈'],
+    falsche:  ['😢','❄️','📚'],
+    fakt: '🎉 Kuchen, Geschenke und Ballons machen den Geburtstag perfekt!',
+  },
+  {
+    frage: 'Was braucht man zum Malen?',
+    frageEmojis: ['🎨','❓'],
+    richtige: ['🖌️','🎨','📄'],
+    falsche:  ['🔔','🪛','🧲'],
+    fakt: '🎨 Mit Pinsel, Farbe und Papier entsteht ein tolles Bild!',
+  },
+  {
+    frage: 'Was braucht man fuer einen Hund?',
+    frageEmojis: ['🐕','❓'],
+    richtige: ['🦴','🛁','🎾'],
+    falsche:  ['🐟','🌵','🔬'],
+    fakt: '🐶 Ein Hund braucht Futter, Wasser, Spielzeug und viel Liebe!',
+  },
+  {
+    frage: 'Was braucht man zum Camping?',
+    frageEmojis: ['⛺','❓'],
+    richtige: ['⛺','🔦','🪵'],
+    falsche:  ['👠','📺','💻'],
+    fakt: '⛺ Mit Zelt, Taschenlampe und Holz fuer das Lagerfeuer!',
+  },
+  {
+    frage: 'Was braucht man um Pizza zu machen?',
+    frageEmojis: ['🍕','❓'],
+    richtige: ['🍅','🧀','🫓'],
+    falsche:  ['🍌','🍰','🧃'],
+    fakt: '🍕 Teig, Tomatensosse und Kaese – das ist das Pizza-Geheimnis!',
+  },
+  {
+    frage: 'Was gehoert ins Weltall?',
+    frageEmojis: ['🚀','❓'],
+    richtige: ['🌕','⭐','🌌'],
+    falsche:  ['🐸','🌹','☕'],
+    fakt: '🌌 Mond, Sterne und die Milchstrasse – das Weltall ist riesig!',
+  },
+  {
+    frage: 'Was braucht man wenn man krank ist?',
+    frageEmojis: ['🤒','❓'],
+    richtige: ['🌡️','💊','🍵'],
+    falsche:  ['⛷️','🎉','🍕'],
+    fakt: '🤒 Thermometer, Medizin und heisser Tee helfen beim Gesundwerden!',
   },
 ]

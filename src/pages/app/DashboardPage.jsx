@@ -22,6 +22,8 @@ const GAME_ROUTES = {
   satzBuilder:          '/app/spiel/satz-builder',
   fahrzeugLenker:       '/app/spiel/fahrzeug-lenker',
   tierWissen:           '/app/spiel/tier-wissen',
+  emojiGeschichte:      '/app/spiel/emoji-geschichte',
+  emojiBaukasten:       '/app/spiel/emoji-baukasten',
 }
 
 const LEVEL_META = {

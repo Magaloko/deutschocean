@@ -22,6 +22,8 @@ const FalscherGegenstand = lazy(() => import('./pages/app/games/FalscherGegensta
 const EmotionenSpiel   = lazy(() => import('./pages/app/games/EmotionenSpiel.jsx'))
 const FahrzeugLenker   = lazy(() => import('./pages/app/games/FahrzeugLenker.jsx'))
 const TierWissen       = lazy(() => import('./pages/app/games/TierWissen.jsx'))
+const EmojiGeschichte  = lazy(() => import('./pages/app/games/EmojiGeschichte.jsx'))
+const EmojiBaukasten   = lazy(() => import('./pages/app/games/EmojiBaukasten.jsx'))
 
 function PageLoader() {
   return (
@@ -59,6 +61,8 @@ export default function App() {
             <Route path="spiel/emotionen"              element={<EmotionenSpiel />} />
             <Route path="spiel/fahrzeug-lenker"        element={<FahrzeugLenker />} />
             <Route path="spiel/tier-wissen"            element={<TierWissen />} />
+            <Route path="spiel/emoji-geschichte"       element={<EmojiGeschichte />} />
+            <Route path="spiel/emoji-baukasten"        element={<EmojiBaukasten />} />
           </Route>
 
           <Route path="*" element={<Navigate to="/app" replace />} />
