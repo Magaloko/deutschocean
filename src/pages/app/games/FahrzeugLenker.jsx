@@ -8,7 +8,12 @@ import { playCorrect, playWrong, playComplete } from '../../../lib/sounds.js'
 import styles from './Game.module.css'
 
 const TOTAL_ROUNDS = 8
-const FALL_MS      = 2300
+
+const SPEEDS = [
+  { id: 'langsam', label: 'Langsam', emoji: '🐢', fallMs: 3800, color: '#22c55e' },
+  { id: 'normal',  label: 'Normal',  emoji: '🚶', fallMs: 2300, color: '#f59e0b' },
+  { id: 'schnell', label: 'Schnell', emoji: '🐇', fallMs: 1400, color: '#ef4444' },
+]
 
 function genRound(welt) {
   const shuffled = [...welt.items].sort(() => Math.random() - 0.5)
@@ -24,6 +29,7 @@ export default function FahrzeugLenker() {
   const { completeSession, saving } = useProgress()
 
   const [welt,       setWelt]       = useState(null)
+  const [speed,      setSpeed]      = useState(SPEEDS[0]) // default: Langsam
   const [gameState,  setGameState]  = useState('select') // select|ready|falling|feedback|result
   const [roundIdx,   setRoundIdx]   = useState(0)
   const [round,      setRound]      = useState(null)
@@ -55,9 +61,9 @@ export default function FahrzeugLenker() {
       if (correct) { setScore(s => s + 1); playCorrect() } else { playWrong() }
       setLastResult(correct ? 'correct' : 'wrong')
       setGameState('feedback')
-    }, FALL_MS)
+    }, speed.fallMs)
     return () => clearTimeout(t)
-  }, [gameState, round])
+  }, [gameState, round, speed])
 
   useEffect(() => {
     if (gameState !== 'feedback') return
@@ -131,6 +137,22 @@ export default function FahrzeugLenker() {
           <div />
         </div>
         <p className={styles.vehicleSelectTitle}>Wähle dein Fahrzeug! 🎮</p>
+
+        {/* Speed picker */}
+        <div className={styles.speedPicker}>
+          {SPEEDS.map(s => (
+            <button
+              key={s.id}
+              className={`${styles.speedBtn} ${speed.id === s.id ? styles.speedBtnActive : ''}`}
+              style={speed.id === s.id ? { borderColor: s.color, background: s.color + '22' } : {}}
+              onClick={() => setSpeed(s)}
+            >
+              <span className={styles.speedEmoji}>{s.emoji}</span>
+              <span className={styles.speedLabel}>{s.label}</span>
+            </button>
+          ))}
+        </div>
+
         <div className={styles.vehicleSelectGrid}>
           {FAHRZEUG_WELTEN.map(w => (
             <button
@@ -162,7 +184,10 @@ export default function FahrzeugLenker() {
           <span className={styles.gameEmoji}>{welt.vehicle}</span>
           <h1 className={styles.gameTitle}>{welt.label}</h1>
         </div>
-        <Badge color="gray">{roundIdx + 1}/{TOTAL_ROUNDS}</Badge>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+          <span title={speed.label}>{speed.emoji}</span>
+          <Badge color="gray">{roundIdx + 1}/{TOTAL_ROUNDS}</Badge>
+        </div>
       </div>
 
       {/* Scene */}
@@ -185,7 +210,7 @@ export default function FahrzeugLenker() {
           <div
             key={`${roundIdx}-${l}`}
             className={`${styles.fallingItemEl} ${styles[`lane${l}`]} ${styles.doFall}`}
-            style={{ '--fall-ms': `${FALL_MS}ms` }}
+            style={{ '--fall-ms': `${speed.fallMs}ms` }}
           >
             {round.items[l].emoji}
           </div>

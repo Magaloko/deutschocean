@@ -636,6 +636,33 @@
   margin: 0;
 }
 
+/* Speed picker */
+.speedPicker {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+}
+
+.speedBtn {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 10px 8px;
+  border-radius: 14px;
+  border: 2px solid #e5e7eb;
+  background: white;
+  cursor: pointer;
+  transition: all 0.18s;
+}
+.speedBtn:hover { border-color: #94a3b8; transform: scale(1.04); }
+.speedBtnActive { font-weight: 700; transform: scale(1.06) !important; box-shadow: 0 4px 12px rgba(0,0,0,0.12); }
+
+.speedEmoji { font-size: 1.6rem; line-height: 1; }
+.speedLabel { font-size: 0.78rem; font-weight: 700; color: #374151; }
+
+/* Vehicle select grid */
 .vehicleSelectGrid {
   display: grid;
   grid-template-columns: 1fr 1fr;
