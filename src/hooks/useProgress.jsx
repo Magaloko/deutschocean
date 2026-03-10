@@ -31,5 +31,5 @@ export function useProgress() {
     }
   }
 
-  return { completeSession, saving }
+  return { completeSession, saving, completedMissions: profile?.completedMissions ?? [] }
 }

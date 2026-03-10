@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react'
+import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import Card from '../../../components/ui/Card.jsx'
 import Button from '../../../components/ui/Button.jsx'
@@ -10,8 +10,14 @@ import styles from './Game.module.css'
 
 function shuffle(arr) { return [...arr].sort(() => Math.random() - 0.5) }
 
-// Card counts per level: 4 → 8 → 12
-const LEVEL_SIZES = [4, 8, 12]
+// Karten-Anzahl pro innerem Level je Schwierigkeitsstufe
+const LEVEL_SIZES_MAP = {
+  1: [4, 6, 8],
+  2: [4, 8, 12],
+  3: [6, 10, 16],
+}
+
+const XP_MAP = { 1: 15, 2: 18, 3: 22 }
 
 function buildCards(size) {
   const pairs = shuffle(MEMORY_KARTEN).slice(0, size / 2)
@@ -24,35 +30,40 @@ function buildCards(size) {
 }
 
 export default function MemorySpiel() {
-  const navigate = useNavigate()
-  const { completeSession, saving } = useProgress()
+  const navigate  = useNavigate()
+  const { completeSession, saving, completedMissions } = useProgress()
 
-  const [level, setLevel]       = useState(0)
-  const [cards, setCards]       = useState(() => buildCards(LEVEL_SIZES[0]))
-  const [flipped, setFlipped]   = useState([])   // UIDs currently face-up (unmatched)
-  const [matched, setMatched]   = useState(new Set()) // matched pairIds
-  const [moves, setMoves]       = useState(0)
-  const [locked, setLocked]     = useState(false)
-  const [levelDone, setLevelDone] = useState(false)
-  const [phase, setPhase]       = useState('playing')
-  const isFirst = useRef(true)
+  const [diffLevel,  setDiffLevel]  = useState(null) // null | 1 | 2 | 3  (äußere Schwierigkeit)
+  const [level,      setLevel]      = useState(0)    // 0 | 1 | 2          (innerer Schritt)
+  const [cards,      setCards]      = useState([])
+  const [flipped,    setFlipped]    = useState([])
+  const [matched,    setMatched]    = useState(new Set())
+  const [moves,      setMoves]      = useState(0)
+  const [locked,     setLocked]     = useState(false)
+  const [levelDone,  setLevelDone]  = useState(false)
+  const [phase,      setPhase]      = useState('playing')
 
-  // Rebuild cards when level advances (skip on mount)
-  useEffect(() => {
-    if (isFirst.current) { isFirst.current = false; return }
-    setCards(buildCards(LEVEL_SIZES[level]))
+  const L2_UNLOCKED = completedMissions.includes('memory-1')
+  const L3_UNLOCKED = completedMissions.includes('memory-2')
+
+  function startDiffLevel(dl) {
+    const sizes = LEVEL_SIZES_MAP[dl]
+    setDiffLevel(dl)
+    setLevel(0)
+    setCards(buildCards(sizes[0]))
     setFlipped([])
     setMatched(new Set())
     setMoves(0)
-    setLevelDone(false)
     setLocked(false)
-  }, [level])
+    setLevelDone(false)
+    setPhase('playing')
+  }
 
   function handleCardClick(card) {
-    if (locked)               return
+    if (locked)                   return
     if (matched.has(card.pairId)) return
     if (flipped.includes(card.uid)) return
-    if (flipped.length >= 2)  return
+    if (flipped.length >= 2)      return
 
     const next = [...flipped, card.uid]
     setFlipped(next)
@@ -77,19 +88,28 @@ export default function MemorySpiel() {
   }
 
   function advanceLevel() {
-    if (level + 1 >= LEVEL_SIZES.length) {
+    const sizes = LEVEL_SIZES_MAP[diffLevel]
+    if (level + 1 >= sizes.length) {
       setPhase('result')
     } else {
-      setLevel(l => l + 1)
+      const nextLevel = level + 1
+      setLevel(nextLevel)
+      setCards(buildCards(sizes[nextLevel]))
+      setFlipped([])
+      setMatched(new Set())
+      setMoves(0)
+      setLevelDone(false)
+      setLocked(false)
     }
   }
 
   async function handleFinish() {
     playComplete()
-    await completeSession({ missionId: 'memory-1', xpEarned: 15, stars: 3, correct: 3, total: 3 })
+    await completeSession({ missionId: `memory-${diffLevel}`, xpEarned: XP_MAP[diffLevel], stars: 3, correct: 3, total: 3 })
     navigate('/app')
   }
 
+  // ── RESULT ────────────────────────────────────────────────────────────────
   if (phase === 'result') {
     return (
       <div className={styles.resultPage}>
@@ -97,19 +117,62 @@ export default function MemorySpiel() {
         <h1 className={styles.resultTitle}>Memory Meister!</h1>
         <p className={styles.resultSub}>Alle 3 Level geschafft!</p>
         <div className={styles.resultStats}>
-          <Badge color="purple">+15 XP</Badge>
+          <Badge color="purple">+{XP_MAP[diffLevel]} XP</Badge>
           <Badge color="yellow">⭐⭐⭐</Badge>
         </div>
         <div className={styles.resultActions}>
           <Button onClick={handleFinish} loading={saving} size="lg">Speichern</Button>
-          <Button variant="secondary" onClick={() => navigate('/app/missionen')} size="lg">Andere Missionen</Button>
+          <Button variant="secondary" onClick={() => navigate('/app')} size="lg">Zurück</Button>
         </div>
       </div>
     )
   }
 
-  // Grid columns: 2 for 4 cards, 4 for 8/12 cards
-  const cols = cards.length <= 4 ? 2 : 4
+  // ── LEVEL-AUSWAHL ─────────────────────────────────────────────────────────
+  if (!diffLevel) {
+    return (
+      <div className={`${styles.gamePage} fade-in`}>
+        <div className={styles.gameHeader}>
+          <Button variant="ghost" size="sm" onClick={() => navigate('/app')}>← Zurück</Button>
+          <div className={styles.gameInfo}>
+            <span className={styles.gameEmoji}>🃏</span>
+            <h1 className={styles.gameTitle}>Memory</h1>
+          </div>
+          <div />
+        </div>
+        <p className={styles.vehicleSelectTitle}>Wähle dein Level! 🌟</p>
+        <div className={styles.levelGrid}>
+          <button className={`${styles.levelCard} ${styles.levelCard1}`} onClick={() => startDiffLevel(1)}>
+            <span className={styles.levelStars}>⭐</span>
+            <strong className={styles.levelTitle}>Level 1</strong>
+            <span className={styles.levelLabel}>Leicht</span>
+          </button>
+          <button
+            className={`${styles.levelCard} ${styles.levelCard2} ${!L2_UNLOCKED ? styles.levelCardLocked : ''}`}
+            onClick={() => L2_UNLOCKED && startDiffLevel(2)}
+          >
+            <span className={styles.levelStars}>{L2_UNLOCKED ? '⭐⭐' : '🔒'}</span>
+            <strong className={styles.levelTitle}>Level 2</strong>
+            <span className={styles.levelLabel}>Mittel</span>
+            {!L2_UNLOCKED && <small className={styles.levelLockHint}>Level 1 erst abschließen!</small>}
+          </button>
+          <button
+            className={`${styles.levelCard} ${styles.levelCard3} ${!L3_UNLOCKED ? styles.levelCardLocked : ''}`}
+            onClick={() => L3_UNLOCKED && startDiffLevel(3)}
+          >
+            <span className={styles.levelStars}>{L3_UNLOCKED ? '⭐⭐⭐' : '🔒'}</span>
+            <strong className={styles.levelTitle}>Level 3</strong>
+            <span className={styles.levelLabel}>Schwer</span>
+            {!L3_UNLOCKED && <small className={styles.levelLockHint}>Level 2 erst abschließen!</small>}
+          </button>
+        </div>
+      </div>
+    )
+  }
+
+  // ── SPIELFELD ─────────────────────────────────────────────────────────────
+  const sizes = LEVEL_SIZES_MAP[diffLevel]
+  const cols  = cards.length <= 4 ? 2 : cards.length === 6 ? 3 : 4
 
   return (
     <div className={`${styles.gamePage} fade-in`}>
@@ -128,13 +191,13 @@ export default function MemorySpiel() {
             <div className={styles.levelBannerEmoji}>🎉</div>
             <h2 className={styles.levelBannerTitle}>Level {level + 1} geschafft!</h2>
             <Button onClick={advanceLevel} size="lg">
-              {level + 1 >= LEVEL_SIZES.length ? 'Fertig! 🏆' : `Level ${level + 2} →`}
+              {level + 1 >= sizes.length ? 'Fertig! 🏆' : `Level ${level + 2} →`}
             </Button>
           </div>
         ) : (
           <>
             <p className={styles.instruction}>
-              Finde alle <strong>gleichen Paare</strong>! ({LEVEL_SIZES[level] / 2} Paare)
+              Finde alle <strong>gleichen Paare</strong>! ({sizes[level] / 2} Paare)
             </p>
 
             <div
@@ -142,20 +205,20 @@ export default function MemorySpiel() {
               style={{ gridTemplateColumns: `repeat(${cols}, 1fr)` }}
             >
               {cards.map(card => {
-                const isFlipped  = flipped.includes(card.uid)
-                const isMatched  = matched.has(card.pairId)
-                const showFace   = isFlipped || isMatched
+                const isFlippedCard = flipped.includes(card.uid)
+                const isMatchedCard = matched.has(card.pairId)
+                const showFace      = isFlippedCard || isMatchedCard
                 return (
                   <button
                     key={card.uid}
                     className={[
                       styles.memoryCard,
-                      !showFace ? styles.memoryCardFaceDown  : '',
-                      showFace && !isMatched ? styles.memoryCardFlipped  : '',
-                      isMatched ? styles.memoryCardMatched : '',
+                      !showFace                    ? styles.memoryCardFaceDown : '',
+                      showFace && !isMatchedCard   ? styles.memoryCardFlipped  : '',
+                      isMatchedCard                ? styles.memoryCardMatched  : '',
                     ].join(' ')}
                     onClick={() => handleCardClick(card)}
-                    disabled={isMatched || locked}
+                    disabled={isMatchedCard || locked}
                     aria-label={showFace ? card.name : 'Verdeckte Karte'}
                   >
                     {showFace ? card.emoji : ''}
@@ -172,7 +235,7 @@ export default function MemorySpiel() {
       </Card>
 
       <div className={styles.progressDots}>
-        {LEVEL_SIZES.map((_, i) => (
+        {sizes.map((_, i) => (
           <div key={i} className={`${styles.dot} ${i < level ? styles.dotDone : i === level ? styles.dotActive : ''}`} />
         ))}
       </div>

@@ -10,8 +10,6 @@ import styles from './Game.module.css'
 
 function shuffle(arr) { return [...arr].sort(() => Math.random() - 0.5) }
 
-const TOTAL = 8
-
 function categoryClass(kat, s) {
   if (kat.startsWith('Essen'))       return s.kategorieEssen
   if (kat.startsWith('Produzieren')) return s.kategorieProduzieren
@@ -22,21 +20,36 @@ function categoryClass(kat, s) {
 
 export default function TierWissen() {
   const navigate = useNavigate()
-  const { completeSession, saving } = useProgress()
+  const { completeSession, saving, completedMissions } = useProgress()
 
-  const [fragen] = useState(() =>
-    shuffle(TIER_WISSEN_FRAGEN).slice(0, TOTAL).map(f => ({
-      ...f,
-      options: shuffle([f.richtig, ...f.falsch]),
-    }))
-  )
+  const [level,    setLevel]    = useState(null) // null | 1 | 2 | 3
+  const [fragen,   setFragen]   = useState([])
+
   const [idx,      setIdx]      = useState(0)
-  const [selected, setSelected] = useState(null) // index into options
+  const [selected, setSelected] = useState(null)
   const [score,    setScore]    = useState(0)
   const [phase,    setPhase]    = useState('playing')
 
-  const frage = fragen[idx]
+  const TOTAL   = fragen.length
+  const frage   = fragen[idx]
   const answered = selected !== null
+
+  const L2_UNLOCKED = completedMissions.includes('tier-wissen-1')
+  const L3_UNLOCKED = completedMissions.includes('tier-wissen-2')
+
+  function startLevel(lvl) {
+    const filtered = TIER_WISSEN_FRAGEN.filter(f => f.difficulty === lvl)
+    const picked = shuffle(filtered).slice(0, 8).map(f => ({
+      ...f,
+      options: shuffle([f.richtig, ...f.falsch]),
+    }))
+    setFragen(picked)
+    setLevel(lvl)
+    setIdx(0)
+    setSelected(null)
+    setScore(0)
+    setPhase('playing')
+  }
 
   function handleSelect(optIdx) {
     if (answered) return
@@ -58,7 +71,7 @@ export default function TierWissen() {
     const stars = score >= TOTAL ? 3 : score >= Math.ceil(TOTAL * 0.6) ? 2 : 1
     playComplete()
     await completeSession({
-      missionId: 'tier-wissen-1',
+      missionId: `tier-wissen-${level}`,
       xpEarned: score * 2,
       stars,
       correct: score,
@@ -89,10 +102,51 @@ export default function TierWissen() {
     )
   }
 
-  // ── PLAYING ───────────────────────────────────────────────────────────────
+  // ── LEVEL-AUSWAHL ─────────────────────────────────────────────────────────
+  if (!level) {
+    return (
+      <div className={`${styles.gamePage} fade-in`}>
+        <div className={styles.gameHeader}>
+          <Button variant="ghost" size="sm" onClick={() => navigate('/app')}>← Zurück</Button>
+          <div className={styles.gameInfo}>
+            <span className={styles.gameEmoji}>🦁</span>
+            <h1 className={styles.gameTitle}>Tier-Wissen</h1>
+          </div>
+          <div />
+        </div>
+        <p className={styles.vehicleSelectTitle}>Wähle dein Level! 🌟</p>
+        <div className={styles.levelGrid}>
+          <button className={`${styles.levelCard} ${styles.levelCard1}`} onClick={() => startLevel(1)}>
+            <span className={styles.levelStars}>⭐</span>
+            <strong className={styles.levelTitle}>Level 1</strong>
+            <span className={styles.levelLabel}>Leicht</span>
+          </button>
+          <button
+            className={`${styles.levelCard} ${styles.levelCard2} ${!L2_UNLOCKED ? styles.levelCardLocked : ''}`}
+            onClick={() => L2_UNLOCKED && startLevel(2)}
+          >
+            <span className={styles.levelStars}>{L2_UNLOCKED ? '⭐⭐' : '🔒'}</span>
+            <strong className={styles.levelTitle}>Level 2</strong>
+            <span className={styles.levelLabel}>Mittel</span>
+            {!L2_UNLOCKED && <small className={styles.levelLockHint}>Level 1 erst abschließen!</small>}
+          </button>
+          <button
+            className={`${styles.levelCard} ${styles.levelCard3} ${!L3_UNLOCKED ? styles.levelCardLocked : ''}`}
+            onClick={() => L3_UNLOCKED && startLevel(3)}
+          >
+            <span className={styles.levelStars}>{L3_UNLOCKED ? '⭐⭐⭐' : '🔒'}</span>
+            <strong className={styles.levelTitle}>Level 3</strong>
+            <span className={styles.levelLabel}>Schwer</span>
+            {!L3_UNLOCKED && <small className={styles.levelLockHint}>Level 2 erst abschließen!</small>}
+          </button>
+        </div>
+      </div>
+    )
+  }
+
+  // ── SPIELFELD ─────────────────────────────────────────────────────────────
   return (
     <div className={`${styles.gamePage} fade-in`}>
-      {/* Header */}
       <div className={styles.gameHeader}>
         <Button variant="ghost" size="sm" onClick={() => navigate('/app')}>← Zurück</Button>
         <div className={styles.gameInfo}>
@@ -123,8 +177,8 @@ export default function TierWissen() {
             const isSelected = selected === i
             const isCorrect  = opt.text === frage.richtig.text
             let btnClass = styles.tierWissenChoiceBtn
-            if (answered && isCorrect)           btnClass += ` ${styles.choiceBtnCorrect}`
-            else if (answered && isSelected)     btnClass += ` ${styles.choiceBtnWrong}`
+            if (answered && isCorrect)       btnClass += ` ${styles.choiceBtnCorrect}`
+            else if (answered && isSelected) btnClass += ` ${styles.choiceBtnWrong}`
 
             return (
               <button
@@ -157,7 +211,6 @@ export default function TierWissen() {
         )}
       </Card>
 
-      {/* Fortschritts-Punkte */}
       <div className={styles.progressDots}>
         {fragen.map((_, i) => (
           <div

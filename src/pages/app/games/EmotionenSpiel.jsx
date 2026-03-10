@@ -10,8 +10,6 @@ import styles from './Game.module.css'
 
 function shuffle(arr) { return [...arr].sort(() => Math.random() - 0.5) }
 
-const TOTAL = 5
-
 function speak(text) {
   if (!('speechSynthesis' in window)) return
   window.speechSynthesis.cancel()
@@ -24,17 +22,11 @@ function speak(text) {
 
 export default function EmotionenSpiel() {
   const navigate = useNavigate()
-  const { completeSession, saving } = useProgress()
+  const { completeSession, saving, completedMissions } = useProgress()
 
-  const [modus, setModus] = useState(null) // null | 'eltern' | 'kind'
-
-  const [runden] = useState(() =>
-    shuffle(EMOTIONEN_RUNDEN).slice(0, TOTAL).map((r) => ({
-      question: r.question,
-      targetEmotion: r.targetEmotion,
-      shuffledFaces: shuffle(r.faces),
-    }))
-  )
+  const [modus,     setModus]     = useState(null) // null | 'eltern' | 'kind'
+  const [level,     setLevel]     = useState(null) // null | 1 | 2 | 3
+  const [runden,    setRunden]    = useState([])
 
   const [idx,       setIdx]       = useState(0)
   const [selected,  setSelected]  = useState(null)
@@ -43,13 +35,30 @@ export default function EmotionenSpiel() {
   const [speaking,  setSpeaking]  = useState(false)
 
   const runde = runden[idx]
+  const TOTAL = runden.length
 
-  // Kinder-Modus: automatisch vorlesen wenn Runde startet
+  // Unlock-Logik
+  const L2_UNLOCKED = completedMissions.includes('emotionen-1')
+  const L3_UNLOCKED = completedMissions.includes('emotionen-2')
+
+  function startLevel(lvl) {
+    const filtered = EMOTIONEN_RUNDEN.filter(r => r.difficulty === lvl)
+    const picked = shuffle(filtered).slice(0, 8).map(r => ({
+      ...r,
+      shuffledFaces: shuffle(r.faces),
+    }))
+    setRunden(picked)
+    setLevel(lvl)
+    setIdx(0)
+    setSelected(null)
+    setScore(0)
+    setGamePhase('playing')
+  }
+
+  // Kinder-Modus: automatisch vorlesen
   useEffect(() => {
     if (modus !== 'kind' || gamePhase !== 'playing' || !runde) return
-    const t = setTimeout(() => {
-      speakQuestion()
-    }, 500)
+    const t = setTimeout(() => speakQuestion(), 500)
     return () => clearTimeout(t)
   }, [modus, idx, gamePhase]) // eslint-disable-line react-hooks/exhaustive-deps
 
@@ -57,7 +66,6 @@ export default function EmotionenSpiel() {
     if (!runde) return
     setSpeaking(true)
     speak(`Welches Gesicht ist ${runde.targetEmotion}?`)
-    // kurzes visuelles Feedback
     setTimeout(() => setSpeaking(false), 1500)
   }
 
@@ -85,15 +93,15 @@ export default function EmotionenSpiel() {
   }
 
   async function handleFinish() {
-    const stars = score === TOTAL ? 3 : score >= 3 ? 2 : 1
+    const stars = score === TOTAL ? 3 : score >= Math.ceil(TOTAL * 0.6) ? 2 : 1
     playComplete()
-    await completeSession({ missionId: 'emotionen-1', xpEarned: score * 2, stars, correct: score, total: TOTAL })
+    await completeSession({ missionId: `emotionen-${level}`, xpEarned: score * 2, stars, correct: score, total: TOTAL })
     navigate('/app')
   }
 
   // ── RESULT ────────────────────────────────────────────────────────────────
   if (gamePhase === 'result') {
-    const stars = score === TOTAL ? 3 : score >= 3 ? 2 : 1
+    const stars = score === TOTAL ? 3 : score >= Math.ceil(TOTAL * 0.6) ? 2 : 1
     return (
       <div className={styles.resultPage}>
         <div className={styles.resultEmoji}>{score === TOTAL ? '😊' : '🌟'}</div>
@@ -123,30 +131,59 @@ export default function EmotionenSpiel() {
           </div>
           <div />
         </div>
-
         <p className={styles.vehicleSelectTitle}>Wie möchtest du spielen? 🎮</p>
-
         <div className={styles.modusGrid}>
-          <button
-            className={`${styles.modusCard} ${styles.modusEltern}`}
-            onClick={() => setModus('eltern')}
-          >
+          <button className={`${styles.modusCard} ${styles.modusEltern}`} onClick={() => setModus('eltern')}>
             <span className={styles.modusEmoji}>👨‍👩‍👧</span>
             <strong className={styles.modusLabel}>Mit Eltern</strong>
-            <span className={styles.modusDesc}>
-              Ein Erwachsener liest die Fragen dem Kind vor
-            </span>
+            <span className={styles.modusDesc}>Ein Erwachsener liest die Fragen dem Kind vor</span>
           </button>
-
-          <button
-            className={`${styles.modusCard} ${styles.modusKind}`}
-            onClick={() => setModus('kind')}
-          >
+          <button className={`${styles.modusCard} ${styles.modusKind}`} onClick={() => setModus('kind')}>
             <span className={styles.modusEmoji}>👶</span>
             <strong className={styles.modusLabel}>Alleine</strong>
-            <span className={styles.modusDesc}>
-              Das Spiel spricht die Fragen automatisch laut vor 🔊
-            </span>
+            <span className={styles.modusDesc}>Das Spiel spricht die Fragen automatisch laut vor 🔊</span>
+          </button>
+        </div>
+      </div>
+    )
+  }
+
+  // ── LEVEL-AUSWAHL ─────────────────────────────────────────────────────────
+  if (!level) {
+    return (
+      <div className={`${styles.gamePage} fade-in`}>
+        <div className={styles.gameHeader}>
+          <Button variant="ghost" size="sm" onClick={() => setModus(null)}>← Zurück</Button>
+          <div className={styles.gameInfo}>
+            <span className={styles.gameEmoji}>😊</span>
+            <h1 className={styles.gameTitle}>Gefühle</h1>
+          </div>
+          <div />
+        </div>
+        <p className={styles.vehicleSelectTitle}>Wähle dein Level! 🌟</p>
+        <div className={styles.levelGrid}>
+          <button className={`${styles.levelCard} ${styles.levelCard1}`} onClick={() => startLevel(1)}>
+            <span className={styles.levelStars}>⭐</span>
+            <strong className={styles.levelTitle}>Level 1</strong>
+            <span className={styles.levelLabel}>Leicht</span>
+          </button>
+          <button
+            className={`${styles.levelCard} ${styles.levelCard2} ${!L2_UNLOCKED ? styles.levelCardLocked : ''}`}
+            onClick={() => L2_UNLOCKED && startLevel(2)}
+          >
+            <span className={styles.levelStars}>{L2_UNLOCKED ? '⭐⭐' : '🔒'}</span>
+            <strong className={styles.levelTitle}>Level 2</strong>
+            <span className={styles.levelLabel}>Mittel</span>
+            {!L2_UNLOCKED && <small className={styles.levelLockHint}>Level 1 erst abschließen!</small>}
+          </button>
+          <button
+            className={`${styles.levelCard} ${styles.levelCard3} ${!L3_UNLOCKED ? styles.levelCardLocked : ''}`}
+            onClick={() => L3_UNLOCKED && startLevel(3)}
+          >
+            <span className={styles.levelStars}>{L3_UNLOCKED ? '⭐⭐⭐' : '🔒'}</span>
+            <strong className={styles.levelTitle}>Level 3</strong>
+            <span className={styles.levelLabel}>Schwer</span>
+            {!L3_UNLOCKED && <small className={styles.levelLockHint}>Level 2 erst abschließen!</small>}
           </button>
         </div>
       </div>
@@ -171,7 +208,6 @@ export default function EmotionenSpiel() {
       <Card padding="lg" className={styles.gameCard}>
 
         {isKind ? (
-          /* ── Kinder-Modus: Sprecher-Knopf ── */
           <div className={styles.kindFrageBereich}>
             <button
               className={`${styles.speakBtn} ${speaking ? styles.speakBtnActive : ''}`}
@@ -186,7 +222,6 @@ export default function EmotionenSpiel() {
             </div>
           </div>
         ) : (
-          /* ── Eltern-Modus: Textfrage + optionaler Vorlesen-Button ── */
           <div className={styles.elternFrageBereich}>
             <div className={styles.emotionQuestion}>{runde.question}</div>
             <button
@@ -200,8 +235,12 @@ export default function EmotionenSpiel() {
           </div>
         )}
 
-        {/* Gesichter-Grid */}
-        <div className={`${styles.emotionGrid} ${isKind ? styles.emotionGridKind : ''}`}>
+        {/* Gesichter-Grid — Level 3 = 3 Spalten */}
+        <div className={[
+          styles.emotionGrid,
+          isKind ? styles.emotionGridKind : '',
+          level === 3 ? styles.emotionGrid3 : '',
+        ].join(' ')}>
           {runde.shuffledFaces.map((face, i) => (
             <button
               key={i}

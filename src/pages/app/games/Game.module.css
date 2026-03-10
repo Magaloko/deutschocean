@@ -1146,3 +1146,81 @@
   background: #fee2e2 !important;
   opacity: 0.8;
 }
+
+/* =============================================
+   Level-Auswahl Screen (alle 6 Spiele)
+   ============================================= */
+.levelGrid {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding: 20px;
+  max-width: 400px;
+  margin: 0 auto;
+  width: 100%;
+}
+.levelCard {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 18px 24px;
+  border-radius: 16px;
+  border: 2.5px solid transparent;
+  cursor: pointer;
+  font-family: inherit;
+  transition: transform 0.15s, box-shadow 0.15s;
+  text-align: center;
+  width: 100%;
+}
+.levelCard:not(.levelCardLocked):hover {
+  transform: scale(1.03);
+  box-shadow: 0 6px 20px rgba(0,0,0,0.12);
+}
+.levelCard1 {
+  border-color: #10b981;
+  background: linear-gradient(135deg, #d1fae5, #a7f3d0);
+}
+.levelCard2 {
+  border-color: #f59e0b;
+  background: linear-gradient(135deg, #fef3c7, #fde68a);
+}
+.levelCard3 {
+  border-color: #ef4444;
+  background: linear-gradient(135deg, #fee2e2, #fecaca);
+}
+.levelCardLocked {
+  opacity: 0.55;
+  cursor: not-allowed;
+  filter: grayscale(0.4);
+  transform: none !important;
+}
+.levelStars {
+  font-size: 1.8rem;
+  line-height: 1;
+}
+.levelTitle {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: #1e293b;
+  margin: 0;
+}
+.levelLabel {
+  font-size: 0.9rem;
+  color: #475569;
+}
+.levelLockHint {
+  font-size: 0.72rem;
+  color: #94a3b8;
+  margin-top: 2px;
+}
+
+/* EmotionenSpiel Level 3: 3x2 Raster */
+.emotionGrid3 {
+  grid-template-columns: repeat(3, 1fr) !important;
+}
+
+/* EmojiBaukasten Level 3: 4x2 Palette */
+.baukastenPalette3 {
+  grid-template-columns: repeat(4, 1fr) !important;
+}

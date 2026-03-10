@@ -10,21 +10,37 @@ import styles from './Game.module.css'
 
 function shuffle(arr) { return [...arr].sort(() => Math.random() - 0.5) }
 
-const TOTAL = 5
-
 export default function FarbenJaeger() {
   const navigate = useNavigate()
-  const { completeSession, saving } = useProgress()
+  const { completeSession, saving, completedMissions } = useProgress()
 
-  const [runden]  = useState(() => shuffle(FARBEN_RUNDEN).slice(0, TOTAL))
-  const [idx, setIdx]           = useState(0)
+  const [level,    setLevel]    = useState(null) // null | 1 | 2 | 3
+  const [runden,   setRunden]   = useState([])
+
+  const [idx,      setIdx]      = useState(0)
   const [selected, setSelected] = useState(new Set())
-  const [checked, setChecked]   = useState(false)
-  const [lastOk, setLastOk]     = useState(false)
-  const [score, setScore]       = useState(0)
-  const [phase, setPhase]       = useState('playing')
+  const [checked,  setChecked]  = useState(false)
+  const [lastOk,   setLastOk]   = useState(false)
+  const [score,    setScore]    = useState(0)
+  const [phase,    setPhase]    = useState('playing')
 
+  const TOTAL = runden.length
   const runde = runden[idx]
+
+  const L2_UNLOCKED = completedMissions.includes('farben-jaeger-1')
+  const L3_UNLOCKED = completedMissions.includes('farben-jaeger-2')
+
+  function startLevel(lvl) {
+    const filtered = FARBEN_RUNDEN.filter(r => r.difficulty === lvl)
+    setRunden(shuffle(filtered).slice(0, 6))
+    setLevel(lvl)
+    setIdx(0)
+    setSelected(new Set())
+    setChecked(false)
+    setLastOk(false)
+    setScore(0)
+    setPhase('playing')
+  }
 
   function toggleItem(itemId) {
     if (checked) return
@@ -58,30 +74,75 @@ export default function FarbenJaeger() {
   }
 
   async function handleFinish() {
-    const stars = score === TOTAL ? 3 : score >= Math.ceil(TOTAL * 0.6) ? 2 : 1
+    const stars = score >= TOTAL ? 3 : score >= Math.ceil(TOTAL * 0.6) ? 2 : 1
     playComplete()
-    await completeSession({ missionId: 'farben-jaeger-1', xpEarned: score * 2, stars, correct: score, total: TOTAL })
+    await completeSession({ missionId: `farben-jaeger-${level}`, xpEarned: score * 2, stars, correct: score, total: TOTAL })
     navigate('/app')
   }
 
+  // ── RESULT ────────────────────────────────────────────────────────────────
   if (phase === 'result') {
+    const stars = score >= TOTAL ? 3 : score >= Math.ceil(TOTAL * 0.6) ? 2 : 1
     return (
       <div className={styles.resultPage}>
-        <div className={styles.resultEmoji}>{score === TOTAL ? '🎨' : '⭐'}</div>
-        <h1 className={styles.resultTitle}>{score === TOTAL ? 'Super Farbenjäger!' : 'Gut gemacht!'}</h1>
+        <div className={styles.resultEmoji}>{score >= TOTAL ? '🎨' : '⭐'}</div>
+        <h1 className={styles.resultTitle}>{score >= TOTAL ? 'Super Farbenjäger!' : 'Gut gemacht!'}</h1>
         <p className={styles.resultSub}>{score}/{TOTAL} richtig</p>
         <div className={styles.resultStats}>
           <Badge color="purple">+{score * 2} XP</Badge>
-          <Badge color="yellow">{'⭐'.repeat(score === TOTAL ? 3 : score >= 3 ? 2 : 1)}</Badge>
+          <Badge color="yellow">{'⭐'.repeat(stars)}</Badge>
         </div>
         <div className={styles.resultActions}>
           <Button onClick={handleFinish} loading={saving} size="lg">Speichern</Button>
-          <Button variant="secondary" onClick={() => navigate('/app/missionen')} size="lg">Andere Missionen</Button>
+          <Button variant="secondary" onClick={() => navigate('/app')} size="lg">Zurück</Button>
         </div>
       </div>
     )
   }
 
+  // ── LEVEL-AUSWAHL ─────────────────────────────────────────────────────────
+  if (!level) {
+    return (
+      <div className={`${styles.gamePage} fade-in`}>
+        <div className={styles.gameHeader}>
+          <Button variant="ghost" size="sm" onClick={() => navigate('/app')}>← Zurück</Button>
+          <div className={styles.gameInfo}>
+            <span className={styles.gameEmoji}>🎨</span>
+            <h1 className={styles.gameTitle}>Farbenjäger</h1>
+          </div>
+          <div />
+        </div>
+        <p className={styles.vehicleSelectTitle}>Wähle dein Level! 🌟</p>
+        <div className={styles.levelGrid}>
+          <button className={`${styles.levelCard} ${styles.levelCard1}`} onClick={() => startLevel(1)}>
+            <span className={styles.levelStars}>⭐</span>
+            <strong className={styles.levelTitle}>Level 1</strong>
+            <span className={styles.levelLabel}>Leicht</span>
+          </button>
+          <button
+            className={`${styles.levelCard} ${styles.levelCard2} ${!L2_UNLOCKED ? styles.levelCardLocked : ''}`}
+            onClick={() => L2_UNLOCKED && startLevel(2)}
+          >
+            <span className={styles.levelStars}>{L2_UNLOCKED ? '⭐⭐' : '🔒'}</span>
+            <strong className={styles.levelTitle}>Level 2</strong>
+            <span className={styles.levelLabel}>Mittel</span>
+            {!L2_UNLOCKED && <small className={styles.levelLockHint}>Level 1 erst abschließen!</small>}
+          </button>
+          <button
+            className={`${styles.levelCard} ${styles.levelCard3} ${!L3_UNLOCKED ? styles.levelCardLocked : ''}`}
+            onClick={() => L3_UNLOCKED && startLevel(3)}
+          >
+            <span className={styles.levelStars}>{L3_UNLOCKED ? '⭐⭐⭐' : '🔒'}</span>
+            <strong className={styles.levelTitle}>Level 3</strong>
+            <span className={styles.levelLabel}>Schwer</span>
+            {!L3_UNLOCKED && <small className={styles.levelLockHint}>Level 2 erst abschließen!</small>}
+          </button>
+        </div>
+      </div>
+    )
+  }
+
+  // ── SPIELFELD ─────────────────────────────────────────────────────────────
   return (
     <div className={`${styles.gamePage} fade-in`}>
       <div className={styles.gameHeader}>
@@ -101,7 +162,7 @@ export default function FarbenJaeger() {
 
         <div className={styles.kidsGrid}>
           {runde.items.map(item => {
-            const isSel    = selected.has(item.id)
+            const isSel     = selected.has(item.id)
             const isCorrect = checked && item.isTarget
             const isWrong   = checked && !item.isTarget && isSel
             const isMissed  = checked && item.isTarget && !isSel

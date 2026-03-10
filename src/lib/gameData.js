@@ -196,6 +196,19 @@ export const MISSIONS = [
     level: 0,
     color: '#f97316',
   },
+  // ---- Für Kleine – Level 2+3 Spiele ----
+  { id: 'emotionen-2',        type: 'emotionenSpiel',  title: 'Gefühle',           description: 'Erkenne schwierigere Gefühle!',         icon: '😊', xp: 12, stars: 0, level: 0, color: '#a855f7' },
+  { id: 'emotionen-3',        type: 'emotionenSpiel',  title: 'Gefühle',           description: 'Meistere alle Gefühle!',               icon: '😊', xp: 14, stars: 0, level: 0, color: '#a855f7' },
+  { id: 'emoji-geschichte-2', type: 'emojiGeschichte', title: 'Emoji-Geschichten', description: 'Kniffligere Emoji-Geschichten!',        icon: '📖', xp: 16, stars: 0, level: 0, color: '#f97316' },
+  { id: 'emoji-geschichte-3', type: 'emojiGeschichte', title: 'Emoji-Geschichten', description: 'Emoji-Geschichten Profi-Level!',        icon: '📖', xp: 18, stars: 0, level: 0, color: '#f97316' },
+  { id: 'emoji-baukasten-2',  type: 'emojiBaukasten',  title: 'Emoji-Baukasten',   description: 'Wähle die richtigen Emojis!',          icon: '🧩', xp: 18, stars: 0, level: 0, color: '#8b5cf6' },
+  { id: 'emoji-baukasten-3',  type: 'emojiBaukasten',  title: 'Emoji-Baukasten',   description: 'Emoji-Baukasten: Schwere Level!',      icon: '🧩', xp: 20, stars: 0, level: 0, color: '#8b5cf6' },
+  { id: 'farben-jaeger-2',    type: 'farbenJaeger',    title: 'Farbenjäger',       description: 'Mehr Farben – mehr Herausforderung!',  icon: '🎨', xp: 12, stars: 0, level: 0, color: '#ec4899' },
+  { id: 'farben-jaeger-3',    type: 'farbenJaeger',    title: 'Farbenjäger',       description: 'Ähnliche Farben erkennen!',            icon: '🎨', xp: 14, stars: 0, level: 0, color: '#ec4899' },
+  { id: 'memory-2',           type: 'memorySpiel',     title: 'Memory',            description: 'Mehr Karten – mehr Spaß!',             icon: '🃏', xp: 18, stars: 0, level: 0, color: '#f97316' },
+  { id: 'memory-3',           type: 'memorySpiel',     title: 'Memory',            description: 'Memory Meister-Level!',                icon: '🃏', xp: 22, stars: 0, level: 0, color: '#f97316' },
+  { id: 'tier-wissen-2',      type: 'tierWissen',      title: 'Tier-Wissen',       description: 'Tieferes Tier-Wissen gefragt!',        icon: '🦁', xp: 18, stars: 0, level: 0, color: '#14b8a6' },
+  { id: 'tier-wissen-3',      type: 'tierWissen',      title: 'Tier-Wissen',       description: 'Tier-Wissen Experten-Level!',          icon: '🦁', xp: 20, stars: 0, level: 0, color: '#14b8a6' },
   // ---- Für Kleine – Emoji-Baukasten ----
   {
     id: 'emoji-baukasten-1',
@@ -738,6 +751,7 @@ export const SATZ_AUFGABEN = [
 // Farbenjäger – Runden (6 Farben)
 export const FARBEN_RUNDEN = [
   {
+    difficulty: 1,
     id: 'fc1', targetColor: 'Rot', targetHex: '#ef4444',
     items: [
       { id: 1, hex: '#ef4444', emoji: '🍎', isTarget: true  },
@@ -749,6 +763,7 @@ export const FARBEN_RUNDEN = [
     ],
   },
   {
+    difficulty: 1,
     id: 'fc2', targetColor: 'Blau', targetHex: '#3b82f6',
     items: [
       { id: 1, hex: '#3b82f6', emoji: '🌊', isTarget: true  },
@@ -760,6 +775,7 @@ export const FARBEN_RUNDEN = [
     ],
   },
   {
+    difficulty: 1,
     id: 'fc3', targetColor: 'Grün', targetHex: '#10b981',
     items: [
       { id: 1, hex: '#10b981', emoji: '🌳', isTarget: true  },
@@ -771,6 +787,7 @@ export const FARBEN_RUNDEN = [
     ],
   },
   {
+    difficulty: 1,
     id: 'fc4', targetColor: 'Gelb', targetHex: '#fbbf24',
     items: [
       { id: 1, hex: '#fbbf24', emoji: '🌻', isTarget: true  },
@@ -782,6 +799,7 @@ export const FARBEN_RUNDEN = [
     ],
   },
   {
+    difficulty: 2,
     id: 'fc5', targetColor: 'Lila', targetHex: '#8b5cf6',
     items: [
       { id: 1, hex: '#8b5cf6', emoji: '🍇', isTarget: true  },
@@ -793,6 +811,7 @@ export const FARBEN_RUNDEN = [
     ],
   },
   {
+    difficulty: 2,
     id: 'fc6', targetColor: 'Orange', targetHex: '#f97316',
     items: [
       { id: 1, hex: '#f97316', emoji: '🍊', isTarget: true  },
@@ -803,6 +822,115 @@ export const FARBEN_RUNDEN = [
       { id: 6, hex: '#fbbf24', emoji: '🌻', isTarget: false },
     ],
   },
+  {
+    difficulty: 1,
+    id: 'fc_l1_5', targetColor: 'Rosa', targetHex: '#f472b6',
+    items: [
+      { id: 1, hex: '#f472b6', emoji: '🌸', isTarget: true  },
+      { id: 2, hex: '#3b82f6', emoji: '🐳', isTarget: false },
+      { id: 3, hex: '#f472b6', emoji: '🌷', isTarget: true  },
+      { id: 4, hex: '#fbbf24', emoji: '⭐', isTarget: false },
+      { id: 5, hex: '#f472b6', emoji: '🍬', isTarget: true  },
+      { id: 6, hex: '#10b981', emoji: '🐸', isTarget: false },
+    ],
+  },
+  {
+    difficulty: 2,
+    id: 'fc_l2_3', targetColor: 'Türkis', targetHex: '#06b6d4',
+    items: [
+      { id: 1, hex: '#06b6d4', emoji: '🏊', isTarget: true  },
+      { id: 2, hex: '#ef4444', emoji: '🍎', isTarget: false },
+      { id: 3, hex: '#06b6d4', emoji: '🧊', isTarget: true  },
+      { id: 4, hex: '#8b5cf6', emoji: '🍇', isTarget: false },
+      { id: 5, hex: '#06b6d4', emoji: '🐬', isTarget: true  },
+      { id: 6, hex: '#fbbf24', emoji: '🌻', isTarget: false },
+    ],
+  },
+  {
+    difficulty: 2,
+    id: 'fc_l2_4', targetColor: 'Braun', targetHex: '#92400e',
+    items: [
+      { id: 1, hex: '#92400e', emoji: '🍫', isTarget: true  },
+      { id: 2, hex: '#3b82f6', emoji: '💎', isTarget: false },
+      { id: 3, hex: '#92400e', emoji: '🪵', isTarget: true  },
+      { id: 4, hex: '#10b981', emoji: '🌿', isTarget: false },
+      { id: 5, hex: '#92400e', emoji: '🐻', isTarget: true  },
+      { id: 6, hex: '#ef4444', emoji: '🍅', isTarget: false },
+    ],
+  },
+  {
+    difficulty: 2,
+    id: 'fc_l2_5', targetColor: 'Grau', targetHex: '#6b7280',
+    items: [
+      { id: 1, hex: '#6b7280', emoji: '🐘', isTarget: true  },
+      { id: 2, hex: '#ef4444', emoji: '🌷', isTarget: false },
+      { id: 3, hex: '#6b7280', emoji: '🌫️', isTarget: true  },
+      { id: 4, hex: '#fbbf24', emoji: '🌟', isTarget: false },
+      { id: 5, hex: '#6b7280', emoji: '🐺', isTarget: true  },
+      { id: 6, hex: '#f97316', emoji: '🦊', isTarget: false },
+    ],
+  },
+  {
+    difficulty: 3,
+    id: 'fc_l3_1', targetColor: 'Hellblau', targetHex: '#93c5fd',
+    items: [
+      { id: 1, hex: '#93c5fd', emoji: '🌊', isTarget: true  },
+      { id: 2, hex: '#3b82f6', emoji: '💎', isTarget: false },
+      { id: 3, hex: '#93c5fd', emoji: '❄️', isTarget: true  },
+      { id: 4, hex: '#a78bfa', emoji: '🔮', isTarget: false },
+      { id: 5, hex: '#93c5fd', emoji: '🫐', isTarget: true  },
+      { id: 6, hex: '#7c3aed', emoji: '🍇', isTarget: false },
+    ],
+  },
+  {
+    difficulty: 3,
+    id: 'fc_l3_2', targetColor: 'Dunkelgrün', targetHex: '#15803d',
+    items: [
+      { id: 1, hex: '#15803d', emoji: '🌲', isTarget: true  },
+      { id: 2, hex: '#10b981', emoji: '🌿', isTarget: false },
+      { id: 3, hex: '#15803d', emoji: '🥦', isTarget: true  },
+      { id: 4, hex: '#84cc16', emoji: '🍀', isTarget: false },
+      { id: 5, hex: '#15803d', emoji: '🐊', isTarget: true  },
+      { id: 6, hex: '#06b6d4', emoji: '🐟', isTarget: false },
+    ],
+  },
+  {
+    difficulty: 3,
+    id: 'fc_l3_3', targetColor: 'Dunkelrot', targetHex: '#b91c1c',
+    items: [
+      { id: 1, hex: '#b91c1c', emoji: '🍎', isTarget: true  },
+      { id: 2, hex: '#f97316', emoji: '🍊', isTarget: false },
+      { id: 3, hex: '#b91c1c', emoji: '🌹', isTarget: true  },
+      { id: 4, hex: '#ec4899', emoji: '🌺', isTarget: false },
+      { id: 5, hex: '#b91c1c', emoji: '🎈', isTarget: true  },
+      { id: 6, hex: '#ef4444', emoji: '🍅', isTarget: false },
+    ],
+  },
+  {
+    difficulty: 3,
+    id: 'fc_l3_4', targetColor: 'Hellgelb', targetHex: '#fde047',
+    items: [
+      { id: 1, hex: '#fde047', emoji: '⭐', isTarget: true  },
+      { id: 2, hex: '#f97316', emoji: '🍊', isTarget: false },
+      { id: 3, hex: '#fde047', emoji: '🍋', isTarget: true  },
+      { id: 4, hex: '#fbbf24', emoji: '🌻', isTarget: false },
+      { id: 5, hex: '#fde047', emoji: '🌟', isTarget: true  },
+      { id: 6, hex: '#d9f99d', emoji: '🍏', isTarget: false },
+    ],
+  },
+  {
+    difficulty: 3,
+    id: 'fc_l3_5', targetColor: 'Violett', targetHex: '#7c3aed',
+    items: [
+      { id: 1, hex: '#7c3aed', emoji: '🍇', isTarget: true  },
+      { id: 2, hex: '#3b82f6', emoji: '💎', isTarget: false },
+      { id: 3, hex: '#7c3aed', emoji: '🔮', isTarget: true  },
+      { id: 4, hex: '#ec4899', emoji: '🌸', isTarget: false },
+      { id: 5, hex: '#7c3aed', emoji: '🌂', isTarget: true  },
+      { id: 6, hex: '#a78bfa', emoji: '🌷', isTarget: false },
+    ],
+  },
+
 ]
 
 // Tiergeräusche
@@ -932,6 +1060,7 @@ export const FALSCHER_GEGENSTAND_RUNDEN = [
 // Emotionen-Spiel – Gefühle-Runden (7 Stück)
 export const EMOTIONEN_RUNDEN = [
   {
+    difficulty: 1,
     question: 'Wer ist traurig?',
     targetEmotion: 'traurig',
     faces: [
@@ -942,6 +1071,7 @@ export const EMOTIONEN_RUNDEN = [
     ],
   },
   {
+    difficulty: 1,
     question: 'Wer ist glücklich?',
     targetEmotion: 'glücklich',
     faces: [
@@ -952,6 +1082,7 @@ export const EMOTIONEN_RUNDEN = [
     ],
   },
   {
+    difficulty: 1,
     question: 'Wer ist wütend?',
     targetEmotion: 'wütend',
     faces: [
@@ -962,6 +1093,7 @@ export const EMOTIONEN_RUNDEN = [
     ],
   },
   {
+    difficulty: 1,
     question: 'Wer ist müde?',
     targetEmotion: 'müde',
     faces: [
@@ -972,6 +1104,7 @@ export const EMOTIONEN_RUNDEN = [
     ],
   },
   {
+    difficulty: 1,
     question: 'Wer ist überrascht?',
     targetEmotion: 'überrascht',
     faces: [
@@ -982,6 +1115,7 @@ export const EMOTIONEN_RUNDEN = [
     ],
   },
   {
+    difficulty: 2,
     question: 'Wer ist fröhlich?',
     targetEmotion: 'fröhlich',
     faces: [
@@ -992,6 +1126,7 @@ export const EMOTIONEN_RUNDEN = [
     ],
   },
   {
+    difficulty: 2,
     question: 'Wer ist ängstlich?',
     targetEmotion: 'ängstlich',
     faces: [
@@ -1003,6 +1138,7 @@ export const EMOTIONEN_RUNDEN = [
   },
   // ── 8 neue Emotionen ──────────────────────────────────────────────────────
   {
+    difficulty: 2,
     question: 'Wer ist verliebt?',
     targetEmotion: 'verliebt',
     faces: [
@@ -1013,6 +1149,7 @@ export const EMOTIONEN_RUNDEN = [
     ],
   },
   {
+    difficulty: 2,
     question: 'Wer ist aufgeregt?',
     targetEmotion: 'aufgeregt',
     faces: [
@@ -1023,6 +1160,7 @@ export const EMOTIONEN_RUNDEN = [
     ],
   },
   {
+    difficulty: 2,
     question: 'Wer ist stolz?',
     targetEmotion: 'stolz',
     faces: [
@@ -1033,6 +1171,7 @@ export const EMOTIONEN_RUNDEN = [
     ],
   },
   {
+    difficulty: 3,
     question: 'Wer ist gelangweilt?',
     targetEmotion: 'gelangweilt',
     faces: [
@@ -1040,9 +1179,12 @@ export const EMOTIONEN_RUNDEN = [
       { emoji: '😑', label: 'gelangweilt', isTarget: true  },
       { emoji: '😊', label: 'glücklich',   isTarget: false },
       { emoji: '😡', label: 'wütend',      isTarget: false },
+      { emoji: '😕', label: 'verwirrt',    isTarget: false },
+      { emoji: '😢', label: 'traurig',     isTarget: false },
     ],
   },
   {
+    difficulty: 3,
     question: 'Wer ist verwirrt?',
     targetEmotion: 'verwirrt',
     faces: [
@@ -1050,9 +1192,12 @@ export const EMOTIONEN_RUNDEN = [
       { emoji: '😁', label: 'fröhlich',    isTarget: false },
       { emoji: '😕', label: 'verwirrt',    isTarget: true  },
       { emoji: '🥰', label: 'verliebt',    isTarget: false },
+      { emoji: '🤔', label: 'nachdenklich',isTarget: false },
+      { emoji: '😮', label: 'überrascht',  isTarget: false },
     ],
   },
   {
+    difficulty: 3,
     question: 'Wer ist krank?',
     targetEmotion: 'krank',
     faces: [
@@ -1060,9 +1205,12 @@ export const EMOTIONEN_RUNDEN = [
       { emoji: '🤒', label: 'krank',      isTarget: true  },
       { emoji: '😤', label: 'stolz',      isTarget: false },
       { emoji: '😮', label: 'überrascht', isTarget: false },
+      { emoji: '😴', label: 'müde',       isTarget: false },
+      { emoji: '😕', label: 'verwirrt',   isTarget: false },
     ],
   },
   {
+    difficulty: 3,
     question: 'Wer ist neugierig?',
     targetEmotion: 'neugierig',
     faces: [
@@ -1070,9 +1218,12 @@ export const EMOTIONEN_RUNDEN = [
       { emoji: '😑', label: 'gelangweilt', isTarget: false },
       { emoji: '🧐', label: 'neugierig', isTarget: true  },
       { emoji: '😢', label: 'traurig',   isTarget: false },
+      { emoji: '🤔', label: 'nachdenklich',isTarget: false },
+      { emoji: '😰', label: 'ängstlich', isTarget: false },
     ],
   },
   {
+    difficulty: 3,
     question: 'Wer ist eifersüchtig?',
     targetEmotion: 'eifersüchtig',
     faces: [
@@ -1080,6 +1231,8 @@ export const EMOTIONEN_RUNDEN = [
       { emoji: '🤔', label: 'nachdenklich', isTarget: false },
       { emoji: '😊', label: 'glücklich',    isTarget: false },
       { emoji: '😒', label: 'eifersüchtig', isTarget: true  },
+      { emoji: '😕', label: 'verwirrt',     isTarget: false },
+      { emoji: '🤩', label: 'aufgeregt',    isTarget: false },
     ],
   },
 ]
@@ -1089,6 +1242,7 @@ export const TIER_WISSEN_FRAGEN = [
   // ── Was isst das Tier? ────────────────────────────────────────────────────
   {
     tier: '🐒', tierName: 'Affe',
+    difficulty: 1,
     frage: 'Was isst ein Affe am liebsten?',
     richtig: { emoji: '🍌', text: 'Bananen' },
     falsch:  [{ emoji: '🥕', text: 'Karotten' }, { emoji: '🍕', text: 'Pizza' }],
@@ -1097,6 +1251,7 @@ export const TIER_WISSEN_FRAGEN = [
   },
   {
     tier: '🐼', tierName: 'Panda',
+    difficulty: 1,
     frage: 'Was frisst ein Panda den ganzen Tag?',
     richtig: { emoji: '🎍', text: 'Bambus' },
     falsch:  [{ emoji: '🍎', text: 'Äpfel' }, { emoji: '🐟', text: 'Fisch' }],
@@ -1105,6 +1260,7 @@ export const TIER_WISSEN_FRAGEN = [
   },
   {
     tier: '🦁', tierName: 'Löwe',
+    difficulty: 1,
     frage: 'Was jagt ein Löwe in der Savanne?',
     richtig: { emoji: '🦓', text: 'Zebras' },
     falsch:  [{ emoji: '🍌', text: 'Bananen' }, { emoji: '🥦', text: 'Brokkoli' }],
@@ -1113,6 +1269,7 @@ export const TIER_WISSEN_FRAGEN = [
   },
   {
     tier: '🐝', tierName: 'Biene',
+    difficulty: 2,
     frage: 'Was sammelt eine Biene von Blumen?',
     richtig: { emoji: '🌸', text: 'Nektar' },
     falsch:  [{ emoji: '💧', text: 'Wasser' }, { emoji: '🌿', text: 'Blätter' }],
@@ -1121,6 +1278,7 @@ export const TIER_WISSEN_FRAGEN = [
   },
   {
     tier: '🐧', tierName: 'Pinguin',
+    difficulty: 2,
     frage: 'Was frisst ein Pinguin?',
     richtig: { emoji: '🐟', text: 'Fisch' },
     falsch:  [{ emoji: '🌾', text: 'Getreide' }, { emoji: '🍄', text: 'Pilze' }],
@@ -1130,6 +1288,7 @@ export const TIER_WISSEN_FRAGEN = [
   // ── Was produziert das Tier? ──────────────────────────────────────────────
   {
     tier: '🐄', tierName: 'Kuh',
+    difficulty: 1,
     frage: 'Was gibt uns eine Kuh?',
     richtig: { emoji: '🥛', text: 'Milch' },
     falsch:  [{ emoji: '🍯', text: 'Honig' }, { emoji: '🧶', text: 'Wolle' }],
@@ -1138,6 +1297,7 @@ export const TIER_WISSEN_FRAGEN = [
   },
   {
     tier: '🐝', tierName: 'Biene',
+    difficulty: 3,
     frage: 'Was stellt eine Biene her?',
     richtig: { emoji: '🍯', text: 'Honig' },
     falsch:  [{ emoji: '🕸️', text: 'Spinnennetz' }, { emoji: '🧵', text: 'Faden' }],
@@ -1146,6 +1306,7 @@ export const TIER_WISSEN_FRAGEN = [
   },
   {
     tier: '🕷️', tierName: 'Spinne',
+    difficulty: 2,
     frage: 'Was baut eine Spinne?',
     richtig: { emoji: '🕸️', text: 'Spinnennetz' },
     falsch:  [{ emoji: '🪺', text: 'Nest' }, { emoji: '🏠', text: 'Haus' }],
@@ -1154,6 +1315,7 @@ export const TIER_WISSEN_FRAGEN = [
   },
   {
     tier: '🐑', tierName: 'Schaf',
+    difficulty: 2,
     frage: 'Was liefert uns ein Schaf?',
     richtig: { emoji: '🧶', text: 'Wolle' },
     falsch:  [{ emoji: '🥚', text: 'Eier' }, { emoji: '🍯', text: 'Honig' }],
@@ -1162,6 +1324,7 @@ export const TIER_WISSEN_FRAGEN = [
   },
   {
     tier: '🐓', tierName: 'Huhn',
+    difficulty: 1,
     frage: 'Was legt ein Huhn?',
     richtig: { emoji: '🥚', text: 'Eier' },
     falsch:  [{ emoji: '🥛', text: 'Milch' }, { emoji: '🍯', text: 'Honig' }],
@@ -1171,6 +1334,7 @@ export const TIER_WISSEN_FRAGEN = [
   // ── Welche Tiere sind verwandt? ───────────────────────────────────────────
   {
     tier: '🦍', tierName: 'Gorilla',
+    difficulty: 1,
     frage: 'Mit wem ist ein Gorilla am nächsten verwandt?',
     richtig: { emoji: '🧑', text: 'Menschen' },
     falsch:  [{ emoji: '🐻', text: 'Bären' }, { emoji: '🐘', text: 'Elefanten' }],
@@ -1179,6 +1343,7 @@ export const TIER_WISSEN_FRAGEN = [
   },
   {
     tier: '🐬', tierName: 'Delfin',
+    difficulty: 2,
     frage: 'Mit welchen Tieren sind Delfine verwandt?',
     richtig: { emoji: '🐳', text: 'Wale' },
     falsch:  [{ emoji: '🦈', text: 'Haie' }, { emoji: '🐟', text: 'Fische' }],
@@ -1187,6 +1352,7 @@ export const TIER_WISSEN_FRAGEN = [
   },
   {
     tier: '🦊', tierName: 'Fuchs',
+    difficulty: 3,
     frage: 'Mit welchen Tieren ist ein Fuchs verwandt?',
     richtig: { emoji: '🐕', text: 'Hunde' },
     falsch:  [{ emoji: '🐈', text: 'Katzen' }, { emoji: '🦝', text: 'Waschbären' }],
@@ -1195,6 +1361,7 @@ export const TIER_WISSEN_FRAGEN = [
   },
   {
     tier: '🐯', tierName: 'Tiger',
+    difficulty: 2,
     frage: 'Mit welchen Haustieren ist ein Tiger verwandt?',
     richtig: { emoji: '🐈', text: 'Katzen' },
     falsch:  [{ emoji: '🐕', text: 'Hunde' }, { emoji: '🐹', text: 'Hamster' }],
@@ -1203,6 +1370,7 @@ export const TIER_WISSEN_FRAGEN = [
   },
   {
     tier: '🐫', tierName: 'Kamel',
+    difficulty: 3,
     frage: 'Mit welchem anderen Tier ist das Kamel verwandt?',
     richtig: { emoji: '🦙', text: 'Lama' },
     falsch:  [{ emoji: '🐴', text: 'Pferd' }, { emoji: '🦒', text: 'Giraffe' }],
@@ -1212,6 +1380,7 @@ export const TIER_WISSEN_FRAGEN = [
   // ── Wo lebt das Tier? ─────────────────────────────────────────────────────
   {
     tier: '🐨', tierName: 'Koala',
+    difficulty: 1,
     frage: 'Wo lebt ein Koala?',
     richtig: { emoji: '🇦🇺', text: 'Australien' },
     falsch:  [{ emoji: '🇧🇷', text: 'Brasilien' }, { emoji: '❄️', text: 'Arktis' }],
@@ -1220,6 +1389,7 @@ export const TIER_WISSEN_FRAGEN = [
   },
   {
     tier: '🐺', tierName: 'Wolf',
+    difficulty: 2,
     frage: 'Wo lebt ein Wolf?',
     richtig: { emoji: '🌲', text: 'Wald' },
     falsch:  [{ emoji: '🏜️', text: 'Wüste' }, { emoji: '🌊', text: 'Meer' }],
@@ -1228,6 +1398,7 @@ export const TIER_WISSEN_FRAGEN = [
   },
   {
     tier: '🐘', tierName: 'Elefant',
+    difficulty: 2,
     frage: 'Wo lebt ein Elefant?',
     richtig: { emoji: '🌾', text: 'Savanne' },
     falsch:  [{ emoji: '❄️', text: 'Arktis' }, { emoji: '🌊', text: 'Ozean' }],
@@ -1236,6 +1407,7 @@ export const TIER_WISSEN_FRAGEN = [
   },
   {
     tier: '🦒', tierName: 'Giraffe',
+    difficulty: 3,
     frage: 'Auf welchem Kontinent lebt eine Giraffe?',
     richtig: { emoji: '🌍', text: 'Afrika' },
     falsch:  [{ emoji: '🌎', text: 'Amerika' }, { emoji: '🌏', text: 'Asien' }],
@@ -1244,6 +1416,7 @@ export const TIER_WISSEN_FRAGEN = [
   },
   {
     tier: '🐻‍❄️', tierName: 'Eisbär',
+    difficulty: 3,
     frage: 'Wo lebt ein Eisbär?',
     richtig: { emoji: '❄️', text: 'Arktis' },
     falsch:  [{ emoji: '🌴', text: 'Tropen' }, { emoji: '🏜️', text: 'Wüste' }],
@@ -1255,6 +1428,7 @@ export const TIER_WISSEN_FRAGEN = [
 // ─── Emoji-Geschichten ───────────────────────────────────────────────────────
 export const EMOJI_GESCHICHTEN = [
   {
+    difficulty: 1,
     story: ['🎂','🎁','🎉','😊'],
     frage: 'Was feiern die Emojis?',
     richtig: { emojis: ['🎂','🎉'], text: 'Geburtstag' },
@@ -1265,6 +1439,7 @@ export const EMOJI_GESCHICHTEN = [
     fakt: '🎂 Am Geburtstag gibt es Kuchen, Geschenke und viel Freude!',
   },
   {
+    difficulty: 1,
     story: ['❄️','🌨️','⛄','🧤'],
     frage: 'Was macht das Kind draußen?',
     richtig: { emojis: ['⛄','❄️'], text: 'Schneemann bauen' },
@@ -1275,6 +1450,7 @@ export const EMOJI_GESCHICHTEN = [
     fakt: '⛄ Für einen Schneemann braucht man viel Schnee und Geduld!',
   },
   {
+    difficulty: 1,
     story: ['🌸','🌷','🐝','☀️'],
     frage: 'Welche Jahreszeit zeigen die Emojis?',
     richtig: { emojis: ['🌸','☀️'], text: 'Frühling' },
@@ -1285,6 +1461,7 @@ export const EMOJI_GESCHICHTEN = [
     fakt: '🌸 Im Frühling blühen Blumen und Bienen sammeln Nektar!',
   },
   {
+    difficulty: 2,
     story: ['🐉','👑','🏰','⚔️'],
     frage: 'Was ist das für eine Geschichte?',
     richtig: { emojis: ['🏰','👑'], text: 'Märchen' },
@@ -1295,6 +1472,7 @@ export const EMOJI_GESCHICHTEN = [
     fakt: '🐉 In Märchen gibt es Drachen, Ritter und Prinzessinnen!',
   },
   {
+    difficulty: 1,
     story: ['🌙','⭐','😴','💤'],
     frage: 'Was macht das Kind?',
     richtig: { emojis: ['😴','🌙'], text: 'Schlafen gehen' },
@@ -1305,6 +1483,7 @@ export const EMOJI_GESCHICHTEN = [
     fakt: '💤 Kinder brauchen mindestens 10 Stunden Schlaf pro Nacht!',
   },
   {
+    difficulty: 1,
     story: ['☀️','🌊','🏖️','👙'],
     frage: 'Wohin fährt die Familie?',
     richtig: { emojis: ['🏖️','🌊'], text: 'Ans Meer' },
@@ -1315,6 +1494,7 @@ export const EMOJI_GESCHICHTEN = [
     fakt: '🏖️ Am Meer kann man schwimmen, sandburgen bauen und Muscheln sammeln!',
   },
   {
+    difficulty: 2,
     story: ['✏️','📚','🏫','👧'],
     frage: 'Was macht das Mädchen?',
     richtig: { emojis: ['🏫','📚'], text: 'In die Schule gehen' },
@@ -1325,6 +1505,7 @@ export const EMOJI_GESCHICHTEN = [
     fakt: '📚 In der Schule lernt man lesen, schreiben und rechnen!',
   },
   {
+    difficulty: 2,
     story: ['🌊','🐠','🐙','🤿'],
     frage: 'Was macht die Person?',
     richtig: { emojis: ['🤿','🌊'], text: 'Tauchen' },
@@ -1335,6 +1516,7 @@ export const EMOJI_GESCHICHTEN = [
     fakt: '🤿 Beim Tauchen kann man bunte Fische und Korallen sehen!',
   },
   {
+    difficulty: 2,
     story: ['🌧️','☁️','☀️','🌈'],
     frage: 'Was entsteht nach dem Regen?',
     richtig: { emojis: ['🌈','☀️'], text: 'Regenbogen' },
@@ -1345,6 +1527,7 @@ export const EMOJI_GESCHICHTEN = [
     fakt: '🌈 Ein Regenbogen entsteht wenn Sonne und Regen zusammenkommen!',
   },
   {
+    difficulty: 2,
     story: ['🎪','🤹','🎭','🎈'],
     frage: 'Wo sind die Kinder?',
     richtig: { emojis: ['🎪','🤹'], text: 'Im Zirkus' },
@@ -1355,6 +1538,7 @@ export const EMOJI_GESCHICHTEN = [
     fakt: '🎪 Im Zirkus gibt es Akrobaten, Clowns und Zauberer!',
   },
   {
+    difficulty: 3,
     story: ['🧁','🍰','👩‍🍳','✨'],
     frage: 'Was macht die Person in der Küche?',
     richtig: { emojis: ['🍰','👩‍🍳'], text: 'Kuchen backen' },
@@ -1365,6 +1549,7 @@ export const EMOJI_GESCHICHTEN = [
     fakt: '🍰 Kuchen backen macht Spaß – und schmeckt noch besser!',
   },
   {
+    difficulty: 3,
     story: ['🚂','🚃','🏔️','🌲'],
     frage: 'Womit reist die Familie?',
     richtig: { emojis: ['🚂','🛤️'], text: 'Mit dem Zug' },
@@ -1375,6 +1560,7 @@ export const EMOJI_GESCHICHTEN = [
     fakt: '🚂 Züge fahren auf Schienen und können sehr schnell sein!',
   },
   {
+    difficulty: 3,
     story: ['⛺','🔦','🌲','🪵'],
     frage: 'Was macht die Familie?',
     richtig: { emojis: ['⛺','🌲'], text: 'Camping im Wald' },
@@ -1385,6 +1571,7 @@ export const EMOJI_GESCHICHTEN = [
     fakt: '⛺ Beim Camping schläft man im Zelt und kocht am Lagerfeuer!',
   },
   {
+    difficulty: 3,
     story: ['🤒','🌡️','🛏️','💊'],
     frage: 'Wie geht es dem Kind?',
     richtig: { emojis: ['🤒','🛏️'], text: 'Krank im Bett' },
@@ -1395,6 +1582,7 @@ export const EMOJI_GESCHICHTEN = [
     fakt: '🤒 Wenn man krank ist, braucht man Ruhe, Tee und viel Schlaf!',
   },
   {
+    difficulty: 3,
     story: ['🚀','🌕','⭐','👨‍🚀'],
     frage: 'Wo ist der Astronaut?',
     richtig: { emojis: ['🚀','🌕'], text: 'Im Weltall' },
@@ -1409,6 +1597,7 @@ export const EMOJI_GESCHICHTEN = [
 // ─── Emoji-Baukasten ─────────────────────────────────────────────────────────
 export const EMOJI_BAUKASTEN_AUFGABEN = [
   {
+    difficulty: 1,
     frage: 'Was braucht man für einen Schneemann?',
     frageEmojis: ['⛄','❓'],
     richtige: ['❄️','🥕','🪨'],
@@ -1416,6 +1605,7 @@ export const EMOJI_BAUKASTEN_AUFGABEN = [
     fakt: '⛄ Schnee formen, Karotte als Nase, Steine als Augen – fertig!',
   },
   {
+    difficulty: 1,
     frage: 'Was braucht man zum Kuchen backen?',
     frageEmojis: ['🎂','❓'],
     richtige: ['🥚','🍫','🧈'],
@@ -1423,6 +1613,7 @@ export const EMOJI_BAUKASTEN_AUFGABEN = [
     fakt: '🎂 Eier, Schokolade und Butter machen den Kuchen lecker!',
   },
   {
+    difficulty: 1,
     frage: 'Was nimmt man mit an den Strand?',
     frageEmojis: ['🏖️','❓'],
     richtige: ['🏊','🕶️','☀️'],
@@ -1430,6 +1621,7 @@ export const EMOJI_BAUKASTEN_AUFGABEN = [
     fakt: '🏖️ Sonnencreme, Badehose und Sonnenbrille nicht vergessen!',
   },
   {
+    difficulty: 1,
     frage: 'Was braucht man zum Schlafen?',
     frageEmojis: ['😴','❓'],
     richtige: ['🌙','🧸','🛏️'],
@@ -1437,6 +1629,7 @@ export const EMOJI_BAUKASTEN_AUFGABEN = [
     fakt: '😴 Schlafanzug, Kuscheltier und dunkles Zimmer – gute Nacht!',
   },
   {
+    difficulty: 2,
     frage: 'Was braucht man zum Blumen giessen?',
     frageEmojis: ['🌱','❓'],
     richtige: ['💧','🌞','🪴'],
@@ -1444,6 +1637,7 @@ export const EMOJI_BAUKASTEN_AUFGABEN = [
     fakt: '🌱 Blumen brauchen Wasser, Sonne und Erde zum Wachsen!',
   },
   {
+    difficulty: 2,
     frage: 'Was braucht man zum Geburtstag feiern?',
     frageEmojis: ['🥳','❓'],
     richtige: ['🎂','🎁','🎈'],
@@ -1451,6 +1645,7 @@ export const EMOJI_BAUKASTEN_AUFGABEN = [
     fakt: '🎉 Kuchen, Geschenke und Ballons machen den Geburtstag perfekt!',
   },
   {
+    difficulty: 2,
     frage: 'Was braucht man zum Malen?',
     frageEmojis: ['🎨','❓'],
     richtige: ['🖌️','🎨','📄'],
@@ -1458,6 +1653,7 @@ export const EMOJI_BAUKASTEN_AUFGABEN = [
     fakt: '🎨 Mit Pinsel, Farbe und Papier entsteht ein tolles Bild!',
   },
   {
+    difficulty: 2,
     frage: 'Was braucht man fuer einen Hund?',
     frageEmojis: ['🐕','❓'],
     richtige: ['🦴','🛁','🎾'],
@@ -1465,31 +1661,35 @@ export const EMOJI_BAUKASTEN_AUFGABEN = [
     fakt: '🐶 Ein Hund braucht Futter, Wasser, Spielzeug und viel Liebe!',
   },
   {
+    difficulty: 3,
     frage: 'Was braucht man zum Camping?',
     frageEmojis: ['⛺','❓'],
-    richtige: ['⛺','🔦','🪵'],
-    falsche:  ['👠','📺','💻'],
+    richtige: ['⛺','🔦','🪵','🧭'],
+    falsche:  ['👠','📺','💻','🏙️'],
     fakt: '⛺ Mit Zelt, Taschenlampe und Holz fuer das Lagerfeuer!',
   },
   {
+    difficulty: 3,
     frage: 'Was braucht man um Pizza zu machen?',
     frageEmojis: ['🍕','❓'],
-    richtige: ['🍅','🧀','🫓'],
-    falsche:  ['🍌','🍰','🧃'],
+    richtige: ['🍅','🧀','🫓','🫒'],
+    falsche:  ['🍌','🍰','🧃','🥤'],
     fakt: '🍕 Teig, Tomatensosse und Kaese – das ist das Pizza-Geheimnis!',
   },
   {
+    difficulty: 3,
     frage: 'Was gehoert ins Weltall?',
     frageEmojis: ['🚀','❓'],
-    richtige: ['🌕','⭐','🌌'],
-    falsche:  ['🐸','🌹','☕'],
+    richtige: ['🌕','⭐','🌌','🪐'],
+    falsche:  ['🐸','🌹','☕','🐶'],
     fakt: '🌌 Mond, Sterne und die Milchstrasse – das Weltall ist riesig!',
   },
   {
+    difficulty: 3,
     frage: 'Was braucht man wenn man krank ist?',
     frageEmojis: ['🤒','❓'],
-    richtige: ['🌡️','💊','🍵'],
-    falsche:  ['⛷️','🎉','🍕'],
+    richtige: ['🌡️','💊','🍵','🛏️'],
+    falsche:  ['⛷️','🎉','🍕','🎮'],
     fakt: '🤒 Thermometer, Medizin und heisser Tee helfen beim Gesundwerden!',
   },
 ]
