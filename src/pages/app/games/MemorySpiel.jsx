@@ -31,7 +31,7 @@ function buildCards(size) {
 
 export default function MemorySpiel() {
   const navigate  = useNavigate()
-  const { completeSession, saving, completedMissions } = useProgress()
+  const { completeSession, saving } = useProgress()
 
   const [diffLevel,  setDiffLevel]  = useState(null) // null | 1 | 2 | 3  (äußere Schwierigkeit)
   const [level,      setLevel]      = useState(0)    // 0 | 1 | 2          (innerer Schritt)
@@ -43,8 +43,6 @@ export default function MemorySpiel() {
   const [levelDone,  setLevelDone]  = useState(false)
   const [phase,      setPhase]      = useState('playing')
 
-  const L2_UNLOCKED = completedMissions.includes('memory-1')
-  const L3_UNLOCKED = completedMissions.includes('memory-2')
 
   function startDiffLevel(dl) {
     const sizes = LEVEL_SIZES_MAP[dl]
@@ -148,22 +146,20 @@ export default function MemorySpiel() {
             <span className={styles.levelLabel}>Leicht</span>
           </button>
           <button
-            className={`${styles.levelCard} ${styles.levelCard2} ${!L2_UNLOCKED ? styles.levelCardLocked : ''}`}
-            onClick={() => L2_UNLOCKED && startDiffLevel(2)}
+            className={`${styles.levelCard} ${styles.levelCard2}`}
+            onClick={() => startDiffLevel(2)}
           >
-            <span className={styles.levelStars}>{L2_UNLOCKED ? '⭐⭐' : '🔒'}</span>
+            <span className={styles.levelStars}>⭐⭐</span>
             <strong className={styles.levelTitle}>Level 2</strong>
             <span className={styles.levelLabel}>Mittel</span>
-            {!L2_UNLOCKED && <small className={styles.levelLockHint}>Level 1 erst abschließen!</small>}
           </button>
           <button
-            className={`${styles.levelCard} ${styles.levelCard3} ${!L3_UNLOCKED ? styles.levelCardLocked : ''}`}
-            onClick={() => L3_UNLOCKED && startDiffLevel(3)}
+            className={`${styles.levelCard} ${styles.levelCard3}`}
+            onClick={() => startDiffLevel(3)}
           >
-            <span className={styles.levelStars}>{L3_UNLOCKED ? '⭐⭐⭐' : '🔒'}</span>
+            <span className={styles.levelStars}>⭐⭐⭐</span>
             <strong className={styles.levelTitle}>Level 3</strong>
             <span className={styles.levelLabel}>Schwer</span>
-            {!L3_UNLOCKED && <small className={styles.levelLockHint}>Level 2 erst abschließen!</small>}
           </button>
         </div>
       </div>

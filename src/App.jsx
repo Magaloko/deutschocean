@@ -5,8 +5,8 @@ import AppLayout from './components/layout/AppLayout.jsx'
 import Spinner from './components/ui/Spinner.jsx'
 
 // Lazy-load aller Seiten
+const StartPage        = lazy(() => import('./pages/StartPage.jsx'))
 const DashboardPage    = lazy(() => import('./pages/app/DashboardPage.jsx'))
-const MissionenPage    = lazy(() => import('./pages/app/MissionenPage.jsx'))
 const FehlerDetektiv   = lazy(() => import('./pages/app/games/FehlerDetektiv.jsx'))
 const Personenbeschreibung = lazy(() => import('./pages/app/games/Personenbeschreibung.jsx'))
 const DiktatModus      = lazy(() => import('./pages/app/games/DiktatModus.jsx'))
@@ -38,14 +38,14 @@ export default function App() {
     <AuthProvider>
       <Suspense fallback={<PageLoader />}>
         <Routes>
-          {/* Direkt zur App — kein Login */}
+          {/* Onboarding */}
           <Route path="/"      element={<Navigate to="/app" replace />} />
-          <Route path="/start" element={<Navigate to="/app" replace />} />
+          <Route path="/start" element={<StartPage />} />
 
-          {/* App-Seiten */}
+          {/* App-Seiten (AppLayout leitet zu /start wenn kein Profil) */}
           <Route path="/app" element={<AppLayout />}>
             <Route index element={<DashboardPage />} />
-            <Route path="missionen" element={<MissionenPage />} />
+            <Route path="missionen" element={<Navigate to="/app" replace />} />
             <Route path="spiel/fehler-detektiv"       element={<FehlerDetektiv />} />
             <Route path="spiel/personenbeschreibung"  element={<Personenbeschreibung />} />
             <Route path="spiel/diktat"                element={<DiktatModus />} />

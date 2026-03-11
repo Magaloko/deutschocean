@@ -86,7 +86,7 @@ export default function FehlerDetektiv() {
           <Button onClick={handleFinish} loading={saving} size="lg">
             Ergebnis speichern
           </Button>
-          <Button variant="secondary" onClick={() => navigate('/app/missionen')} size="lg">
+          <Button variant="secondary" onClick={() => navigate('/app')} size="lg">
             Andere Missionen
           </Button>
         </div>

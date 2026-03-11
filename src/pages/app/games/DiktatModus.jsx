@@ -89,11 +89,11 @@ export default function DiktatModus() {
         <h1 className={styles.resultTitle}>Diktat abgeschlossen!</h1>
         <p className={styles.resultSub}>{score} Wörter richtig geschrieben</p>
         <div className={styles.resultStats}>
-          <Badge color="purple">+{Math.round(score * 0.5)} XP</Badge>
+          <Badge color="purple">+{Math.round(score / tasks.reduce((a, t) => a + t.text.split(' ').length, 0) * 25)} XP</Badge>
         </div>
         <div className={styles.resultActions}>
           <Button onClick={handleFinish} loading={saving} size="lg">Speichern</Button>
-          <Button variant="secondary" onClick={() => navigate('/app/missionen')} size="lg">Andere Missionen</Button>
+          <Button variant="secondary" onClick={() => navigate('/app')} size="lg">Andere Missionen</Button>
         </div>
       </div>
     )

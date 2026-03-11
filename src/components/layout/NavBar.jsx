@@ -22,9 +22,6 @@ export default function NavBar() {
           <NavLink to="/app" end className={({ isActive }) => isActive ? styles.linkActive : styles.link}>
             Dashboard
           </NavLink>
-          <NavLink to="/app/missionen" className={({ isActive }) => isActive ? styles.linkActive : styles.link}>
-            Missionen
-          </NavLink>
         </div>
 
         <div className={styles.right}>

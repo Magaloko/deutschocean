@@ -90,7 +90,7 @@ export default function SilbenPuzzle() {
         </div>
         <div className={styles.resultActions}>
           <Button onClick={handleFinish} loading={saving} size="lg">Speichern</Button>
-          <Button variant="secondary" onClick={() => navigate('/app/missionen')} size="lg">Andere Missionen</Button>
+          <Button variant="secondary" onClick={() => navigate('/app')} size="lg">Andere Missionen</Button>
         </div>
       </div>
     )

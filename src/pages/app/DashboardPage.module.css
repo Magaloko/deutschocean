@@ -24,6 +24,32 @@
 .heroText { position: relative; }
 .heroTitle { font-size: 1.8rem; font-weight: 900; margin: 0; letter-spacing: -0.5px; }
 .heroSub   { font-size: 0.9rem; opacity: 0.85; margin: 0.2rem 0 0; }
+.modulePill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  font-size: 0.75rem;
+  font-weight: 800;
+  border-radius: 999px;
+  padding: 0.2rem 0.65rem;
+  margin-top: 0.4rem;
+  width: fit-content;
+}
+
+/* ── Kommt bald ── */
+.comingSoon {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  background: #f5f3ff;
+  border: 2px dashed #c4b5fd;
+  border-radius: var(--radius-lg);
+  padding: 1.5rem;
+  text-align: center;
+}
+.comingSoonEmoji { font-size: 2.5rem; }
+.comingSoonText  { font-size: 0.88rem; color: #7c3aed; font-weight: 600; margin: 0; }
 
 .heroStats {
   display: flex;
@@ -186,6 +212,12 @@
 }
 .gameCardDone::before { background: #22c55e; }
 
+.gameCardPartial {
+  background: #fffbeb;
+  border-color: #fde68a;
+}
+.gameCardPartial::before { background: #f59e0b; }
+
 /* Big centered emoji icon */
 .gameIconBig {
   font-size: 2.8rem;
@@ -231,6 +263,26 @@
 }
 .gameDoneBtn {
   background: #22c55e;
+}
+.gamePartialBtn {
+  background: #f59e0b;
+}
+
+/* Schwierigkeits-Punkte */
+.diffDots {
+  display: flex;
+  gap: 0.3rem;
+  justify-content: center;
+}
+.diffDot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--border);
+  border: 1.5px solid var(--accent, #4f46e5);
+}
+.diffDotDone {
+  background: var(--accent, #4f46e5);
 }
 
 /* ── Section title ── */

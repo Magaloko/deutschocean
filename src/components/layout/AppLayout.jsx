@@ -1,5 +1,5 @@
 import React from 'react'
-import { Outlet } from 'react-router-dom'
+import { Outlet, Navigate } from 'react-router-dom'
 import NavBar from './NavBar.jsx'
 import { useAuth } from '../../hooks/useAuth.jsx'
 import Spinner from '../ui/Spinner.jsx'
@@ -14,6 +14,10 @@ export default function AppLayout() {
         <Spinner size="xl" />
       </div>
     )
+  }
+
+  if (!profile) {
+    return <Navigate to="/start" replace />
   }
 
   return (

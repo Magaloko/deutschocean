@@ -24,11 +24,12 @@ function saveProfile(profile) {
   localStorage.setItem(STORAGE_KEY, JSON.stringify(profile))
 }
 
-function createProfile(name, avatar = '🐬') {
+function createProfile(name, avatar = '🐬', schoolModule = 'volksschule') {
   return {
     uid: `local_${Date.now()}`,
     name,
     avatar,
+    schoolModule,   // 'kindergarten' | 'volksschule' | 'hauptschule'
     xp: 0,
     stars: 0,
     streakDays: 0,
@@ -46,12 +47,13 @@ export function AuthProvider({ children }) {
   useEffect(() => {
     const saved = loadProfile()
     if (saved) {
+      // Migriere alte Profile ohne schoolModule
+      if (!saved.schoolModule) saved.schoolModule = 'volksschule'
       setProfileState(saved)
     } else {
-      // Kein Login nötig — automatisch ein Profil anlegen
-      const p = createProfile('Spieler', '🐬')
-      saveProfile(p)
-      setProfileState(p)
+      // Kein Profil — StartPage zeigt Onboarding
+      setLoading(false)
+      return
     }
     setLoading(false)
   }, [])
@@ -64,9 +66,10 @@ export function AuthProvider({ children }) {
     })
   }, [])
 
-  function register(name, avatar = '🐬') {
-    const p = createProfile(name, avatar)
-    setProfile(p)
+  function register(name, avatar = '🐬', schoolModule = 'volksschule') {
+    const p = createProfile(name, avatar, schoolModule)
+    saveProfile(p)
+    setProfileState(p)
     return p
   }
 

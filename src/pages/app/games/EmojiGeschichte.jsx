@@ -22,7 +22,7 @@ function speak(text) {
 
 export default function EmojiGeschichte() {
   const navigate = useNavigate()
-  const { completeSession, saving, completedMissions } = useProgress()
+  const { completeSession, saving } = useProgress()
 
   const [modus,    setModus]    = useState(null) // null | 'eltern' | 'kind'
   const [level,    setLevel]    = useState(null) // null | 1 | 2 | 3
@@ -37,8 +37,6 @@ export default function EmojiGeschichte() {
   const runde = runden[idx]
   const TOTAL = runden.length
 
-  const L2_UNLOCKED = completedMissions.includes('emoji-geschichte-1')
-  const L3_UNLOCKED = completedMissions.includes('emoji-geschichte-2')
 
   function startLevel(lvl) {
     const filtered = EMOJI_GESCHICHTEN.filter(r => r.difficulty === lvl)
@@ -156,22 +154,20 @@ export default function EmojiGeschichte() {
             <span className={styles.levelLabel}>Leicht</span>
           </button>
           <button
-            className={`${styles.levelCard} ${styles.levelCard2} ${!L2_UNLOCKED ? styles.levelCardLocked : ''}`}
-            onClick={() => L2_UNLOCKED && startLevel(2)}
+            className={`${styles.levelCard} ${styles.levelCard2}`}
+            onClick={() => startLevel(2)}
           >
-            <span className={styles.levelStars}>{L2_UNLOCKED ? '⭐⭐' : '🔒'}</span>
+            <span className={styles.levelStars}>⭐⭐</span>
             <strong className={styles.levelTitle}>Level 2</strong>
             <span className={styles.levelLabel}>Mittel</span>
-            {!L2_UNLOCKED && <small className={styles.levelLockHint}>Level 1 erst abschließen!</small>}
           </button>
           <button
-            className={`${styles.levelCard} ${styles.levelCard3} ${!L3_UNLOCKED ? styles.levelCardLocked : ''}`}
-            onClick={() => L3_UNLOCKED && startLevel(3)}
+            className={`${styles.levelCard} ${styles.levelCard3}`}
+            onClick={() => startLevel(3)}
           >
-            <span className={styles.levelStars}>{L3_UNLOCKED ? '⭐⭐⭐' : '🔒'}</span>
+            <span className={styles.levelStars}>⭐⭐⭐</span>
             <strong className={styles.levelTitle}>Level 3</strong>
             <span className={styles.levelLabel}>Schwer</span>
-            {!L3_UNLOCKED && <small className={styles.levelLockHint}>Level 2 erst abschließen!</small>}
           </button>
         </div>
       </div>
