@@ -1,16 +1,17 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import Card from '../../../components/ui/Card.jsx'
 import Button from '../../../components/ui/Button.jsx'
 import Badge from '../../../components/ui/Badge.jsx'
 import { FALSCHER_GEGENSTAND_RUNDEN } from '../../../lib/gameData.js'
 import { useProgress } from '../../../hooks/useProgress.jsx'
-import { playCorrect, playWrong, playComplete } from '../../../lib/sounds.js'
+import { playCorrect, playWrong, playComplete, speak } from '../../../lib/sounds.js'
 import styles from './Game.module.css'
 
 function shuffle(arr) { return [...arr].sort(() => Math.random() - 0.5) }
 
 const TOTAL = 5
+const TASK_TEXT = 'Was passt nicht dazu?'
 
 export default function FalscherGegenstand() {
   const navigate = useNavigate()
@@ -31,6 +32,8 @@ export default function FalscherGegenstand() {
   const [gamePhase, setGamePhase] = useState('playing') // 'playing' | 'result'
 
   const runde = runden[idx]
+
+  useEffect(() => { speak(TASK_TEXT) }, [idx])
 
   function handleSelect(item) {
     if (selected) return
@@ -89,6 +92,7 @@ export default function FalscherGegenstand() {
       <Card padding="lg" className={styles.gameCard}>
         <div className={styles.targetDisplay}>
           <span>Was passt <strong>nicht</strong> dazu? 🤔</span>
+          <button className={styles.elternSpeakBtn} onClick={() => speak(TASK_TEXT)} aria-label="Vorlesen">🔊</button>
         </div>
 
         <div className={styles.kidsGrid}>

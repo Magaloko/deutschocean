@@ -1,11 +1,11 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import Card from '../../../components/ui/Card.jsx'
 import Button from '../../../components/ui/Button.jsx'
 import Badge from '../../../components/ui/Badge.jsx'
 import { MEMORY_KARTEN } from '../../../lib/gameData.js'
 import { useProgress } from '../../../hooks/useProgress.jsx'
-import { playCoin, playWrong, playComplete } from '../../../lib/sounds.js'
+import { playCoin, playWrong, playComplete, speak } from '../../../lib/sounds.js'
 import styles from './Game.module.css'
 
 function shuffle(arr) { return [...arr].sort(() => Math.random() - 0.5) }
@@ -55,6 +55,7 @@ export default function MemorySpiel() {
     setLocked(false)
     setLevelDone(false)
     setPhase('playing')
+    speak('Finde alle gleichen Paare!')
   }
 
   function handleCardClick(card) {

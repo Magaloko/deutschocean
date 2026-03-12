@@ -221,6 +221,12 @@ export const MISSIONS = [
     level: 0,
     color: '#8b5cf6',
   },
+  // ---- Für Kleine – Emotions-Karten ----
+  { id: 'emotionen-karten-kat1', type: 'emotionenKarten', title: 'Emotions-Karten', description: 'Lerne Gefühle erkennen!', icon: '🎭', xp: 20, stars: 0, level: 0, color: '#ec4899' },
+  { id: 'emotionen-karten-kat2', type: 'emotionenKarten', title: 'Emotions-Karten', description: 'Rate die Emotion!',         icon: '🎭', xp: 20, stars: 0, level: 0, color: '#ec4899' },
+  { id: 'emotionen-karten-kat3', type: 'emotionenKarten', title: 'Emotions-Karten', description: 'Emoji-Situation zuordnen!', icon: '🎭', xp: 20, stars: 0, level: 0, color: '#ec4899' },
+  { id: 'emotionen-karten-kat4', type: 'emotionenKarten', title: 'Emotions-Karten', description: 'Viele Gefühle auf einmal!', icon: '🎭', xp: 25, stars: 0, level: 0, color: '#ec4899' },
+  { id: 'emotionen-karten-kat5', type: 'emotionenKarten', title: 'Emotions-Karten', description: 'Empathie lernen!',          icon: '🎭', xp: 25, stars: 0, level: 0, color: '#ec4899' },
 ]
 
 // ── Fahrzeug-Lenker Welten ────────────────────────────────────────────────

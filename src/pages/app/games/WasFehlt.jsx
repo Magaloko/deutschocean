@@ -5,7 +5,7 @@ import Button from '../../../components/ui/Button.jsx'
 import Badge from '../../../components/ui/Badge.jsx'
 import { WAS_FEHLT_RUNDEN } from '../../../lib/gameData.js'
 import { useProgress } from '../../../hooks/useProgress.jsx'
-import { playCorrect, playWrong, playComplete } from '../../../lib/sounds.js'
+import { playCorrect, playWrong, playComplete, speak } from '../../../lib/sounds.js'
 import styles from './Game.module.css'
 
 function shuffle(arr) { return [...arr].sort(() => Math.random() - 0.5) }
@@ -39,6 +39,11 @@ export default function WasFehlt() {
   const [gamePhase, setGamePhase] = useState('playing') // 'playing' | 'result'
 
   const runde = runden[idx]
+
+  useEffect(() => {
+    if (phase === 'memorize') speak('Merke dir alle Bilder!')
+    else speak('Was fehlt?')
+  }, [phase, idx])
 
   useEffect(() => {
     if (phase !== 'memorize') return
@@ -118,6 +123,7 @@ export default function WasFehlt() {
           <>
             <div className={styles.targetDisplay}>
               <span>Was fehlt? 🤔</span>
+              <button className={styles.elternSpeakBtn} onClick={() => speak('Was fehlt?')} aria-label="Vorlesen">🔊</button>
             </div>
             <div className={styles.kidsGrid}>
               {runde.visible.map((item, i) => (

@@ -24,6 +24,7 @@ const GAME_ROUTES = {
   tierWissen:           '/app/spiel/tier-wissen',
   emojiGeschichte:      '/app/spiel/emoji-geschichte',
   emojiBaukasten:       '/app/spiel/emoji-baukasten',
+  emotionenKarten:      '/app/spiel/emotionen-karten',
 }
 
 // Welche Level-Abschnitte sind pro Modul sichtbar?

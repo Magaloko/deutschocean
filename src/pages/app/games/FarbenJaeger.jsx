@@ -1,11 +1,11 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import Card from '../../../components/ui/Card.jsx'
 import Button from '../../../components/ui/Button.jsx'
 import Badge from '../../../components/ui/Badge.jsx'
 import { FARBEN_RUNDEN } from '../../../lib/gameData.js'
 import { useProgress } from '../../../hooks/useProgress.jsx'
-import { playCorrect, playWrong, playComplete } from '../../../lib/sounds.js'
+import { playCorrect, playWrong, playComplete, speak } from '../../../lib/sounds.js'
 import styles from './Game.module.css'
 
 function shuffle(arr) { return [...arr].sort(() => Math.random() - 0.5) }
@@ -27,6 +27,9 @@ export default function FarbenJaeger() {
   const TOTAL = runden.length
   const runde = runden[idx]
 
+  useEffect(() => {
+    if (runde) speak(`Tippe alles ${runde.targetColor}!`)
+  }, [idx, runde?.targetColor])
 
   function startLevel(lvl) {
     const filtered = FARBEN_RUNDEN.filter(r => r.difficulty === lvl)
@@ -154,6 +157,7 @@ export default function FarbenJaeger() {
         <div className={styles.targetDisplay}>
           <div className={styles.colorSwatch} style={{ background: runde.targetHex }} />
           <span>Tippe alles <strong style={{ color: runde.targetHex }}>{runde.targetColor.toUpperCase()}</strong>!</span>
+          <button className={styles.elternSpeakBtn} onClick={() => speak(`Tippe alles ${runde.targetColor}!`)} aria-label="Vorlesen">🔊</button>
         </div>
 
         <div className={styles.kidsGrid}>

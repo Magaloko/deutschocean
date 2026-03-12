@@ -62,6 +62,17 @@ export function playCoin() {
   tone(1108, t + 0.07, 0.1)
 }
 
+/** Text-to-Speech auf Deutsch — für Kinder die noch nicht lesen können */
+export function speak(text) {
+  if (!('speechSynthesis' in window)) return
+  window.speechSynthesis.cancel()
+  const utt = new SpeechSynthesisUtterance(text)
+  utt.lang = 'de-DE'
+  utt.rate = 0.82
+  utt.pitch = 1.1
+  window.speechSynthesis.speak(utt)
+}
+
 /** Volle Sieges-Fanfare am Spielende */
 export function playComplete() {
   const c = getCtx()
