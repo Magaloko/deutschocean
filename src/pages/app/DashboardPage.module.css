@@ -305,3 +305,33 @@
 }
 .badgeIcon { font-size: 1.3rem; }
 .badgeName { font-size: 0.8rem; font-weight: 700; }
+
+/* ── Tabs ── */
+.tabs {
+  display: flex;
+  border-bottom: 2.5px solid var(--border);
+  margin: 0 0 4px;
+  padding: 0 4px;
+  gap: 4px;
+}
+
+.tab {
+  flex: 1;
+  background: none;
+  border: none;
+  border-bottom: 3px solid transparent;
+  margin-bottom: -2.5px;
+  padding: 12px 8px;
+  font-size: 0.95rem;
+  font-weight: 800;
+  font-family: inherit;
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: color 0.15s, border-color 0.15s;
+}
+.tab:hover { color: var(--text); }
+
+.tabActive {
+  color: var(--primary);
+  border-bottom-color: var(--primary);
+}
