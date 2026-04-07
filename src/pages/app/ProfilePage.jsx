@@ -18,7 +18,8 @@ export default function ProfilePage() {
   const navigate = useNavigate()
   const [editAvatar, setEditAvatar] = useState(false)
   const [editModule, setEditModule] = useState(false)
-  const [saving, setSaving] = useState(false)
+  const [savingAvatar, setSavingAvatar] = useState(false)
+  const [savingModule, setSavingModule] = useState(false)
 
   if (!profile) return null
 
@@ -28,22 +29,33 @@ export default function ProfilePage() {
   const earnedBadges = BADGES.filter(b => (profile.unlockedBadges ?? []).includes(b.id))
 
   async function handleAvatarChange(a) {
-    setSaving(true)
-    await setProfile({ avatar: a })
-    setEditAvatar(false)
-    setSaving(false)
+    setSavingAvatar(true)
+    try {
+      await setProfile({ avatar: a })
+      setEditAvatar(false)
+    } finally {
+      setSavingAvatar(false)
+    }
   }
 
   async function handleModuleChange(m) {
-    setSaving(true)
-    await setProfile({ schoolModule: m })
-    setEditModule(false)
-    setSaving(false)
+    setSavingModule(true)
+    try {
+      await setProfile({ schoolModule: m })
+      setEditModule(false)
+    } finally {
+      setSavingModule(false)
+    }
   }
 
   async function handleLogout() {
-    await logout()
-    navigate('/start')
+    try {
+      await logout()
+      navigate('/start')
+    } catch {
+      // Ignore logout errors — navigate anyway
+      navigate('/start')
+    }
   }
 
   const mod = MODULES.find(m => m.id === profile.schoolModule) ?? MODULES[1]
@@ -76,7 +88,7 @@ export default function ProfilePage() {
         <div className={styles.avatarPicker}>
           {AVATARS.map(a => (
             <button key={a} className={`${styles.avatarOpt} ${profile.avatar === a ? styles.avatarOptSelected : ''}`}
-              onClick={() => handleAvatarChange(a)} disabled={saving}>{a}</button>
+              onClick={() => handleAvatarChange(a)} disabled={savingAvatar}>{a}</button>
           ))}
         </div>
       )}
@@ -142,7 +154,7 @@ export default function ProfilePage() {
           <div className={styles.moduleOptions}>
             {MODULES.map(m => (
               <button key={m.id} className={`${styles.moduleOpt} ${profile.schoolModule === m.id ? styles.moduleOptActive : ''}`}
-                style={{ '--mc': m.color }} onClick={() => handleModuleChange(m.id)} disabled={saving}>
+                style={{ '--mc': m.color }} onClick={() => handleModuleChange(m.id)} disabled={savingModule}>
                 {m.emoji} {m.label}
               </button>
             ))}
