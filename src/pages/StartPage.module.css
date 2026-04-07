@@ -153,3 +153,59 @@
   margin-top: 0.15rem;
   line-height: 1.4;
 }
+
+/* ── Auth Hub ── */
+.hubButtons {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 1.5rem;
+  width: 100%;
+}
+
+.guestBtn, .registerBtn {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px 20px;
+  border-radius: 18px;
+  font-weight: 800;
+  font-size: 1rem;
+  cursor: pointer;
+  text-decoration: none;
+  transition: transform 0.12s, box-shadow 0.12s;
+  font-family: inherit;
+}
+.guestBtn:hover, .registerBtn:hover { transform: translateY(-2px); }
+.guestBtn:active, .registerBtn:active { transform: scale(0.98); }
+
+.guestBtn {
+  background: linear-gradient(135deg, #f1f5f9, #e2e8f0);
+  border: 2.5px solid #e2e8f0;
+  color: #1e293b;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+}
+
+.registerBtn {
+  background: linear-gradient(135deg, #4f46e5, #7c3aed);
+  border: none;
+  color: #fff;
+  box-shadow: 0 4px 16px rgba(79,70,229,0.35);
+}
+
+.guestBtn .hint, .registerBtn .hint {
+  margin-left: auto;
+  font-size: 0.78rem;
+  font-weight: 700;
+  opacity: 0.7;
+}
+
+.loginLink {
+  text-align: center;
+  color: var(--text-muted);
+  font-size: 0.88rem;
+  font-weight: 700;
+  text-decoration: none;
+  padding: 4px 0;
+}
+.loginLink:hover { color: var(--primary); }
