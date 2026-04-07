@@ -227,6 +227,10 @@ export const MISSIONS = [
   { id: 'emotionen-karten-kat3', type: 'emotionenKarten', title: 'Emotions-Karten', description: 'Emoji-Situation zuordnen!', icon: '🎭', xp: 20, stars: 0, level: 0, color: '#ec4899' },
   { id: 'emotionen-karten-kat4', type: 'emotionenKarten', title: 'Emotions-Karten', description: 'Viele Gefühle auf einmal!', icon: '🎭', xp: 25, stars: 0, level: 0, color: '#ec4899' },
   { id: 'emotionen-karten-kat5', type: 'emotionenKarten', title: 'Emotions-Karten', description: 'Empathie lernen!',          icon: '🎭', xp: 25, stars: 0, level: 0, color: '#ec4899' },
+  // ---- Für Kleine – Früchte Zählen ----
+  { id: 'fruechtZaehlen-1', type: 'fruechtZaehlen', title: 'Früchte Zählen', description: 'Zähle die Früchte!',    icon: '🍎', xp: 10, stars: 0, level: 0, color: '#f97316' },
+  { id: 'fruechtZaehlen-2', type: 'fruechtZaehlen', title: 'Früchte Zählen', description: 'Mehr Früchte zählen!', icon: '🍎', xp: 14, stars: 0, level: 0, color: '#f97316' },
+  { id: 'fruechtZaehlen-3', type: 'fruechtZaehlen', title: 'Früchte Zählen', description: 'Viele Früchte zählen!',icon: '🍎', xp: 18, stars: 0, level: 0, color: '#f97316' },
 ]
 
 // ── Fahrzeug-Lenker Welten ────────────────────────────────────────────────

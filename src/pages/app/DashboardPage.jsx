@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useMemo } from 'react'
 import { Link } from 'react-router-dom'
 import { useAuth } from '../../hooks/useAuth.jsx'
 import Badge from '../../components/ui/Badge.jsx'
@@ -25,6 +25,7 @@ const GAME_ROUTES = {
   emojiGeschichte:      '/app/spiel/emoji-geschichte',
   emojiBaukasten:       '/app/spiel/emoji-baukasten',
   emotionenKarten:      '/app/spiel/emotionen-karten',
+  fruechtZaehlen:       '/app/spiel/fruechtZaehlen',
 }
 
 // Welche Level-Abschnitte sind pro Modul sichtbar?
@@ -102,7 +103,11 @@ export default function DashboardPage() {
   const levelMeta     = LEVEL_META[schoolModule] ?? LEVEL_META.volksschule
   const moduleMeta    = MODULE_META[schoolModule]
 
-  const featured = getTagesaufgabe(completed)
+  const featured      = useMemo(() => getTagesaufgabe(completed), [completed])
+  const leveledGames  = useMemo(
+    () => Object.fromEntries(allowedLevels.map((lvl) => [lvl, getUniqueGames(lvl, completed)])),
+    [allowedLevels, completed],
+  )
 
   return (
     <div className={`${styles.page} fade-in`}>
@@ -172,7 +177,7 @@ export default function DashboardPage() {
 
       {/* ── Spiele nach Kategorie ── */}
       {allowedLevels.map((lvl) => {
-        const games = getUniqueGames(lvl, completed)
+        const games = leveledGames[lvl]
         if (!games.length) return null
         const meta = levelMeta[lvl] ?? { label: `Level ${lvl}`, emoji: '📖', color: '#6b7280' }
         const totalVariants = games.reduce((s, g) => s + g.variants.length, 0)
