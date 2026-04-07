@@ -12,6 +12,10 @@ const AuthContext = createContext(null)
 const LEGACY_KEY  = 'deutschocean_user'
 const googleProvider = new GoogleAuthProvider()
 
+function requireFirebase() {
+  if (!FIREBASE_CONFIGURED) throw new Error('Firebase is not configured. Set VITE_FIREBASE_* env vars.')
+}
+
 function makeProfile(uid, name, avatar, schoolModule, isAnonymous) {
   const now = new Date().toISOString()
   return {
@@ -42,7 +46,7 @@ async function ensureFirestoreProfile(fbUser, overrides = {}) {
   let legacy = {}
   try {
     const raw = localStorage.getItem(LEGACY_KEY)
-    if (raw) { legacy = JSON.parse(raw); localStorage.removeItem(LEGACY_KEY) }
+    if (raw) { legacy = JSON.parse(raw) || {}; localStorage.removeItem(LEGACY_KEY) }
   } catch { /* ignore */ }
 
   const profile = {
@@ -68,7 +72,8 @@ async function ensureFirestoreProfile(fbUser, overrides = {}) {
 export function AuthProvider({ children }) {
   const [profile,  setProfileState] = useState(null)
   const [loading,  setLoading]      = useState(true)
-  const unsubRef = useRef(null)
+  const unsubRef   = useRef(null)
+  const profileRef = useRef(null)
 
   useEffect(() => {
     if (!FIREBASE_CONFIGURED) {
@@ -77,23 +82,31 @@ export function AuthProvider({ children }) {
       return
     }
 
-    const unsubAuth = onAuthStateChanged(auth, async (fbUser) => {
-      // Tear down previous Firestore listener
-      if (unsubRef.current) { unsubRef.current(); unsubRef.current = null }
+    const unsubAuth = onAuthStateChanged(auth, (fbUser) => {
+      ;(async () => {
+        // Tear down previous Firestore listener
+        if (unsubRef.current) { unsubRef.current(); unsubRef.current = null }
 
-      if (!fbUser) {
-        setProfileState(null)
-        setLoading(false)
-        return
-      }
+        if (!fbUser) {
+          setProfileState(null)
+          setLoading(false)
+          return
+        }
 
-      // Ensure Firestore document exists, then subscribe
-      await ensureFirestoreProfile(fbUser)
-      const userRef = doc(db, 'users', fbUser.uid)
-      unsubRef.current = onSnapshot(userRef, (snap) => {
-        setProfileState(snap.exists() ? snap.data() : null)
-        setLoading(false)
-      })
+        try {
+          // Ensure Firestore document exists, then subscribe
+          await ensureFirestoreProfile(fbUser)
+          const userRef = doc(db, 'users', fbUser.uid)
+          unsubRef.current = onSnapshot(userRef, (snap) => {
+            setProfileState(snap.exists() ? snap.data() : null)
+            setLoading(false)
+          })
+        } catch (err) {
+          console.error('Auth state error:', err)
+          setProfileState(null)
+          setLoading(false)
+        }
+      })()
     })
 
     return () => {
@@ -102,31 +115,39 @@ export function AuthProvider({ children }) {
     }
   }, [])
 
+  useEffect(() => { profileRef.current = profile }, [profile])
+
   // ── Auth methods ──────────────────────────────────────────────────────
 
   async function loginAnonymously(name, avatar, schoolModule) {
+    requireFirebase()
     const { user: fbUser } = await signInAnonymously(auth)
     const userRef = doc(db, 'users', fbUser.uid)
     await setDoc(userRef, makeProfile(fbUser.uid, name, avatar, schoolModule, true))
   }
 
   async function login(email, password) {
+    requireFirebase()
     await signInWithEmailAndPassword(auth, email, password)
     // ensureFirestoreProfile handles legacy migration via onAuthStateChanged
   }
 
   async function loginWithGoogle() {
+    requireFirebase()
     await signInWithPopup(auth, googleProvider)
   }
 
   async function register(email, password, name, avatar, schoolModule) {
+    requireFirebase()
     const { user: fbUser } = await createUserWithEmailAndPassword(auth, email, password)
     const userRef = doc(db, 'users', fbUser.uid)
     await setDoc(userRef, makeProfile(fbUser.uid, name, avatar, schoolModule, false))
   }
 
   async function upgradeWithEmail(email, password) {
+    requireFirebase()
     const fbUser = auth.currentUser
+    if (!fbUser) throw new Error('No authenticated user to upgrade.')
     const credential = EmailAuthProvider.credential(email, password)
     await linkWithCredential(fbUser, credential)
     await updateDoc(doc(db, 'users', fbUser.uid), {
@@ -136,7 +157,9 @@ export function AuthProvider({ children }) {
   }
 
   async function upgradeWithGoogle() {
+    requireFirebase()
     const fbUser = auth.currentUser
+    if (!fbUser) throw new Error('No authenticated user to upgrade.')
     await linkWithPopup(fbUser, googleProvider)
     await updateDoc(doc(db, 'users', fbUser.uid), {
       isAnonymous: false,
@@ -145,18 +168,20 @@ export function AuthProvider({ children }) {
   }
 
   async function logout() {
+    requireFirebase()
     await signOut(auth)
   }
 
   const setProfile = useCallback(async (updates) => {
+    requireFirebase()
     const fbUser = auth.currentUser
     if (!fbUser) return
-    const partial = typeof updates === 'function' ? updates(profile) : updates
+    const partial = typeof updates === 'function' ? updates(profileRef.current) : updates
     await updateDoc(doc(db, 'users', fbUser.uid), {
       ...partial,
       updatedAt: new Date().toISOString(),
     })
-  }, [profile])
+  }, []) // stable reference — no profile dependency
 
   const user = profile ? { uid: profile.uid, displayName: profile.name } : null
 
