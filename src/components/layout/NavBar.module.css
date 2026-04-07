@@ -58,8 +58,8 @@
   width: 34px;
   height: 34px;
   border-radius: 50%;
-  background: linear-gradient(135deg, var(--primary), var(--primary-light));
-  color: #fff;
+  background: var(--avatar-gradient);
+  color: var(--text-on-primary);
   font-weight: 700;
   font-size: 1rem;
   display: flex;
@@ -85,8 +85,8 @@
   width: 34px;
   height: 34px;
   border-radius: 50%;
-  background: linear-gradient(135deg, var(--primary), var(--primary-light));
-  color: #fff;
+  background: var(--avatar-gradient);
+  color: var(--text-on-primary);
   font-size: 1rem;
   display: flex;
   align-items: center;

@@ -118,7 +118,7 @@
   flex-direction: column;
   align-items: flex-start;
   gap: 0.2rem;
-  background: var(--mb, #f5f3ff);
+  background: var(--mb, var(--surface-2));
   border: 2.5px solid var(--mbd, #a5b4fc);
   border-radius: var(--radius-lg);
   padding: 1rem 1.25rem;
@@ -129,7 +129,7 @@
 .moduleCard:hover {
   transform: translateY(-2px);
   box-shadow: 0 6px 20px rgba(0,0,0,0.1);
-  border-color: var(--mc, #4f46e5);
+  border-color: var(--mc, var(--primary));
 }
 .moduleCard:active { transform: scale(0.98); }
 
@@ -137,7 +137,7 @@
 .moduleTitle {
   font-size: 1.1rem;
   font-weight: 900;
-  color: var(--mc, #4f46e5);
+  color: var(--mc, var(--primary));
 }
 .moduleAges {
   font-size: 0.75rem;
@@ -180,16 +180,16 @@
 .guestBtn:active, .registerBtn:active { transform: scale(0.98); }
 
 .guestBtn {
-  background: linear-gradient(135deg, #f1f5f9, #e2e8f0);
-  border: 2.5px solid #e2e8f0;
-  color: #1e293b;
+  background: linear-gradient(135deg, var(--surface-2), var(--border));
+  border: 2.5px solid var(--border);
+  color: var(--text);
   box-shadow: 0 4px 12px rgba(0,0,0,0.08);
 }
 
 .registerBtn {
-  background: linear-gradient(135deg, #4f46e5, #7c3aed);
+  background: var(--avatar-gradient);
   border: none;
-  color: #fff;
+  color: var(--text-on-primary);
   box-shadow: 0 4px 16px rgba(79,70,229,0.35);
 }
 
