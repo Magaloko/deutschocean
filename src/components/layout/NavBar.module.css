@@ -80,3 +80,19 @@
   font-family: inherit;
 }
 .signOut:hover { border-color: var(--danger); color: var(--danger); }
+
+.avatarLink {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--primary), var(--primary-light));
+  color: #fff;
+  font-size: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  transition: transform 0.12s, box-shadow 0.12s;
+  cursor: pointer;
+}
+.avatarLink:hover { transform: scale(1.1); box-shadow: 0 2px 8px rgba(79,70,229,0.3); }

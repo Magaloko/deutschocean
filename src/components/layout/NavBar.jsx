@@ -1,5 +1,5 @@
 import React from 'react'
-import { NavLink } from 'react-router-dom'
+import { NavLink, Link } from 'react-router-dom'
 import styles from './NavBar.module.css'
 import { useAuth } from '../../hooks/useAuth.jsx'
 
@@ -31,9 +31,9 @@ export default function NavBar() {
                 <span>⚡</span>
                 <span>{profile.xp ?? 0} XP</span>
               </div>
-              <div className={styles.avatar} title={profile.name}>
+              <Link to="/app/profil" className={styles.avatarLink} title={`${profile.name} — Profil`}>
                 {profile.avatar || '🐬'}
-              </div>
+              </Link>
             </>
           )}
         </div>
