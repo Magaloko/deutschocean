@@ -26,6 +26,13 @@ const EmojiGeschichte  = lazy(() => import('./pages/app/games/EmojiGeschichte.js
 const EmojiBaukasten   = lazy(() => import('./pages/app/games/EmojiBaukasten.jsx'))
 const EmotionenKarten  = lazy(() => import('./pages/app/games/EmotionenKarten.jsx'))
 const FruechtZaehlen   = lazy(() => import('./pages/app/games/FruechtZaehlen.jsx'))
+const Zahlenstrahl    = lazy(() => import('./pages/app/games/mathe/Zahlenstrahl.jsx'))
+const MehrWeniger     = lazy(() => import('./pages/app/games/mathe/MehrWeniger.jsx'))
+const MinusRakete     = lazy(() => import('./pages/app/games/mathe/MinusRakete.jsx'))
+const Zahlenfolge     = lazy(() => import('./pages/app/games/mathe/Zahlenfolge.jsx'))
+const WuerfelRechnen  = lazy(() => import('./pages/app/games/mathe/WuerfelRechnen.jsx'))
+const MiniMarkt       = lazy(() => import('./pages/app/games/mathe/MiniMarkt.jsx'))
+const EinmaleinsBlitz = lazy(() => import('./pages/app/games/mathe/EinmaleinsBlitz.jsx'))
 
 function PageLoader() {
   return (
@@ -67,6 +74,13 @@ export default function App() {
             <Route path="spiel/emoji-baukasten"        element={<EmojiBaukasten />} />
             <Route path="spiel/emotionen-karten"       element={<EmotionenKarten />} />
             <Route path="spiel/fruechtZaehlen"          element={<FruechtZaehlen />} />
+            <Route path="mathe/zahlenstrahl"    element={<Zahlenstrahl />} />
+            <Route path="mathe/mehr-weniger"    element={<MehrWeniger />} />
+            <Route path="mathe/minus-rakete"    element={<MinusRakete />} />
+            <Route path="mathe/zahlenfolge"     element={<Zahlenfolge />} />
+            <Route path="mathe/wuerfel-rechnen" element={<WuerfelRechnen />} />
+            <Route path="mathe/mini-markt"      element={<MiniMarkt />} />
+            <Route path="mathe/einmaleins"      element={<EinmaleinsBlitz />} />
           </Route>
 
           <Route path="*" element={<Navigate to="/app" replace />} />
