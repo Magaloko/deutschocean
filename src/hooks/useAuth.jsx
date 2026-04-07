@@ -122,8 +122,14 @@ export function AuthProvider({ children }) {
   async function loginAnonymously(name, avatar, schoolModule) {
     requireFirebase()
     const { user: fbUser } = await signInAnonymously(auth)
-    const userRef = doc(db, 'users', fbUser.uid)
-    await setDoc(userRef, makeProfile(fbUser.uid, name, avatar, schoolModule, true))
+    // Pass overrides to ensureFirestoreProfile so the user-supplied values are used.
+    // The onAuthStateChanged path will skip writing since the doc will exist.
+    await ensureFirestoreProfile(fbUser, {
+      name:         name         || 'Gast',
+      avatar:       avatar       || '🐬',
+      schoolModule: schoolModule || 'volksschule',
+      isAnonymous:  true,
+    })
   }
 
   async function login(email, password) {
