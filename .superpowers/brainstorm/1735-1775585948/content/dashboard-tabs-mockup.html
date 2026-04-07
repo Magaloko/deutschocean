@@ -1,0 +1,78 @@
+<h2>Dashboard — Deutsch / Mathe Tabs</h2>
+<p class="subtitle">So würde das neue Tab-System aussehen. Wähle welche Version dir besser gefällt.</p>
+
+<div class="options">
+
+  <div class="option" data-choice="tab-top" onclick="toggleSelect(this)">
+    <div class="letter">A</div>
+    <div class="content">
+      <h3>Tabs oben — unter dem Hero</h3>
+      <div class="mockup" style="margin-top:10px">
+        <div class="mockup-header">DashboardPage</div>
+        <div class="mockup-body" style="padding:0;font-size:13px">
+          <!-- Hero -->
+          <div style="background:linear-gradient(135deg,#4f46e5,#818cf8);color:#fff;padding:12px;border-radius:8px;margin:8px;font-size:11px">
+            🌊 Hallo, Max! &nbsp; ⚡ 120 XP &nbsp; ⭐ 8 &nbsp; 🏅 14
+          </div>
+          <!-- Tabs -->
+          <div style="display:flex;border-bottom:2px solid #e2e8f0;margin:0 8px">
+            <div style="padding:8px 20px;font-weight:900;border-bottom:3px solid #4f46e5;color:#4f46e5;font-size:12px">📚 Deutsch</div>
+            <div style="padding:8px 20px;color:#94a3b8;font-size:12px;font-weight:700">🔢 Mathe</div>
+          </div>
+          <!-- Content -->
+          <div style="padding:8px;font-size:11px;color:#475569">
+            <div style="font-weight:800;margin-bottom:4px">🧒 Meine Spiele</div>
+            <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:4px">
+              <div style="background:#f1f5f9;border-radius:6px;padding:6px;text-align:center;font-size:10px">🎨<br>Farben</div>
+              <div style="background:#f1f5f9;border-radius:6px;padding:6px;text-align:center;font-size:10px">🐾<br>Tiere</div>
+              <div style="background:#f1f5f9;border-radius:6px;padding:6px;text-align:center;font-size:10px">🃏<br>Memory</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <p style="margin-top:6px;font-size:0.82rem">Hero immer sichtbar. Tab-Wechsel scrollt nicht zurück nach oben.</p>
+    </div>
+  </div>
+
+  <div class="option" data-choice="tab-pill" onclick="toggleSelect(this)">
+    <div class="letter">B</div>
+    <div class="content">
+      <h3>Pill-Tabs — kompakter Hero</h3>
+      <div class="mockup" style="margin-top:10px">
+        <div class="mockup-header">DashboardPage</div>
+        <div class="mockup-body" style="padding:0;font-size:13px">
+          <!-- Mini-Hero -->
+          <div style="background:linear-gradient(135deg,#4f46e5,#818cf8);color:#fff;padding:10px 12px;font-size:11px;display:flex;justify-content:space-between;align-items:center">
+            <span>👋 Max — Lvl 2</span>
+            <span>⚡120 XP &nbsp; ⭐8</span>
+          </div>
+          <!-- Pill Tabs -->
+          <div style="display:flex;gap:8px;padding:10px 12px;background:#f8fafc">
+            <div style="background:#4f46e5;color:#fff;border-radius:999px;padding:6px 18px;font-weight:900;font-size:12px">📚 Deutsch</div>
+            <div style="background:#fff;border:2px solid #e2e8f0;color:#64748b;border-radius:999px;padding:6px 18px;font-size:12px;font-weight:700">🔢 Mathe</div>
+          </div>
+          <!-- Content -->
+          <div style="padding:0 8px 8px;font-size:11px;color:#475569">
+            <div style="font-weight:800;margin-bottom:4px">🧒 Meine Spiele</div>
+            <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:4px">
+              <div style="background:#f1f5f9;border-radius:6px;padding:6px;text-align:center;font-size:10px">🎨<br>Farben</div>
+              <div style="background:#f1f5f9;border-radius:6px;padding:6px;text-align:center;font-size:10px">🐾<br>Tiere</div>
+              <div style="background:#f1f5f9;border-radius:6px;padding:6px;text-align:center;font-size:10px">🃏<br>Memory</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <p style="margin-top:6px;font-size:0.82rem">Modernerer Look. Hero wird etwas komprimiert um mehr Platz für Spiele zu haben.</p>
+    </div>
+  </div>
+
+</div>
+
+<div style="margin-top:16px;padding:12px;background:#f8fafc;border-radius:12px;font-size:0.85rem">
+  <strong>Mathe-Tab Inhalt (beide Varianten gleich):</strong><br>
+  Level 0 → Zahlenstrahl, Mehr/Weniger, Würfel-Rechnen<br>
+  Level 1 → Minus-Rakete, Zahlenfolge<br>
+  Level 2 → Mini-Markt, Einmaleins-Blitz
+</div>
+
+<p class="subtitle" style="margin-top:12px">Meine Empfehlung: <strong>B — Pill-Tabs</strong>, moderner und spart vertikalen Platz auf Mobile.</p>

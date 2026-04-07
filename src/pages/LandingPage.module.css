@@ -275,6 +275,416 @@
 .footerLinks { display: flex; gap: 1.25rem; }
 .footerLinks a:hover { color: var(--primary); }
 
+/* ==============================
+   GAMES SHOWCASE
+   ============================== */
+.showcase {
+  background: #0b0a1a;
+  overflow: hidden;
+  position: relative;
+}
+/* Subtle mesh background */
+.showcase::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 60% 40% at 20% 20%, rgba(79,70,229,.18) 0%, transparent 60%),
+    radial-gradient(ellipse 50% 35% at 80% 80%, rgba(139,92,246,.14) 0%, transparent 60%);
+  pointer-events: none;
+}
+
+/* ── Ticker ── */
+.ticker {
+  width: 100%;
+  overflow: hidden;
+  border-bottom: 1px solid rgba(255,255,255,.06);
+  padding: 0.75rem 0;
+}
+.tickerTrack {
+  display: flex;
+  gap: 0;
+  animation: tickerMove 20s linear infinite;
+  width: max-content;
+}
+@keyframes tickerMove {
+  0%   { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+.tickerItem {
+  font-size: 1.6rem;
+  padding: 0 1rem;
+  opacity: 0.4;
+  transition: opacity .2s;
+}
+.tickerItem:hover { opacity: 1; }
+
+/* ── Inner ── */
+.showcaseInner {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 4rem 1.5rem 5rem;
+  position: relative;
+  z-index: 1;
+}
+.showcaseBadge {
+  display: inline-block;
+  background: rgba(79,70,229,.25);
+  border: 1px solid rgba(99,102,241,.5);
+  color: #a5b4fc;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 0.3rem 1rem;
+  border-radius: 999px;
+  margin-bottom: 1rem;
+}
+.showcaseTitle {
+  font-size: clamp(1.8rem, 4vw, 2.8rem);
+  font-weight: 900;
+  color: #fff;
+  font-family: var(--font-display);
+  margin-bottom: 0.75rem;
+}
+.showcaseSub {
+  color: rgba(255,255,255,.5);
+  font-size: 1rem;
+  margin-bottom: 3rem;
+}
+
+/* ── Card Grid ── */
+.showcaseGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.25rem;
+}
+@media (max-width: 900px) { .showcaseGrid { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 580px) { .showcaseGrid { grid-template-columns: 1fr; } }
+
+/* ── Game Card ── */
+.gameCard {
+  background: rgba(255,255,255,.04);
+  border: 1px solid rgba(255,255,255,.09);
+  border-radius: 20px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  text-decoration: none;
+  color: inherit;
+  position: relative;
+  transition: transform .25s, box-shadow .25s, border-color .25s;
+
+  /* entrance: start hidden */
+  opacity: 0;
+  transform: translateY(28px);
+}
+.gameCard[data-visible='true'] {
+  animation: cardIn .5s cubic-bezier(.22,.68,0,1.2) forwards;
+  animation-delay: calc(var(--i) * 80ms);
+}
+@keyframes cardIn {
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.gameCard:hover {
+  transform: translateY(-6px);
+  border-color: color-mix(in srgb, var(--c) 60%, transparent);
+  box-shadow: 0 16px 48px rgba(0,0,0,.5), 0 0 0 1px color-mix(in srgb, var(--c) 30%, transparent);
+}
+.gameCard:hover .cardGlow { opacity: 1; }
+
+/* Colored top accent line */
+.gameCard::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+  background: var(--c);
+  opacity: 0;
+  transition: opacity .25s;
+}
+.gameCard:hover::before { opacity: 1; }
+
+/* ── Glow orb ── */
+.cardGlow {
+  position: absolute;
+  bottom: -40px; right: -40px;
+  width: 140px; height: 140px;
+  border-radius: 50%;
+  background: radial-gradient(circle, var(--glow) 0%, transparent 70%);
+  opacity: 0;
+  transition: opacity .3s;
+  pointer-events: none;
+}
+
+/* ── Game Preview ── */
+.gamePreview {
+  height: 110px;
+  background: linear-gradient(135deg,
+    color-mix(in srgb, var(--c) 25%, #0b0a1a),
+    color-mix(in srgb, var(--c) 12%, #0b0a1a)
+  );
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+/* ── Fehler-Detektiv Preview ── */
+.previewDetektiv {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 10px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: rgba(255,255,255,.6);
+  font-family: monospace;
+  width: 90%;
+}
+.pdLine { display: flex; gap: 4px; align-items: center; }
+.pdW {
+  background: rgba(255,255,255,.07);
+  border-radius: 4px;
+  padding: 2px 6px;
+}
+.pdErr {
+  background: rgba(239,68,68,.2);
+  color: #fca5a5;
+  border-bottom: 2px solid #ef4444;
+  animation: errPulse 2s ease-in-out infinite;
+}
+@keyframes errPulse {
+  0%,100% { background: rgba(239,68,68,.15); }
+  50%      { background: rgba(239,68,68,.35); }
+}
+.pdLens {
+  position: absolute;
+  right: 14px;
+  bottom: 10px;
+  font-size: 1.6rem;
+  animation: lensMove 3s ease-in-out infinite;
+}
+@keyframes lensMove {
+  0%,100% { transform: translate(0,0) rotate(-10deg); }
+  50%      { transform: translate(-8px,-6px) rotate(10deg); }
+}
+
+/* ── Memory Preview ── */
+.previewMemory {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+.memCard {
+  width: 38px; height: 38px;
+  border-radius: 8px;
+  position: relative;
+  transform-style: preserve-3d;
+  animation: memFlip 3s ease-in-out infinite;
+  animation-delay: var(--d);
+  cursor: default;
+}
+@keyframes memFlip {
+  0%,40%  { transform: rotateY(0deg); }
+  50%,90% { transform: rotateY(180deg); }
+  100%    { transform: rotateY(0deg); }
+}
+.memFront, .memBack {
+  position: absolute; inset: 0;
+  border-radius: 8px;
+  display: flex; align-items: center; justify-content: center;
+  backface-visibility: hidden;
+  font-size: 1.3rem;
+  font-weight: 900;
+}
+.memFront {
+  background: rgba(236,72,153,.3);
+  border: 1px solid rgba(236,72,153,.5);
+  color: rgba(255,255,255,.7);
+  font-size: 1rem;
+}
+.memBack {
+  background: rgba(236,72,153,.15);
+  border: 1px solid rgba(236,72,153,.3);
+  transform: rotateY(180deg);
+}
+
+/* ── Buchstaben-Chaos Preview ── */
+.previewChaos {
+  display: flex;
+  gap: 6px;
+}
+.chaosLetter {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px; height: 32px;
+  border-radius: 6px;
+  background: rgba(249,115,22,.2);
+  border: 1px solid rgba(249,115,22,.4);
+  color: #fb923c;
+  font-size: 0.9rem;
+  font-weight: 900;
+  font-family: monospace;
+  animation: chaosJump 2.4s ease-in-out infinite;
+  animation-delay: var(--d);
+}
+@keyframes chaosJump {
+  0%,60%,100% { transform: translateY(0); }
+  30%          { transform: translateY(-10px) rotate(8deg); }
+}
+
+/* ── Diktat Preview ── */
+.previewDiktat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+.diktatMic {
+  font-size: 2rem;
+  animation: micPulse 1.5s ease-in-out infinite;
+}
+@keyframes micPulse {
+  0%,100% { transform: scale(1); filter: drop-shadow(0 0 0 rgba(6,182,212,0)); }
+  50%      { transform: scale(1.15); filter: drop-shadow(0 0 8px rgba(6,182,212,.8)); }
+}
+.diktatBars {
+  display: flex;
+  align-items: flex-end;
+  gap: 3px;
+  height: 32px;
+}
+.diktatBar {
+  width: 4px;
+  border-radius: 2px;
+  background: #06b6d4;
+  animation: barWave 1s ease-in-out infinite alternate;
+  animation-delay: var(--d);
+  height: var(--h);
+}
+@keyframes barWave {
+  from { transform: scaleY(0.3); opacity: .5; }
+  to   { transform: scaleY(1);   opacity: 1; }
+}
+
+/* ── Früchte Zählen Preview ── */
+.previewFruechte {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  flex-wrap: wrap;
+  justify-content: center;
+  padding: 8px;
+  position: relative;
+}
+.frucht {
+  font-size: 1.5rem;
+  animation: fruchBounce 2s ease-in-out infinite;
+  animation-delay: var(--d);
+  display: inline-block;
+}
+@keyframes fruchBounce {
+  0%,80%,100% { transform: translateY(0); }
+  40%          { transform: translateY(-8px); }
+}
+.frCount {
+  position: absolute;
+  bottom: 6px; right: 10px;
+  background: rgba(16,185,129,.3);
+  border: 1px solid rgba(16,185,129,.5);
+  color: #6ee7b7;
+  font-size: 0.7rem;
+  font-weight: 900;
+  padding: 2px 8px;
+  border-radius: 999px;
+  animation: countPop 2s ease-in-out infinite;
+}
+@keyframes countPop {
+  0%,100% { transform: scale(1); }
+  50%      { transform: scale(1.12); }
+}
+
+/* ── Mathe Preview ── */
+.previewMathe {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.matheNum {
+  font-size: 1.8rem;
+  font-weight: 900;
+  color: #c4b5fd;
+  font-family: var(--font-display);
+}
+.matheOp {
+  font-size: 1.4rem;
+  font-weight: 900;
+  color: rgba(255,255,255,.4);
+}
+.matheAns {
+  color: #a78bfa;
+  animation: answerPop 2s ease-in-out infinite;
+}
+@keyframes answerPop {
+  0%,60%,100% { transform: scale(1); filter: drop-shadow(0 0 0 rgba(139,92,246,0)); }
+  30%          { transform: scale(1.25); filter: drop-shadow(0 0 10px rgba(139,92,246,.8)); }
+}
+
+/* ── Game Info ── */
+.gameInfo {
+  padding: 1.25rem 1.25rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  flex: 1;
+}
+.gameIconRow {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.2rem;
+}
+.gameIcon { font-size: 1.5rem; }
+.gameBadge {
+  font-size: 0.68rem;
+  font-weight: 800;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  background: color-mix(in srgb, var(--c) 18%, transparent);
+  border: 1px solid color-mix(in srgb, var(--c) 40%, transparent);
+  color: color-mix(in srgb, var(--c) 100%, #fff);
+  padding: 0.15rem 0.6rem;
+  border-radius: 999px;
+}
+.gameTitle {
+  font-size: 1rem;
+  font-weight: 900;
+  color: #fff;
+  font-family: var(--font-display);
+}
+.gameDesc {
+  font-size: 0.8rem;
+  color: rgba(255,255,255,.45);
+  line-height: 1.5;
+  flex: 1;
+}
+.gamePlay {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  font-size: 0.82rem;
+  font-weight: 800;
+  color: color-mix(in srgb, var(--c) 100%, #fff);
+  margin-top: 0.5rem;
+  transition: gap .15s;
+}
+.gameCard:hover .gamePlay { gap: 0.5rem; }
+
 /* ---- Responsive ---- */
 @media (max-width: 640px) {
   .header { padding: 0.75rem 1rem; }
@@ -285,4 +695,7 @@
   .modules { padding: 2rem 1rem 3rem; }
   .ctaBanner { padding: 3.5rem 1rem; }
   .footer { padding: 1.25rem 1rem; flex-direction: column; align-items: flex-start; }
+  .showcaseInner { padding: 2.5rem 1rem 3rem; }
+  .showcaseTitle { font-size: 1.6rem; }
+  .gamePreview { height: 90px; }
 }

@@ -1,0 +1,86 @@
+.page { padding: 2rem; }
+
+.topBar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1.5rem;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+.heading { font-size: 1.5rem; font-weight: 900; font-family: var(--font-display); margin: 0; }
+.newBtn {
+  background: var(--primary);
+  color: #fff;
+  font-weight: 800;
+  font-size: 0.9rem;
+  padding: 0.6rem 1.25rem;
+  border-radius: var(--radius-lg);
+  text-decoration: none;
+  transition: background .15s;
+}
+.newBtn:hover { background: var(--primary-dark); }
+
+.empty { color: var(--text-muted); padding: 2rem 0; }
+
+.tableWrap { overflow-x: auto; }
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.88rem;
+}
+.table th {
+  text-align: left;
+  padding: 0.6rem 0.75rem;
+  font-size: 0.75rem;
+  font-weight: 800;
+  color: var(--text-muted);
+  border-bottom: var(--border-2) solid var(--border);
+  white-space: nowrap;
+}
+.table td {
+  padding: 0.75rem;
+  border-bottom: var(--border-1) solid var(--border);
+  vertical-align: middle;
+}
+.table tr:hover td { background: var(--surface-2); }
+
+.titleCell { font-weight: 700; max-width: 280px; }
+
+.typeBadge {
+  font-size: 0.72rem; font-weight: 800; padding: 0.15rem 0.6rem;
+  border-radius: 999px; background: var(--surface-2); color: var(--text-muted);
+  border: var(--border-1) solid var(--border); text-transform: capitalize;
+}
+
+.statusBadge {
+  font-size: 0.72rem; font-weight: 800; padding: 0.15rem 0.6rem;
+  border-radius: 999px;
+}
+.statusPublished { background: rgba(16,185,129,.1); color: var(--success); border: 1px solid rgba(16,185,129,.3); }
+.statusDraft     { background: rgba(245,158,11,.1); color: var(--accent);  border: 1px solid rgba(245,158,11,.3); }
+
+.dateCell { color: var(--text-light); white-space: nowrap; font-size: 0.8rem; }
+
+.actions { display: flex; gap: 0.5rem; align-items: center; flex-wrap: wrap; }
+
+.editBtn {
+  font-size: 0.78rem; font-weight: 700; color: var(--primary);
+  text-decoration: none; padding: 0.25rem 0.6rem;
+  border-radius: var(--radius-sm); border: var(--border-1) solid var(--primary);
+  transition: background .12s;
+}
+.editBtn:hover { background: rgba(79,70,229,.08); }
+
+.publishBtn, .deleteBtn {
+  font-size: 0.78rem; font-weight: 700; border-radius: var(--radius-sm);
+  padding: 0.25rem 0.6rem; border: none; cursor: pointer; font-family: inherit;
+  transition: opacity .15s;
+}
+.publishBtn:disabled, .deleteBtn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+.publishBtn { background: rgba(16,185,129,.12); color: var(--success); border: 1px solid rgba(16,185,129,.3); }
+.publishBtn:hover:not(:disabled) { background: rgba(16,185,129,.22); }
+
+.deleteBtn { background: rgba(239,68,68,.08); color: var(--danger); border: 1px solid rgba(239,68,68,.25); }
+.deleteBtn:hover:not(:disabled) { background: rgba(239,68,68,.16); }

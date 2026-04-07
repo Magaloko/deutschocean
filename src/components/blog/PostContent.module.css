@@ -1,0 +1,31 @@
+.content {
+  font-size: 1rem;
+  line-height: 1.75;
+  color: var(--text);
+}
+.content :global(h1) { font-size: 1.8rem; font-weight: 900; margin: 1.5rem 0 0.5rem; font-family: var(--font-display); }
+.content :global(h2) { font-size: 1.4rem; font-weight: 800; margin: 1.25rem 0 0.5rem; font-family: var(--font-display); }
+.content :global(h3) { font-size: 1.15rem; font-weight: 700; margin: 1rem 0 0.4rem; font-family: var(--font-display); }
+.content :global(p)  { margin: 0 0 1rem; }
+.content :global(strong) { font-weight: 700; }
+.content :global(em) { font-style: italic; }
+.content :global(blockquote) {
+  border-left: 4px solid var(--primary); padding: 0.5rem 1rem;
+  margin: 1rem 0; background: var(--surface-2); border-radius: 0 var(--radius) var(--radius) 0;
+  color: var(--text-muted);
+}
+.content :global(code) {
+  background: var(--surface-2); padding: 0.15rem 0.4rem;
+  border-radius: var(--radius-sm); font-size: 0.88em; font-family: monospace;
+}
+.content :global(pre) {
+  background: #1e1b4b; color: #e0e7ff; padding: 1rem 1.25rem;
+  border-radius: var(--radius); overflow-x: auto; margin: 1rem 0;
+}
+.content :global(pre code) { background: none; color: inherit; padding: 0; }
+.content :global(ul), .content :global(ol) { padding-left: 1.5rem; margin: 0 0 1rem; }
+.content :global(li) { margin-bottom: 0.25rem; }
+.content :global(img) { max-width: 100%; border-radius: var(--radius); margin: 1rem 0; }
+.content :global(a) { color: var(--primary); text-decoration: underline; }
+.content :global(hr) { border: none; border-top: 2px solid var(--border); margin: 1.5rem 0; }
+.content :global(.ProseMirror) { outline: none; }

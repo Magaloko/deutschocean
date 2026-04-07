@@ -31,6 +31,16 @@ const EmojiBaukasten   = lazy(() => import('./pages/app/games/EmojiBaukasten.jsx
 const EmotionenKarten  = lazy(() => import('./pages/app/games/EmotionenKarten.jsx'))
 const FruechtZaehlen   = lazy(() => import('./pages/app/games/FruechtZaehlen.jsx'))
 const Zahlenstrahl    = lazy(() => import('./pages/app/games/mathe/Zahlenstrahl.jsx'))
+
+// Blog
+const BlogListPage       = lazy(() => import('./pages/blog/BlogListPage.jsx'))
+const BlogPostPublicPage = lazy(() => import('./pages/blog/BlogPostPublicPage.jsx'))
+const BlogPostPage       = lazy(() => import('./pages/blog/BlogPostPage.jsx'))
+
+// Admin
+const AdminLayout        = lazy(() => import('./pages/admin/AdminLayout.jsx'))
+const AdminBlogListPage  = lazy(() => import('./pages/admin/AdminBlogListPage.jsx'))
+const BlogEditorPage     = lazy(() => import('./pages/admin/BlogEditorPage.jsx'))
 const MehrWeniger     = lazy(() => import('./pages/app/games/mathe/MehrWeniger.jsx'))
 const MinusRakete     = lazy(() => import('./pages/app/games/mathe/MinusRakete.jsx'))
 const Zahlenfolge     = lazy(() => import('./pages/app/games/mathe/Zahlenfolge.jsx'))
@@ -88,6 +98,25 @@ export default function App() {
             <Route path="mathe/wuerfel-rechnen" element={<WuerfelRechnen />} />
             <Route path="mathe/mini-markt"      element={<MiniMarkt />} />
             <Route path="mathe/einmaleins"      element={<EinmaleinsBlitz />} />
+          </Route>
+
+          {/* Blog (public) */}
+          <Route path="blog">
+            <Route index element={<BlogListPage />} />
+            <Route path=":slug" element={<BlogPostPublicPage />} />
+          </Route>
+
+          {/* Blog (logged in) */}
+          <Route path="app/blog">
+            <Route index element={<BlogListPage basePath="/app/blog" showHeader={false} />} />
+            <Route path=":slug" element={<BlogPostPage />} />
+          </Route>
+
+          {/* Admin */}
+          <Route path="admin" element={<AdminLayout />}>
+            <Route path="blog" element={<AdminBlogListPage />} />
+            <Route path="blog/neu" element={<BlogEditorPage />} />
+            <Route path="blog/:id" element={<BlogEditorPage />} />
           </Route>
 
           <Route path="*" element={<Navigate to="/app" replace />} />

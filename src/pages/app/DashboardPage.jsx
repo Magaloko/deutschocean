@@ -1,6 +1,8 @@
 import React, { useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { useAuth } from '../../hooks/useAuth.jsx'
+import { useRecommendedPosts } from '../../hooks/useRecommendedPosts.js'
+import PostCard from '../../components/blog/PostCard.jsx'
 import Badge from '../../components/ui/Badge.jsx'
 import ProgressBar from '../../components/ui/ProgressBar.jsx'
 import { MISSIONS, BADGES } from '../../lib/gameData.js'
@@ -148,7 +150,8 @@ export default function DashboardPage() {
   const levelMeta     = LEVEL_META[schoolModule] ?? LEVEL_META.volksschule
   const moduleMeta    = MODULE_META[schoolModule]
 
-  const [activeTab, setActiveTab] = useState('deutsch')
+  const [activeTab, setActiveTab]   = useState('deutsch')
+  const recommendedPosts            = useRecommendedPosts(profile)
 
   const featured      = useMemo(() => getTagesaufgabe(completed), [completed])
   const leveledGames  = useMemo(
@@ -223,6 +226,21 @@ export default function DashboardPage() {
               <div className={styles.featuredPlayBtn}>▶ JETZT SPIELEN</div>
             </div>
           </Link>
+        </section>
+      )}
+
+      {/* ── Artikel-Empfehlungen ── */}
+      {recommendedPosts.length > 0 && (
+        <section className={styles.recommendedSection}>
+          <div className={styles.recommendedHeader}>
+            <span className={styles.recommendedLabel}>📚 Für dich empfohlen</span>
+            <Link to="/app/blog" className={styles.recommendedAll}>Alle Artikel →</Link>
+          </div>
+          <div className={styles.recommendedGrid}>
+            {recommendedPosts.map(post => (
+              <PostCard key={post.id} post={post} href={`/app/blog/${post.slug}`} />
+            ))}
+          </div>
         </section>
       )}
 
