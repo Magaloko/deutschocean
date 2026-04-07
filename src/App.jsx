@@ -6,6 +6,9 @@ import Spinner from './components/ui/Spinner.jsx'
 
 // Lazy-load aller Seiten
 const StartPage        = lazy(() => import('./pages/StartPage.jsx'))
+const LoginPage        = lazy(() => import('./pages/LoginPage.jsx'))
+const RegisterPage     = lazy(() => import('./pages/RegisterPage.jsx'))
+const ProfilePage      = lazy(() => import('./pages/app/ProfilePage.jsx'))
 const DashboardPage    = lazy(() => import('./pages/app/DashboardPage.jsx'))
 const FehlerDetektiv   = lazy(() => import('./pages/app/games/FehlerDetektiv.jsx'))
 const Personenbeschreibung = lazy(() => import('./pages/app/games/Personenbeschreibung.jsx'))
@@ -48,12 +51,15 @@ export default function App() {
       <Suspense fallback={<PageLoader />}>
         <Routes>
           {/* Onboarding */}
-          <Route path="/"      element={<Navigate to="/app" replace />} />
-          <Route path="/start" element={<StartPage />} />
+          <Route path="/"             element={<Navigate to="/app" replace />} />
+          <Route path="/start"        element={<StartPage />} />
+          <Route path="/login"        element={<LoginPage />} />
+          <Route path="/registrieren" element={<RegisterPage />} />
 
           {/* App-Seiten (AppLayout leitet zu /start wenn kein Profil) */}
           <Route path="/app" element={<AppLayout />}>
             <Route index element={<DashboardPage />} />
+            <Route path="profil" element={<ProfilePage />} />
             <Route path="missionen" element={<Navigate to="/app" replace />} />
             <Route path="spiel/fehler-detektiv"       element={<FehlerDetektiv />} />
             <Route path="spiel/personenbeschreibung"  element={<Personenbeschreibung />} />
