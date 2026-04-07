@@ -5,6 +5,7 @@ import AppLayout from './components/layout/AppLayout.jsx'
 import Spinner from './components/ui/Spinner.jsx'
 
 // Lazy-load aller Seiten
+const LandingPage      = lazy(() => import('./pages/LandingPage.jsx'))
 const StartPage        = lazy(() => import('./pages/StartPage.jsx'))
 const LoginPage        = lazy(() => import('./pages/LoginPage.jsx'))
 const RegisterPage     = lazy(() => import('./pages/RegisterPage.jsx'))
@@ -51,7 +52,7 @@ export default function App() {
       <Suspense fallback={<PageLoader />}>
         <Routes>
           {/* Onboarding */}
-          <Route path="/"             element={<Navigate to="/app" replace />} />
+          <Route path="/"             element={<LandingPage />} />
           <Route path="/start"        element={<StartPage />} />
           <Route path="/login"        element={<LoginPage />} />
           <Route path="/registrieren" element={<RegisterPage />} />
