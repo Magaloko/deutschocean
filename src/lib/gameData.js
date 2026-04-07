@@ -231,6 +231,43 @@ export const MISSIONS = [
   { id: 'fruechtZaehlen-1', type: 'fruechtZaehlen', title: 'Früchte Zählen', description: 'Zähle die Früchte!',    icon: '🍎', xp: 10, stars: 0, level: 0, color: '#f97316' },
   { id: 'fruechtZaehlen-2', type: 'fruechtZaehlen', title: 'Früchte Zählen', description: 'Mehr Früchte zählen!', icon: '🍎', xp: 14, stars: 0, level: 0, color: '#f97316' },
   { id: 'fruechtZaehlen-3', type: 'fruechtZaehlen', title: 'Früchte Zählen', description: 'Viele Früchte zählen!',icon: '🍎', xp: 18, stars: 0, level: 0, color: '#f97316' },
+
+  // ── Mathe-Spiele ──────────────────────────────────────────────────────
+
+  // Zahlenstrahl (Level 0 = Kindergarten, all modules)
+  { id: 'zahlenstrahl-1', type: 'zahlenstrahl', title: 'Zahlenstrahl', description: 'Welche Zahl fehlt?',       icon: '🔢', xp: 10, stars: 0, level: 0, color: '#6366f1' },
+  { id: 'zahlenstrahl-2', type: 'zahlenstrahl', title: 'Zahlenstrahl', description: 'Lücken auf dem Strahl!',   icon: '🔢', xp: 14, stars: 0, level: 0, color: '#6366f1' },
+  { id: 'zahlenstrahl-3', type: 'zahlenstrahl', title: 'Zahlenstrahl', description: 'Zahlenreihe meistern!',    icon: '🔢', xp: 18, stars: 0, level: 0, color: '#6366f1' },
+
+  // Mehr oder Weniger (Level 0)
+  { id: 'mehrWeniger-1', type: 'mehrWeniger', title: 'Mehr oder Weniger', description: 'Was ist mehr?',         icon: '⚖️', xp: 10, stars: 0, level: 0, color: '#06b6d4' },
+  { id: 'mehrWeniger-2', type: 'mehrWeniger', title: 'Mehr oder Weniger', description: 'Größer, kleiner, gleich?', icon: '⚖️', xp: 14, stars: 0, level: 0, color: '#06b6d4' },
+  { id: 'mehrWeniger-3', type: 'mehrWeniger', title: 'Mehr oder Weniger', description: 'Mengen vergleichen!',   icon: '⚖️', xp: 18, stars: 0, level: 0, color: '#06b6d4' },
+
+  // Würfel-Rechnen (Level 0)
+  { id: 'wuerfelRechnen-1', type: 'wuerfelRechnen', title: 'Würfel-Rechnen', description: 'Zähle die Punkte!', icon: '🎲', xp: 10, stars: 0, level: 0, color: '#10b981' },
+  { id: 'wuerfelRechnen-2', type: 'wuerfelRechnen', title: 'Würfel-Rechnen', description: 'Zwei Würfel addieren!', icon: '🎲', xp: 14, stars: 0, level: 0, color: '#10b981' },
+  { id: 'wuerfelRechnen-3', type: 'wuerfelRechnen', title: 'Würfel-Rechnen', description: 'Würfel-Profi!',      icon: '🎲', xp: 18, stars: 0, level: 0, color: '#10b981' },
+
+  // Minus-Rakete (Level 1)
+  { id: 'minusRakete-1', type: 'minusRakete', title: 'Minus-Rakete', description: 'Was bleibt übrig?',          icon: '🚀', xp: 10, stars: 0, level: 1, color: '#f97316' },
+  { id: 'minusRakete-2', type: 'minusRakete', title: 'Minus-Rakete', description: 'Subtraktion üben!',          icon: '🚀', xp: 14, stars: 0, level: 1, color: '#f97316' },
+  { id: 'minusRakete-3', type: 'minusRakete', title: 'Minus-Rakete', description: 'Minus-Meister!',             icon: '🚀', xp: 18, stars: 0, level: 1, color: '#f97316' },
+
+  // Zahlenfolge (Level 1)
+  { id: 'zahlenfolge-1', type: 'zahlenfolge', title: 'Zahlenfolge', description: 'Was kommt als nächstes?',     icon: '🔗', xp: 10, stars: 0, level: 1, color: '#8b5cf6' },
+  { id: 'zahlenfolge-2', type: 'zahlenfolge', title: 'Zahlenfolge', description: 'Muster erkennen!',            icon: '🔗', xp: 14, stars: 0, level: 1, color: '#8b5cf6' },
+  { id: 'zahlenfolge-3', type: 'zahlenfolge', title: 'Zahlenfolge', description: 'Zahlenreihen-Profi!',         icon: '🔗', xp: 18, stars: 0, level: 1, color: '#8b5cf6' },
+
+  // Mini-Markt (Level 2)
+  { id: 'miniMarkt-1', type: 'miniMarkt', title: 'Mini-Markt', description: 'Was kostet alles zusammen?',       icon: '🛒', xp: 10, stars: 0, level: 2, color: '#f59e0b' },
+  { id: 'miniMarkt-2', type: 'miniMarkt', title: 'Mini-Markt', description: 'Preise addieren!',                 icon: '🛒', xp: 14, stars: 0, level: 2, color: '#f59e0b' },
+  { id: 'miniMarkt-3', type: 'miniMarkt', title: 'Mini-Markt', description: 'Einkaufs-Profi!',                  icon: '🛒', xp: 18, stars: 0, level: 2, color: '#f59e0b' },
+
+  // Einmaleins-Blitz (Level 2)
+  { id: 'einmaleinsBlitz-1', type: 'einmaleinsBlitz', title: 'Einmaleins-Blitz', description: 'Mal-Aufgaben lösen!',   icon: '✖️', xp: 10, stars: 0, level: 2, color: '#ef4444' },
+  { id: 'einmaleinsBlitz-2', type: 'einmaleinsBlitz', title: 'Einmaleins-Blitz', description: 'Schnell multiplizieren!', icon: '✖️', xp: 14, stars: 0, level: 2, color: '#ef4444' },
+  { id: 'einmaleinsBlitz-3', type: 'einmaleinsBlitz', title: 'Einmaleins-Blitz', description: 'Einmaleins-Meister!',    icon: '✖️', xp: 18, stars: 0, level: 2, color: '#ef4444' },
 ]
 
 // ── Fahrzeug-Lenker Welten ────────────────────────────────────────────────
