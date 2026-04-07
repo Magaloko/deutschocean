@@ -16,3 +16,7 @@
   align-items: center;
   justify-content: center;
 }
+
+@media (max-width: 640px) {
+  .main { padding: 1.25rem 1rem; }
+}
