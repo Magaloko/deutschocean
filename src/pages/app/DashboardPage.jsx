@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react'
+import React, { useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { useAuth } from '../../hooks/useAuth.jsx'
 import Badge from '../../components/ui/Badge.jsx'
@@ -26,6 +26,16 @@ const GAME_ROUTES = {
   emojiBaukasten:       '/app/spiel/emoji-baukasten',
   emotionenKarten:      '/app/spiel/emotionen-karten',
   fruechtZaehlen:       '/app/spiel/fruechtZaehlen',
+}
+
+const MATHE_GAME_ROUTES = {
+  zahlenstrahl:    '/app/mathe/zahlenstrahl',
+  mehrWeniger:     '/app/mathe/mehr-weniger',
+  minusRakete:     '/app/mathe/minus-rakete',
+  zahlenfolge:     '/app/mathe/zahlenfolge',
+  wuerfelRechnen:  '/app/mathe/wuerfel-rechnen',
+  miniMarkt:       '/app/mathe/mini-markt',
+  einmaleinsBlitz: '/app/mathe/einmaleins',
 }
 
 // Welche Level-Abschnitte sind pro Modul sichtbar?
@@ -56,6 +66,41 @@ const MODULE_META = {
   kindergarten: { emoji: '🧒', label: 'Kindergarten',    color: '#ec4899' },
   volksschule:  { emoji: '📚', label: 'Volksschule',      color: '#4f46e5' },
   hauptschule:  { emoji: '🎓', label: 'Hauptschule/NMS',  color: '#f97316' },
+}
+
+const MATHE_LEVEL_META = {
+  kindergarten: {
+    0: { label: 'Meine Mathe-Spiele', emoji: '🔢', color: '#6366f1' },
+  },
+  volksschule: {
+    0: { label: 'Zahlen & Zählen',  emoji: '🔢', color: '#6366f1' },
+    1: { label: 'Rechnen',           emoji: '➕', color: '#f97316' },
+    2: { label: 'Profi-Rechnen',     emoji: '✖️', color: '#ef4444' },
+  },
+  hauptschule: {
+    0: { label: 'Aufwärmen',         emoji: '🔢', color: '#6366f1' },
+    1: { label: 'Grundrechnen',      emoji: '➕', color: '#f97316' },
+    2: { label: 'Mittelstufe',       emoji: '✖️', color: '#ef4444' },
+  },
+}
+
+const MATHE_TYPES = new Set([
+  'zahlenstrahl','mehrWeniger','minusRakete',
+  'zahlenfolge','wuerfelRechnen','miniMarkt','einmaleinsBlitz',
+])
+
+function getUniqueMatheGames(level, completed) {
+  const seen = new Set()
+  const unique = []
+  for (const m of MISSIONS) {
+    if (m.level !== level || !MATHE_TYPES.has(m.type)) continue
+    if (seen.has(m.type)) continue
+    seen.add(m.type)
+    const variants = MISSIONS.filter((v) => v.level === level && v.type === m.type)
+    const completedCount = variants.filter((v) => completed.includes(v.id)).length
+    unique.push({ ...m, variants, completedCount })
+  }
+  return unique
 }
 
 // Deduplicate: one entry per game type per level category
@@ -103,9 +148,15 @@ export default function DashboardPage() {
   const levelMeta     = LEVEL_META[schoolModule] ?? LEVEL_META.volksschule
   const moduleMeta    = MODULE_META[schoolModule]
 
+  const [activeTab, setActiveTab] = useState('deutsch')
+
   const featured      = useMemo(() => getTagesaufgabe(completed), [completed])
   const leveledGames  = useMemo(
     () => Object.fromEntries(allowedLevels.map((lvl) => [lvl, getUniqueGames(lvl, completed)])),
+    [allowedLevels, completed],
+  )
+  const mathedLeveledGames = useMemo(
+    () => Object.fromEntries(allowedLevels.map((lvl) => [lvl, getUniqueMatheGames(lvl, completed)])),
     [allowedLevels, completed],
   )
 
@@ -175,8 +226,20 @@ export default function DashboardPage() {
         </section>
       )}
 
-      {/* ── Spiele nach Kategorie ── */}
-      {allowedLevels.map((lvl) => {
+      {/* ── Tabs ── */}
+      <div className={styles.tabs}>
+        <button
+          className={`${styles.tab} ${activeTab === 'deutsch' ? styles.tabActive : ''}`}
+          onClick={() => setActiveTab('deutsch')}
+        >📚 Deutsch</button>
+        <button
+          className={`${styles.tab} ${activeTab === 'mathe' ? styles.tabActive : ''}`}
+          onClick={() => setActiveTab('mathe')}
+        >🔢 Mathe</button>
+      </div>
+
+      {/* ── Deutsch Tab ── */}
+      {activeTab === 'deutsch' && allowedLevels.map((lvl) => {
         const games = leveledGames[lvl]
         if (!games.length) return null
         const meta = levelMeta[lvl] ?? { label: `Level ${lvl}`, emoji: '📖', color: '#6b7280' }
@@ -235,7 +298,7 @@ export default function DashboardPage() {
       })}
 
       {/* ── Hauptschule: Kommt bald ── */}
-      {schoolModule === 'hauptschule' && (
+      {activeTab === 'deutsch' && schoolModule === 'hauptschule' && (
         <section>
           <div className={styles.levelHeader}>
             <div className={styles.levelPill} style={{ background: '#f5f3ff', border: '2px solid #c4b5fd' }}>
@@ -251,6 +314,71 @@ export default function DashboardPage() {
             </p>
           </div>
         </section>
+      )}
+
+      {/* ── Mathe Tab ── */}
+      {activeTab === 'mathe' && (
+        <>
+          {allowedLevels.map((lvl) => {
+            const games = mathedLeveledGames[lvl]
+            if (!games.length) return null
+            const meta = (MATHE_LEVEL_META[schoolModule] ?? MATHE_LEVEL_META.volksschule)[lvl]
+                      ?? { label: `Level ${lvl}`, emoji: '🔢', color: '#6366f1' }
+            const totalVariants = games.reduce((s, g) => s + g.variants.length, 0)
+            const doneVariants  = games.reduce((s, g) => s + g.completedCount, 0)
+            return (
+              <section key={lvl}>
+                <div className={styles.levelHeader}>
+                  <div className={styles.levelPill} style={{ background: `${meta.color}18`, border: `2px solid ${meta.color}40` }}>
+                    <span>{meta.emoji}</span>
+                    <span style={{ color: meta.color, fontWeight: 800 }}>{meta.label}</span>
+                  </div>
+                  <span className={styles.levelProgress}>{doneVariants}/{totalVariants} erledigt</span>
+                </div>
+                <div className={styles.gameGrid}>
+                  {games.map((g) => {
+                    const route = MATHE_GAME_ROUTES[g.type]
+                    const anyDone = g.completedCount > 0
+                    const allDone = g.completedCount >= g.variants.length
+                    return (
+                      <Link key={g.type} to={route} className={styles.gameLink}>
+                        <div
+                          className={`${styles.gameCard} ${allDone ? styles.gameCardDone : anyDone ? styles.gameCardPartial : ''}`}
+                          style={{ '--accent': g.color }}
+                        >
+                          <div className={styles.gameIconBig}>{g.icon}</div>
+                          <div className={styles.gameTitle}>{g.title}</div>
+                          {g.variants.length > 1 && (
+                            <div className={styles.diffDots}>
+                              {g.variants.map((v, i) => (
+                                <div
+                                  key={v.id}
+                                  className={`${styles.diffDot} ${completed.includes(v.id) ? styles.diffDotDone : ''}`}
+                                  title={`Level ${i + 1}: ${completed.includes(v.id) ? 'gespielt' : 'offen'}`}
+                                />
+                              ))}
+                            </div>
+                          )}
+                          <div className={styles.gameCardMeta}>
+                            <span className={styles.gameXp}>+{g.xp} XP</span>
+                          </div>
+                          <div className={`${styles.gamePlayBtn} ${allDone ? styles.gameDoneBtn : anyDone ? styles.gamePartialBtn : ''}`}>
+                            {allDone ? '✓ Alle gespielt' : anyDone ? `${g.completedCount}/${g.variants.length} gespielt` : '▶ Spielen'}
+                          </div>
+                        </div>
+                      </Link>
+                    )
+                  })}
+                </div>
+              </section>
+            )
+          })}
+          {(!mathedLeveledGames[0]?.length && !mathedLeveledGames[1]?.length && !mathedLeveledGames[2]?.length) && (
+            <div style={{ padding: '2rem', textAlign: 'center', color: 'var(--text-muted)', fontWeight: 700 }}>
+              Mathe-Spiele werden gleich geladen...
+            </div>
+          )}
+        </>
       )}
 
       {/* ── Abzeichen ── */}
