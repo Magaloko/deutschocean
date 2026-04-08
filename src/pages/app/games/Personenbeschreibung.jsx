@@ -19,7 +19,7 @@ const SHOW_SECONDS = 5
 const TOTAL = PERSONEN.length
 
 const HINTS = {
-  long:   { text: 'Beschreibe die Person systematisch: Haare, Gesicht, Kleidung, Accessoires. Verwende "hat" für Körpermerkmale und "trägt" für Kleidung!', tts: true },
+  long:   { text: 'Beschreibe die Person so: Haare, Gesicht, Kleidung. Verwende "hat" für das Aussehen und "trägt" für Kleidung!', tts: true },
   medium: { text: 'Nutze "hat" für Aussehen und "trägt" für Kleidung.', tts: false },
   short:  { text: '💡 Hat… / Trägt…', tts: false },
 }

@@ -24,7 +24,7 @@ const HINTS = {
     text: 'Schau jeden Buchstaben an und ordne sie: Welcher könnte der erste Buchstabe sein? Spreche das Wort laut und höre auf die Laute!',
     tts:  true,
   },
-  medium: { text: 'Fang mit dem Anfangsbuchstaben an und baue das Wort auf.', tts: false },
+  medium: { text: 'Fang mit dem ersten Buchstaben an und baue das Wort auf.', tts: false },
   short:  { text: '💡 Laut vorlesen hilft!', tts: false },
 }
 

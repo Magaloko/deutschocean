@@ -18,7 +18,7 @@ function shuffle(arr) { return [...arr].sort(() => Math.random() - 0.5) }
 
 const HINTS = {
   long:   {
-    text: 'Nomen sind Dinge, Lebewesen oder Orte — sie werden IMMER großgeschrieben! Merkhilfe: Du kannst "ein/eine" davorstellen: ein Hund, eine Schule.',
+    text: 'Nomen sind Dinge, Lebewesen oder Orte — sie werden IMMER groß geschrieben! Merkhilfe: Kannst du "ein/eine" davor stellen? Ein Hund, eine Schule.',
     tts:  true,
   },
   medium: { text: 'Nomen erkennt man oft am "ein" oder "die/der/das" davor.', tts: false },

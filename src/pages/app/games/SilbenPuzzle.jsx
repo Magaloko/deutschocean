@@ -20,7 +20,7 @@ const TOTAL = 5
 
 const HINTS = {
   long:   {
-    text: 'Silben sind kleine Lautbausteine eines Wortes. Sprich das Wort laut und klatsche dazu — jeder Klatsch ist eine Silbe! Schu-le = 2 Silben.',
+    text: 'Silben sind Klangteile eines Wortes. Sprich das Wort laut und klatsche dazu — jeder Klatsch ist eine Silbe! Schu-le = 2 Silben.',
     tts:  true,
   },
   medium: { text: 'Sprich das Wort laut und klatsche die Silben.', tts: false },

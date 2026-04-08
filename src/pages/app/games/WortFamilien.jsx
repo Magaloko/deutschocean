@@ -20,7 +20,7 @@ const TOTAL_ROUNDS = 3
 
 const HINTS = {
   long:   {
-    text: 'Wörter einer Familie haben dieselbe Wurzel — also denselben Grundbaustein. "fahren", "Fahrer", "Fahrt" gehören alle zur Wurzel "fahr-". Hörst du den gemeinsamen Klang?',
+    text: 'Wörter einer Familie haben dieselbe Wurzel — denselben Kernteil. "fahren", "Fahrer", "Fahrt" gehören alle zur Wurzel "fahr-". Hörst du den Klang?',
     tts:  true,
   },
   medium: { text: 'Hör auf den gemeinsamen Klang der Wörter — die Wurzel klingt ähnlich.', tts: false },
