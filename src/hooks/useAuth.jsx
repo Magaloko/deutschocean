@@ -4,8 +4,9 @@ import {
   onAuthStateChanged, signInAnonymously, signInWithEmailAndPassword,
   createUserWithEmailAndPassword, signInWithPopup, signOut,
   GoogleAuthProvider, EmailAuthProvider, linkWithCredential, linkWithPopup,
+  deleteUser,
 } from 'firebase/auth'
-import { doc, getDoc, setDoc, updateDoc, onSnapshot } from 'firebase/firestore'
+import { doc, getDoc, setDoc, updateDoc, onSnapshot, deleteDoc } from 'firebase/firestore'
 import { auth, db, FIREBASE_CONFIGURED } from '../lib/firebase.js'
 
 const AuthContext = createContext(null)
@@ -30,6 +31,7 @@ function makeProfile(uid, name, avatar, schoolModule, isAnonymous) {
     lastActiveDate:    null,
     completedMissions: [],
     unlockedBadges:    [],
+    totalHintsUsed:    0,
     createdAt:         now,
     updatedAt:         now,
   }
@@ -69,11 +71,49 @@ async function ensureFirestoreProfile(fbUser, overrides = {}) {
   await setDoc(userRef, profile)
 }
 
+function toLocalDateStr(date = new Date()) {
+  const y = date.getFullYear()
+  const m = String(date.getMonth() + 1).padStart(2, '0')
+  const d = String(date.getDate()).padStart(2, '0')
+  return `${y}-${m}-${d}`
+}
+
+async function updateStreak(fbUser, currentProfile) {
+  const today = toLocalDateStr()
+
+  let last = null
+  if (currentProfile.lastActiveDate) {
+    // Handle both full ISO strings and any legacy plain date strings
+    const raw = currentProfile.lastActiveDate
+    last = raw.length === 10 ? raw : toLocalDateStr(new Date(raw))
+  }
+
+  if (last === today) return  // already updated today
+
+  // Compute yesterday in local time (DST-safe)
+  const yd = new Date()
+  yd.setDate(yd.getDate() - 1)
+  const yesterday = toLocalDateStr(yd)
+
+  const newStreak = last === yesterday
+    ? (currentProfile.streakDays ?? 0) + 1
+    : last === null
+      ? 0      // first ever visit — no streak yet
+      : 1      // streak broken, reset to 1
+
+  await updateDoc(doc(db, 'users', fbUser.uid), {
+    streakDays:     newStreak,
+    lastActiveDate: toLocalDateStr(),
+    updatedAt:      new Date().toISOString(),
+  })
+}
+
 export function AuthProvider({ children }) {
   const [profile,  setProfileState] = useState(null)
   const [loading,  setLoading]      = useState(true)
-  const unsubRef   = useRef(null)
-  const profileRef = useRef(null)
+  const unsubRef        = useRef(null)
+  const profileRef      = useRef(null)
+  const streakUpdatedRef = useRef(false)
 
   useEffect(() => {
     if (!FIREBASE_CONFIGURED) {
@@ -87,6 +127,9 @@ export function AuthProvider({ children }) {
         // Tear down previous Firestore listener
         if (unsubRef.current) { unsubRef.current(); unsubRef.current = null }
 
+        // Reset streak flag for new session
+        streakUpdatedRef.current = false
+
         if (!fbUser) {
           setProfileState(null)
           setLoading(false)
@@ -98,8 +141,14 @@ export function AuthProvider({ children }) {
           await ensureFirestoreProfile(fbUser)
           const userRef = doc(db, 'users', fbUser.uid)
           unsubRef.current = onSnapshot(userRef, (snap) => {
-            setProfileState(snap.exists() ? snap.data() : null)
+            const data = snap.exists() ? snap.data() : null
+            setProfileState(data)
             setLoading(false)
+            // Update streak once per session (first snapshot only)
+            if (data && !streakUpdatedRef.current) {
+              streakUpdatedRef.current = true
+              updateStreak(fbUser, data).catch(console.error)
+            }
           })
         } catch (err) {
           console.error('Auth state error:', err)
@@ -178,6 +227,16 @@ export function AuthProvider({ children }) {
     await signOut(auth)
   }
 
+  async function deleteAccount() {
+    requireFirebase()
+    const fbUser = auth.currentUser
+    if (!fbUser) throw new Error('No authenticated user.')
+    // Delete Firestore document first (before auth deletion)
+    await deleteDoc(doc(db, 'users', fbUser.uid))
+    // Delete Firebase Auth account
+    await deleteUser(fbUser)
+  }
+
   const setProfile = useCallback(async (updates) => {
     requireFirebase()
     const fbUser = auth.currentUser
@@ -196,7 +255,7 @@ export function AuthProvider({ children }) {
       user, profile, loading,
       loginAnonymously, login, loginWithGoogle,
       register, upgradeWithEmail, upgradeWithGoogle,
-      logout, setProfile,
+      logout, setProfile, deleteAccount,
     }}>
       {children}
     </AuthContext.Provider>

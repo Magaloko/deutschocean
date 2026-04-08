@@ -6,6 +6,7 @@ import PostCard from '../../components/blog/PostCard.jsx'
 import Badge from '../../components/ui/Badge.jsx'
 import ProgressBar from '../../components/ui/ProgressBar.jsx'
 import { MISSIONS, BADGES } from '../../lib/gameData.js'
+import { isDueToday } from '../../lib/spacedRepetition.js'
 import styles from './DashboardPage.module.css'
 
 const GAME_ROUTES = {
@@ -28,6 +29,8 @@ const GAME_ROUTES = {
   emojiBaukasten:       '/app/spiel/emoji-baukasten',
   emotionenKarten:      '/app/spiel/emotionen-karten',
   fruechtZaehlen:       '/app/spiel/fruechtZaehlen',
+  regelRaupe:           '/app/spiel/regel-raupe',
+  wortFamilien:         '/app/spiel/wort-familien',
 }
 
 const MATHE_GAME_ROUTES = {
@@ -133,11 +136,22 @@ function getTagesaufgabe(completed) {
   return uncompleted[dayOfYear % uncompleted.length]
 }
 
+// A level is unlocked if:
+// - It's level 0 (always unlocked)
+// - OR the previous level has at least 1 completed mission
+function isLevelUnlocked(lvl, allLeveledGames) {
+  if (lvl === 0) return true
+  const prevGames = allLeveledGames[lvl - 1] ?? []
+  return prevGames.some((g) => g.completedCount > 0)
+}
+
 export default function DashboardPage() {
   const { profile } = useAuth()
+  const weakGames = profile?.weakGames ?? {}
 
   const xp           = profile?.xp ?? 0
   const stars        = profile?.stars ?? 0
+  const streakDays   = profile?.streakDays ?? 0
   const badges       = profile?.unlockedBadges ?? []
   const completed    = profile?.completedMissions ?? []
   const name         = profile?.name || 'Spieler'
@@ -152,6 +166,16 @@ export default function DashboardPage() {
 
   const [activeTab, setActiveTab]   = useState('deutsch')
   const recommendedPosts            = useRecommendedPosts(profile)
+
+  const spacedRepetition = profile?.spacedRepetition ?? {}
+
+  // Missions due for review today
+  const dueForReview = useMemo(() => {
+    return MISSIONS.filter((m) => {
+      const sr = spacedRepetition[m.id]
+      return sr && isDueToday(sr.nextReview) && GAME_ROUTES[m.type]
+    }).slice(0, 4)  // max 4 at a time
+  }, [spacedRepetition])
 
   const featured      = useMemo(() => getTagesaufgabe(completed), [completed])
   const leveledGames  = useMemo(
@@ -172,11 +196,13 @@ export default function DashboardPage() {
         <div className={styles.heroText}>
           <h1 className={styles.heroTitle}>Hallo, {name}! 👋</h1>
           <p className={styles.heroSub}>
-            {xp === 0
-              ? 'Wähle ein Spiel und leg los!'
-              : xpInLevel < 50
-                ? `Noch ${xpToNext} XP bis Level ${level + 1}!`
-                : `Du bist auf Level ${level} — weiter so!`}
+            {streakDays >= 3
+              ? `🔥 ${streakDays} Tage in Folge — unaufhaltbar!`
+              : xp === 0
+                ? 'Wähle ein Spiel und leg los!'
+                : xpInLevel < 50
+                  ? `Noch ${xpToNext} XP bis Level ${level + 1}!`
+                  : `Du bist auf Level ${level} — weiter so!`}
           </p>
           <div className={styles.modulePill} style={{ background: `${moduleMeta.color}20`, color: moduleMeta.color }}>
             {moduleMeta.emoji} {moduleMeta.label}
@@ -197,6 +223,15 @@ export default function DashboardPage() {
             <span className={styles.heroStatNum}>{completed.length}</span>
             <span className={styles.heroStatLabel}>🏅 Gespielt</span>
           </div>
+          {streakDays > 0 && (
+            <>
+              <div className={styles.heroStatDiv} />
+              <div className={styles.heroStat}>
+                <span className={styles.heroStatNum}>{streakDays}</span>
+                <span className={styles.heroStatLabel}>🔥 Tage</span>
+              </div>
+            </>
+          )}
         </div>
         <div className={styles.xpBarWrap}>
           <span className={styles.xpBarLabel}>Lvl {level}</span>
@@ -226,6 +261,25 @@ export default function DashboardPage() {
               <div className={styles.featuredPlayBtn}>▶ JETZT SPIELEN</div>
             </div>
           </Link>
+        </section>
+      )}
+
+      {/* ── Zum Wiederholen ── */}
+      {dueForReview.length > 0 && (
+        <section className={styles.reviewSection}>
+          <div className={styles.reviewHeader}>
+            <span className={styles.reviewLabel}>🔁 Heute wiederholen</span>
+            <span className={styles.reviewCount}>{dueForReview.length} fällig</span>
+          </div>
+          <div className={styles.reviewGrid}>
+            {dueForReview.map((m) => (
+              <Link key={m.id} to={GAME_ROUTES[m.type]} className={styles.reviewCard}>
+                <span className={styles.reviewIcon}>{m.icon}</span>
+                <span className={styles.reviewTitle}>{m.title}</span>
+                <span className={styles.reviewArrow}>→</span>
+              </Link>
+            ))}
+          </div>
         </section>
       )}
 
@@ -263,6 +317,7 @@ export default function DashboardPage() {
         const meta = levelMeta[lvl] ?? { label: `Level ${lvl}`, emoji: '📖', color: '#6b7280' }
         const totalVariants = games.reduce((s, g) => s + g.variants.length, 0)
         const doneVariants  = games.reduce((s, g) => s + g.completedCount, 0)
+        const unlocked = isLevelUnlocked(lvl, leveledGames)
         return (
           <section key={lvl}>
             <div className={styles.levelHeader}>
@@ -271,10 +326,32 @@ export default function DashboardPage() {
                 <span style={{ color: meta.color, fontWeight: 800 }}>{meta.label}</span>
               </div>
               <span className={styles.levelProgress}>{doneVariants}/{totalVariants} erledigt</span>
+              {!unlocked && <span className={styles.levelLockBadge}>🔒 Noch gesperrt</span>}
             </div>
 
             <div className={styles.gameGrid}>
               {games.map((g) => {
+                if (!unlocked) {
+                  return (
+                    <div
+                      key={g.type}
+                      className={`${styles.gameLink} ${styles.gameLinkLocked}`}
+                      aria-hidden="true"
+                    >
+                      <div className={`${styles.gameCard} ${styles.gameCardLocked}`} style={{ '--accent': g.color }}>
+                        <div className={styles.lockOverlay}>
+                          <span className={styles.lockIcon}>🔒</span>
+                          <span className={styles.lockHint}>Vorherige Aufgaben lösen!</span>
+                        </div>
+                        <div className={styles.gameIconBig} style={{ opacity: 0.35 }}>{g.icon}</div>
+                        <div className={styles.gameTitle} style={{ opacity: 0.35 }}>{g.title}</div>
+                        <div className={styles.gameCardMeta} style={{ opacity: 0.35 }}>
+                          <span className={styles.gameXp}>+{g.xp} XP</span>
+                        </div>
+                      </div>
+                    </div>
+                  )
+                }
                 const route = GAME_ROUTES[g.type]
                 const anyDone = g.completedCount > 0
                 const allDone = g.completedCount >= g.variants.length
@@ -284,6 +361,12 @@ export default function DashboardPage() {
                       className={`${styles.gameCard} ${allDone ? styles.gameCardDone : anyDone ? styles.gameCardPartial : ''}`}
                       style={{ '--accent': g.color }}
                     >
+                      {weakGames[g.id] >= 2 && (
+                        <span className={styles.weakIndicator} title="Mehr üben!">⚠️</span>
+                      )}
+                      {(weakGames[g.id] ?? 0) > 0 && (
+                        <span className={styles.difficultyBadge}>🟢 Leicht-Modus aktiv</span>
+                      )}
                       <div className={styles.gameIconBig}>{g.icon}</div>
                       <div className={styles.gameTitle}>{g.title}</div>
 
@@ -344,6 +427,7 @@ export default function DashboardPage() {
                       ?? { label: `Level ${lvl}`, emoji: '🔢', color: '#6366f1' }
             const totalVariants = games.reduce((s, g) => s + g.variants.length, 0)
             const doneVariants  = games.reduce((s, g) => s + g.completedCount, 0)
+            const unlocked = isLevelUnlocked(lvl, mathedLeveledGames)
             return (
               <section key={lvl}>
                 <div className={styles.levelHeader}>
@@ -352,9 +436,31 @@ export default function DashboardPage() {
                     <span style={{ color: meta.color, fontWeight: 800 }}>{meta.label}</span>
                   </div>
                   <span className={styles.levelProgress}>{doneVariants}/{totalVariants} erledigt</span>
+                  {!unlocked && <span className={styles.levelLockBadge}>🔒 Noch gesperrt</span>}
                 </div>
                 <div className={styles.gameGrid}>
                   {games.map((g) => {
+                    if (!unlocked) {
+                      return (
+                        <div
+                          key={g.type}
+                          className={`${styles.gameLink} ${styles.gameLinkLocked}`}
+                          aria-hidden="true"
+                        >
+                          <div className={`${styles.gameCard} ${styles.gameCardLocked}`} style={{ '--accent': g.color }}>
+                            <div className={styles.lockOverlay}>
+                              <span className={styles.lockIcon}>🔒</span>
+                              <span className={styles.lockHint}>Vorherige Aufgaben lösen!</span>
+                            </div>
+                            <div className={styles.gameIconBig} style={{ opacity: 0.35 }}>{g.icon}</div>
+                            <div className={styles.gameTitle} style={{ opacity: 0.35 }}>{g.title}</div>
+                            <div className={styles.gameCardMeta} style={{ opacity: 0.35 }}>
+                              <span className={styles.gameXp}>+{g.xp} XP</span>
+                            </div>
+                          </div>
+                        </div>
+                      )
+                    }
                     const route = MATHE_GAME_ROUTES[g.type]
                     const anyDone = g.completedCount > 0
                     const allDone = g.completedCount >= g.variants.length
@@ -364,6 +470,12 @@ export default function DashboardPage() {
                           className={`${styles.gameCard} ${allDone ? styles.gameCardDone : anyDone ? styles.gameCardPartial : ''}`}
                           style={{ '--accent': g.color }}
                         >
+                          {weakGames[g.id] >= 2 && (
+                            <span className={styles.weakIndicator} title="Mehr üben!">⚠️</span>
+                          )}
+                          {(weakGames[g.id] ?? 0) > 0 && (
+                            <span className={styles.difficultyBadge}>🟢 Leicht-Modus aktiv</span>
+                          )}
                           <div className={styles.gameIconBig}>{g.icon}</div>
                           <div className={styles.gameTitle}>{g.title}</div>
                           {g.variants.length > 1 && (

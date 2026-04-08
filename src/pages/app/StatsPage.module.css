@@ -1,0 +1,209 @@
+/* =============================================
+   StatsPage — Lernanalyse-Dashboard
+   ============================================= */
+
+.page {
+  max-width: 700px;
+  margin: 0 auto;
+  padding: 1rem 1rem 6rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+/* ── Header ── */
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+.backBtn {
+  background: none;
+  border: none;
+  font-size: 1.4rem;
+  cursor: pointer;
+  padding: 0.3rem 0.6rem;
+  border-radius: var(--radius-sm);
+  color: var(--text);
+  line-height: 1;
+  transition: background 0.15s;
+}
+.backBtn:hover { background: var(--surface-2); }
+.heading {
+  font-size: 1.3rem;
+  font-weight: 900;
+  color: var(--text);
+  margin: 0;
+}
+
+/* ── Hero Row ── */
+.heroRow {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0.6rem;
+}
+@media (max-width: 480px) {
+  .heroRow { grid-template-columns: repeat(2, 1fr); }
+}
+.heroCard {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 0.9rem 0.5rem;
+  text-align: center;
+  box-shadow: var(--shadow-sm);
+}
+.heroNum {
+  font-size: 1.4rem;
+  font-weight: 900;
+  color: var(--primary);
+  line-height: 1.2;
+}
+.heroLabel {
+  font-size: 0.68rem;
+  font-weight: 700;
+  color: var(--text-muted);
+  margin-top: 0.2rem;
+}
+
+/* ── Sections ── */
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+.sectionTitle {
+  font-size: 0.95rem;
+  font-weight: 800;
+  color: var(--text);
+  margin: 0;
+}
+
+/* ── Level Card ── */
+.levelCard {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1rem 1.1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  box-shadow: var(--shadow-sm);
+}
+.levelRow {
+  display: flex;
+  align-items: baseline;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+.levelBig {
+  font-size: 1.3rem;
+  font-weight: 900;
+  color: var(--primary);
+}
+.levelSub {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  font-weight: 700;
+}
+.nextBadge {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  background: var(--surface-2);
+  border-radius: var(--radius);
+  padding: 0.7rem 0.9rem;
+}
+.nextBadgeIcon { font-size: 1.5rem; }
+.nextBadgeLabel { font-size: 0.82rem; font-weight: 800; color: var(--text); }
+.nextBadgeSub   { font-size: 0.72rem; color: var(--text-muted); font-weight: 700; }
+
+/* ── Bar Chart ── */
+.barList {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1rem 1.1rem;
+  box-shadow: var(--shadow-sm);
+}
+.barItem { display: flex; flex-direction: column; gap: 0.3rem; }
+.barHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.barLabel { font-size: 0.82rem; font-weight: 700; color: var(--text); }
+.barCount { font-size: 0.75rem; font-weight: 700; color: var(--text-muted); }
+.barTrack {
+  height: 8px;
+  background: var(--surface-2);
+  border-radius: 99px;
+  overflow: hidden;
+}
+.barFill {
+  height: 100%;
+  background: var(--bar-color, var(--primary));
+  border-radius: 99px;
+  transition: width 0.6s ease;
+}
+
+/* ── Game List ── */
+.gameList {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 0.75rem 1rem;
+  box-shadow: var(--shadow-sm);
+}
+.gameRow {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+.gameIcon { font-size: 1.3rem; flex-shrink: 0; }
+.gameInfo { flex: 1; display: flex; flex-direction: column; gap: 0.2rem; }
+.gameTitle { font-size: 0.82rem; font-weight: 700; color: var(--text); display: flex; align-items: center; gap: 0.4rem; }
+.weakTag {
+  font-size: 0.65rem;
+  font-weight: 700;
+  background: #fef3c7;
+  color: #92400e;
+  border-radius: 99px;
+  padding: 0.1rem 0.4rem;
+}
+.gameSubTrack {
+  height: 5px;
+  background: var(--surface-2);
+  border-radius: 99px;
+  overflow: hidden;
+}
+.gameSubFill {
+  height: 100%;
+  background: var(--primary-light);
+  border-radius: 99px;
+}
+.gameDone { font-size: 0.72rem; font-weight: 700; color: var(--text-muted); flex-shrink: 0; }
+
+/* ── Badges ── */
+.badgeGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(90px, 1fr));
+  gap: 0.6rem;
+}
+.badgeCard {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 0.75rem 0.5rem;
+  text-align: center;
+  box-shadow: var(--shadow-sm);
+}
+.badgeIcon { font-size: 1.5rem; }
+.badgeName { font-size: 0.65rem; font-weight: 700; color: var(--text-muted); margin-top: 0.2rem; }

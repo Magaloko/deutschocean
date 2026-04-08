@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
 import Card from '../../../components/ui/Card.jsx'
 import Button from '../../../components/ui/Button.jsx'
@@ -7,15 +7,32 @@ import Input from '../../../components/ui/Input.jsx'
 import { PERSONEN } from '../../../lib/gameData.js'
 import { useProgress } from '../../../hooks/useProgress.jsx'
 import styles from './Game.module.css'
+import { useAdaptivity } from '../../../hooks/useAdaptivity.js'
+import { useHints } from '../../../hooks/useHints.js'
+import { useOzzy } from '../../../hooks/useOzzy.js'
+import OzzyMascot from '../../../components/game/OzzyMascot.jsx'
+import { shouldOfferHint } from '../../../lib/adaptivityEngine.js'
 
 function shuffle(arr) { return [...arr].sort(() => Math.random() - 0.5) }
 
 const SHOW_SECONDS = 5
 const TOTAL = PERSONEN.length
 
+const HINTS = {
+  long:   { text: 'Beschreibe die Person so: Haare, Gesicht, Kleidung. Verwende "hat" für das Aussehen und "trägt" für Kleidung!', tts: true },
+  medium: { text: 'Nutze "hat" für Aussehen und "trägt" für Kleidung.', tts: false },
+  short:  { text: '💡 Hat… / Trägt…', tts: false },
+}
+
 export default function Personenbeschreibung() {
   const navigate = useNavigate()
-  const { completeSession, saving } = useProgress()
+  const { completeSession, saving, weakGames } = useProgress()
+
+  const initialDifficulty = (weakGames['personenbeschreibung-1'] ?? 0) > 0 ? 'easy' : 'normal'
+  const { difficulty, wrongCount, recordAnswer } = useAdaptivity(initialDifficulty)
+  const { hint, showHint, dismissHint }          = useHints(HINTS, difficulty, wrongCount)
+  const { mood, message, react: ozzReact }       = useOzzy()
+  const prevDiffRef = useRef(initialDifficulty)
 
   const [persons] = useState(() => shuffle(PERSONEN))
   const [idx, setIdx] = useState(0)
@@ -26,6 +43,14 @@ export default function Personenbeschreibung() {
   const [answers, setAnswers] = useState([])
 
   const person = persons[idx]
+
+  useEffect(() => {
+    if (difficulty !== prevDiffRef.current) {
+      if (difficulty === 'hard') ozzReact('levelUp')
+      else if (difficulty === 'easy') ozzReact('levelDown')
+      prevDiffRef.current = difficulty
+    }
+  }, [difficulty, ozzReact])
 
   // Countdown während "watch"-Phase
   useEffect(() => {
@@ -40,6 +65,11 @@ export default function Personenbeschreibung() {
     const answer = text.toLowerCase()
     const found  = props.filter((p) => answer.includes(p.toLowerCase()))
     const pts    = Math.round((found.length / props.length) * 3)
+    const correct = pts > 0
+    recordAnswer(correct)
+    dismissHint()
+    if (correct) ozzReact('correct')
+    else ozzReact('wrong')
     setScore((s) => s + pts)
     setAnswers((a) => [...a, { text, person, found, pts }])
     setPhase('feedback')
@@ -58,6 +88,7 @@ export default function Personenbeschreibung() {
 
   async function handleFinish() {
     const stars = score >= TOTAL * 3 ? 3 : score >= TOTAL * 1.5 ? 2 : 1
+    ozzReact('celebrate')
     await completeSession({
       missionId: 'personenbeschreibung-1',
       xpEarned: score * 5 + 10,
@@ -97,7 +128,20 @@ export default function Personenbeschreibung() {
         <Badge color="gray">{idx + 1}/{TOTAL}</Badge>
       </div>
 
+      <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '-0.5rem' }}>
+        <OzzyMascot mood={mood} message={message} />
+      </div>
+
       <Card padding="lg" className={styles.gameCard}>
+        {hint ? (
+          <div className={styles.hintBox}>
+            <p className={styles.hintText}>{hint.text}</p>
+            <button className={styles.hintDismiss} onClick={dismissHint} aria-label="Tipp schließen">✕</button>
+          </div>
+        ) : (phase === 'write' && shouldOfferHint(difficulty, wrongCount)) && (
+          <button className={styles.hintBtn} onClick={showHint}>💡 Tipp anzeigen</button>
+        )}
+
         {phase === 'watch' && (
           <div className={styles.watchPhase}>
             <p className={styles.instruction}>

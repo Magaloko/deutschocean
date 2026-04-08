@@ -31,6 +31,8 @@ const EmojiBaukasten   = lazy(() => import('./pages/app/games/EmojiBaukasten.jsx
 const EmotionenKarten  = lazy(() => import('./pages/app/games/EmotionenKarten.jsx'))
 const FruechtZaehlen   = lazy(() => import('./pages/app/games/FruechtZaehlen.jsx'))
 const Zahlenstrahl    = lazy(() => import('./pages/app/games/mathe/Zahlenstrahl.jsx'))
+const RegelRaupe      = lazy(() => import('./pages/app/games/RegelRaupe.jsx'))
+const WortFamilien    = lazy(() => import('./pages/app/games/WortFamilien.jsx'))
 
 // Blog
 const BlogListPage       = lazy(() => import('./pages/blog/BlogListPage.jsx'))
@@ -47,6 +49,8 @@ const Zahlenfolge     = lazy(() => import('./pages/app/games/mathe/Zahlenfolge.j
 const WuerfelRechnen  = lazy(() => import('./pages/app/games/mathe/WuerfelRechnen.jsx'))
 const MiniMarkt       = lazy(() => import('./pages/app/games/mathe/MiniMarkt.jsx'))
 const EinmaleinsBlitz = lazy(() => import('./pages/app/games/mathe/EinmaleinsBlitz.jsx'))
+const StatsPage       = lazy(() => import('./pages/app/StatsPage.jsx'))
+const ChatPage        = lazy(() => import('./pages/app/ChatPage.jsx'))
 
 function PageLoader() {
   return (
@@ -71,6 +75,8 @@ export default function App() {
           <Route path="/app" element={<AppLayout />}>
             <Route index element={<DashboardPage />} />
             <Route path="profil" element={<ProfilePage />} />
+            <Route path="stats" element={<StatsPage />} />
+            <Route path="chat" element={<ChatPage />} />
             <Route path="missionen" element={<Navigate to="/app" replace />} />
             <Route path="spiel/fehler-detektiv"       element={<FehlerDetektiv />} />
             <Route path="spiel/personenbeschreibung"  element={<Personenbeschreibung />} />
@@ -91,6 +97,8 @@ export default function App() {
             <Route path="spiel/emoji-baukasten"        element={<EmojiBaukasten />} />
             <Route path="spiel/emotionen-karten"       element={<EmotionenKarten />} />
             <Route path="spiel/fruechtZaehlen"          element={<FruechtZaehlen />} />
+            <Route path="spiel/regel-raupe"            element={<RegelRaupe />} />
+            <Route path="spiel/wort-familien"          element={<WortFamilien />} />
             <Route path="mathe/zahlenstrahl"    element={<Zahlenstrahl />} />
             <Route path="mathe/mehr-weniger"    element={<MehrWeniger />} />
             <Route path="mathe/minus-rakete"    element={<MinusRakete />} />

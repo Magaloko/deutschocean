@@ -1,0 +1,116 @@
+/* src/pages/app/games/RegelRaupe.module.css */
+.page {
+  padding: 1rem;
+  max-width: 500px;
+  margin: 0 auto;
+}
+
+.wordCard {
+  background: #fff;
+  border-radius: 16px;
+  padding: 2rem 1.5rem;
+  text-align: center;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+  margin: 1rem 0;
+}
+
+.currentWord {
+  font-size: 2.5rem;
+  font-weight: 800;
+  color: #1e293b;
+  letter-spacing: 0.03em;
+  margin: 0 0 0.5rem;
+}
+
+.ruleHint {
+  font-size: 0.82rem;
+  color: #64748b;
+  margin: 0 0 1.5rem;
+}
+
+.choiceRow {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  margin-top: 1rem;
+}
+
+.choiceBtn {
+  flex: 1;
+  max-width: 140px;
+  padding: 0.85rem 1rem;
+  border-radius: 12px;
+  border: 2px solid transparent;
+  font-size: 1rem;
+  font-weight: 700;
+  font-family: inherit;
+  cursor: pointer;
+  transition: transform 0.12s, background 0.12s;
+}
+.choiceBtn:active {
+  transform: scale(0.96);
+}
+
+.btnGross {
+  background: #4f46e5;
+  color: #fff;
+}
+.btnGross:hover {
+  background: #4338ca;
+}
+
+.btnKlein {
+  background: #e2e8f0;
+  color: #334155;
+}
+.btnKlein:hover {
+  background: #cbd5e1;
+}
+
+.choiceBtn:disabled {
+  opacity: 0.6;
+  cursor: default;
+  transform: none;
+}
+
+.feedback {
+  margin-top: 1rem;
+  font-size: 1rem;
+  font-weight: 600;
+  text-align: center;
+}
+.feedbackCorrect { color: #16a34a; }
+.feedbackWrong   { color: #dc2626; }
+
+.ruleTag {
+  display: inline-block;
+  margin-top: 0.35rem;
+  padding: 0.2rem 0.65rem;
+  background: #f1f5f9;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  color: #475569;
+}
+
+.progress {
+  margin: 1rem 0;
+}
+
+.progressBar {
+  height: 8px;
+  background: #e2e8f0;
+  border-radius: 999px;
+  overflow: hidden;
+}
+.progressFill {
+  height: 100%;
+  background: #10b981;
+  border-radius: 999px;
+  transition: width 0.3s;
+}
+.progressLabel {
+  font-size: 0.78rem;
+  color: #64748b;
+  margin-top: 0.3rem;
+  text-align: center;
+}

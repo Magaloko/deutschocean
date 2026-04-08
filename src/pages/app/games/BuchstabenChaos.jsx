@@ -1,4 +1,5 @@
-import React, { useState } from 'react'
+// src/pages/app/games/BuchstabenChaos.jsx
+import React, { useState, useEffect, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
 import Card from '../../../components/ui/Card.jsx'
 import Button from '../../../components/ui/Button.jsx'
@@ -6,60 +7,89 @@ import Badge from '../../../components/ui/Badge.jsx'
 import Input from '../../../components/ui/Input.jsx'
 import { CHAOS_WOERTER } from '../../../lib/gameData.js'
 import { useProgress } from '../../../hooks/useProgress.jsx'
+import { useAdaptivity } from '../../../hooks/useAdaptivity.js'
+import { useHints } from '../../../hooks/useHints.js'
+import { useOzzy } from '../../../hooks/useOzzy.js'
+import OzzyMascot from '../../../components/game/OzzyMascot.jsx'
 import { playCorrect, playWrong, playComplete } from '../../../lib/sounds.js'
+import { shouldOfferHint } from '../../../lib/adaptivityEngine.js'
 import styles from './Game.module.css'
 
 function shuffle(arr) { return [...arr].sort(() => Math.random() - 0.5) }
 
 const TOTAL = 5
 
+const HINTS = {
+  long:   {
+    text: 'Schau jeden Buchstaben an und ordne sie: Welcher könnte der erste Buchstabe sein? Spreche das Wort laut und höre auf die Laute!',
+    tts:  true,
+  },
+  medium: { text: 'Fang mit dem ersten Buchstaben an und baue das Wort auf.', tts: false },
+  short:  { text: '💡 Laut vorlesen hilft!', tts: false },
+}
+
+function getWordPool(difficulty) {
+  const pool = CHAOS_WOERTER.filter((w) => w.difficulty === difficulty)
+  return pool.length >= TOTAL ? pool : CHAOS_WOERTER
+}
+
 export default function BuchstabenChaos() {
   const navigate = useNavigate()
-  const { completeSession, saving } = useProgress()
+  const { completeSession, saving, weakGames } = useProgress()
 
-  const [words]   = useState(() => shuffle(CHAOS_WOERTER).slice(0, TOTAL))
-  const [idx, setIdx]     = useState(0)
-  const [answer, setAnswer] = useState('')
+  const initialDifficulty = (weakGames['buchstaben-chaos-1'] ?? 0) > 0 ? 'easy' : 'normal'
+  const { difficulty, wrongCount, recordAnswer } = useAdaptivity(initialDifficulty)
+  const { hint, showHint, dismissHint, hintsUsedCount } = useHints(HINTS, difficulty, wrongCount)
+  const { mood, message, react: ozzReact }       = useOzzy()
+
+  const prevDiffRef = useRef(initialDifficulty)
+
+  const [words]               = useState(() => shuffle(getWordPool(initialDifficulty)).slice(0, TOTAL))
+  const [idx, setIdx]         = useState(0)
+  const [answer, setAnswer]   = useState('')
   const [checked, setChecked] = useState(false)
-  const [score, setScore]   = useState(0)
-  const [phase, setPhase]   = useState('playing')
-  const [shake, setShake]   = useState(false)
+  const [score, setScore]     = useState(0)
+  const [phase, setPhase]     = useState('playing')
+  const [shake, setShake]     = useState(false)
+
+  useEffect(() => {
+    if (difficulty !== prevDiffRef.current) {
+      if (difficulty === 'hard') ozzReact('levelUp')
+      else if (difficulty === 'easy') ozzReact('levelDown')
+      prevDiffRef.current = difficulty
+    }
+  }, [difficulty, ozzReact])
 
   const item = words[idx]
 
   function handleCheck() {
     const correct = answer.toUpperCase().trim() === item.word
-    if (correct) {
-      setScore((s) => s + 1)
-      playCorrect()
-    } else {
-      playWrong()
+    if (correct) { setScore((s) => s + 1); playCorrect(); ozzReact('correct') }
+    else {
+      playWrong(); ozzReact('wrong')
       setShake(true)
       setTimeout(() => setShake(false), 500)
     }
+    recordAnswer(correct)
     setChecked(true)
+    dismissHint()
   }
 
   function handleNext() {
-    if (idx + 1 >= TOTAL) {
-      setPhase('result')
-    } else {
+    if (idx + 1 >= TOTAL) { setPhase('result') }
+    else {
       setIdx((i) => i + 1)
       setAnswer('')
       setChecked(false)
+      dismissHint()
     }
   }
 
   async function handleFinish() {
     const stars = score === TOTAL ? 3 : score >= TOTAL * 0.6 ? 2 : 1
     playComplete()
-    await completeSession({
-      missionId: 'buchstaben-chaos-1',
-      xpEarned: score * 2,
-      stars,
-      correct: score,
-      total: TOTAL,
-    })
+    ozzReact('celebrate')
+    await completeSession({ missionId: 'buchstaben-chaos-1', xpEarned: score * 2, stars, correct: score, total: TOTAL, hintsUsed: hintsUsedCount })
     navigate('/app')
   }
 
@@ -71,7 +101,7 @@ export default function BuchstabenChaos() {
         <p className={styles.resultSub}>{score}/{TOTAL} Wörter gelöst</p>
         <div className={styles.resultStats}>
           <Badge color="purple">+{score * 2} XP</Badge>
-          <Badge color="yellow">{'⭐'.repeat(score === TOTAL ? 3 : score >= 3 ? 2 : 1)}</Badge>
+          <Badge color="yellow">{'⭐'.repeat(score === TOTAL ? 3 : score >= TOTAL * 0.6 ? 2 : 1)}</Badge>
         </div>
         <div className={styles.resultActions}>
           <Button onClick={handleFinish} loading={saving} size="lg">Speichern</Button>
@@ -94,12 +124,24 @@ export default function BuchstabenChaos() {
         <Badge color="gray">{idx + 1}/{TOTAL}</Badge>
       </div>
 
+      <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '-0.5rem' }}>
+        <OzzyMascot mood={mood} message={message} />
+      </div>
+
       <Card padding="lg" className={`${styles.gameCard} ${shake ? 'shake' : ''}`}>
         <p className={styles.instruction}>
           Bring die Buchstaben in die <strong>richtige Reihenfolge</strong>!
         </p>
 
-        {/* Chaos-Buchstaben */}
+        {hint ? (
+          <div className={styles.hintBox}>
+            <p className={styles.hintText}>{hint.text}</p>
+            <button className={styles.hintDismiss} onClick={dismissHint} aria-label="Tipp schließen">✕</button>
+          </div>
+        ) : (!checked && shouldOfferHint(difficulty, wrongCount)) && (
+          <button className={styles.hintBtn} onClick={showHint}>💡 Tipp anzeigen</button>
+        )}
+
         <div className={styles.chaosLetters}>
           {item.scrambled.split('').map((l, i) => (
             <span key={i} className={styles.chaosLetter}>{l}</span>
@@ -125,15 +167,10 @@ export default function BuchstabenChaos() {
         )}
 
         <div className={styles.actions}>
-          {!checked ? (
-            <Button onClick={handleCheck} disabled={!answer.trim()} size="lg">
-              Überprüfen
-            </Button>
-          ) : (
-            <Button onClick={handleNext} size="lg">
-              {idx + 1 >= TOTAL ? 'Ergebnis' : 'Weiter →'}
-            </Button>
-          )}
+          {!checked
+            ? <Button onClick={handleCheck} disabled={!answer.trim()} size="lg">Überprüfen</Button>
+            : <Button onClick={handleNext} size="lg">{idx + 1 >= TOTAL ? 'Ergebnis' : 'Weiter →'}</Button>
+          }
         </div>
       </Card>
 

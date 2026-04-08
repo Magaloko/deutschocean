@@ -14,12 +14,15 @@ const MODULES = [
 ]
 
 export default function ProfilePage() {
-  const { profile, logout, setProfile } = useAuth()
+  const { profile, logout, setProfile, deleteAccount } = useAuth()
   const navigate = useNavigate()
   const [editAvatar, setEditAvatar] = useState(false)
   const [editModule, setEditModule] = useState(false)
   const [savingAvatar, setSavingAvatar] = useState(false)
   const [savingModule, setSavingModule] = useState(false)
+  const [deletingAccount, setDeletingAccount] = useState(false)
+  const [confirmDelete, setConfirmDelete] = useState(false)
+  const [deleteError, setDeleteError] = useState(null)
 
   if (!profile) return null
 
@@ -55,6 +58,28 @@ export default function ProfilePage() {
     } catch {
       // Ignore logout errors — navigate anyway
       navigate('/start')
+    }
+  }
+
+  async function handleDeleteAccount() {
+    if (!confirmDelete) {
+      setConfirmDelete(true)
+      setDeleteError(null)
+      return
+    }
+    setDeletingAccount(true)
+    setDeleteError(null)
+    try {
+      await deleteAccount()
+      navigate('/')
+    } catch (err) {
+      setDeletingAccount(false)
+      setConfirmDelete(false)
+      if (err?.code === 'auth/requires-recent-login') {
+        setDeleteError('Bitte melde dich ab und wieder an, dann versuche es erneut.')
+      } else {
+        setDeleteError('Fehler beim Löschen. Bitte versuche es später nochmal.')
+      }
     }
   }
 
@@ -164,6 +189,39 @@ export default function ProfilePage() {
         <button className={styles.logoutRow} onClick={handleLogout}>
           🚪 Abmelden
         </button>
+
+        <div className={styles.dangerZone}>
+          {!confirmDelete ? (
+            <button className={styles.deleteRow} onClick={handleDeleteAccount}>
+              🗑️ Konto löschen
+            </button>
+          ) : (
+            <div className={styles.deleteConfirm}>
+              <p className={styles.deleteWarning}>
+                ⚠️ Alle Daten werden unwiderruflich gelöscht!
+              </p>
+              <div className={styles.deleteConfirmBtns}>
+                <button
+                  className={styles.deleteConfirmYes}
+                  onClick={handleDeleteAccount}
+                  disabled={deletingAccount}
+                >
+                  {deletingAccount ? 'Wird gelöscht…' : 'Ja, löschen'}
+                </button>
+                <button
+                  className={styles.deleteConfirmNo}
+                  onClick={() => setConfirmDelete(false)}
+                  disabled={deletingAccount}
+                >
+                  Abbrechen
+                </button>
+              </div>
+            </div>
+          )}
+          {deleteError && (
+            <p className={styles.deleteError}>{deleteError}</p>
+          )}
+        </div>
       </section>
     </div>
   )

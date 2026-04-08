@@ -139,6 +139,28 @@ export const MISSIONS = [
     color: '#f59e0b',
   },
   {
+    id: 'regel-raupe-1',
+    type: 'regelRaupe',
+    title: 'RegelRaupe',
+    description: 'Entscheide Wort für Wort: Groß oder Klein?',
+    icon: '🐛',
+    xp: 20,
+    stars: 3,
+    level: 1,
+    color: '#10b981',
+  },
+  {
+    id: 'wort-familien-1',
+    type: 'wortFamilien',
+    title: 'WortFamilien',
+    description: 'Sortiere Wörter nach ihrer Wortwurzel!',
+    icon: '🌳',
+    xp: 20,
+    stars: 3,
+    level: 1,
+    color: '#10b981',
+  },
+  {
     id: 'nomen-1',
     type: 'nomenFinder',
     title: 'Nomen-Jäger',
@@ -332,8 +354,9 @@ export const FAHRZEUG_WELTEN = [
 
 // Fehler-Detektiv Aufgaben (15 Stück)
 export const FEHLER_DETEKTIV_TASKS = [
+  // ── easy: ≤3 Fehler, kurze/bekannte Wörter ──
   {
-    id: 'fd1',
+    id: 'fd1', difficulty: 'easy',
     text: 'der hund läuft schnell über die straße.',
     errors: [
       { word: 'der',    correct: 'Der',    reason: 'Satzanfang → Großschreibung' },
@@ -343,7 +366,7 @@ export const FEHLER_DETEKTIV_TASKS = [
     corrected: 'Der Hund läuft schnell über die Straße.',
   },
   {
-    id: 'fd2',
+    id: 'fd2', difficulty: 'easy',
     text: 'anna geht mit ihrer katze in den park.',
     errors: [
       { word: 'anna',  correct: 'Anna',  reason: 'Eigenname → Großschreibung' },
@@ -353,7 +376,28 @@ export const FEHLER_DETEKTIV_TASKS = [
     corrected: 'Anna geht mit ihrer Katze in den Park.',
   },
   {
-    id: 'fd3',
+    id: 'fd14', difficulty: 'easy',
+    text: 'paul fährt mit dem fahrrad zum schwimmbad.',
+    errors: [
+      { word: 'paul',       correct: 'Paul',       reason: 'Eigenname → Großschreibung' },
+      { word: 'fahrrad',    correct: 'Fahrrad',    reason: 'Nomen → Großschreibung' },
+      { word: 'schwimmbad', correct: 'Schwimmbad', reason: 'Nomen → Großschreibung' },
+    ],
+    corrected: 'Paul fährt mit dem Fahrrad zum Schwimmbad.',
+  },
+  {
+    id: 'fd15', difficulty: 'easy',
+    text: 'am morgen esse ich ein brötchen mit butter.',
+    errors: [
+      { word: 'am',       correct: 'Am',       reason: 'Satzanfang → Großschreibung' },
+      { word: 'brötchen', correct: 'Brötchen', reason: 'Nomen → Großschreibung' },
+      { word: 'butter',   correct: 'Butter',   reason: 'Nomen → Großschreibung' },
+    ],
+    corrected: 'Am Morgen esse ich ein Brötchen mit Butter.',
+  },
+  // ── normal: 4 Fehler, mittlere Komplexität ──
+  {
+    id: 'fd3', difficulty: 'normal',
     text: 'das kind spielt im garten mit einem ball.',
     errors: [
       { word: 'das',    correct: 'Das',    reason: 'Satzanfang → Großschreibung' },
@@ -364,7 +408,7 @@ export const FEHLER_DETEKTIV_TASKS = [
     corrected: 'Das Kind spielt im Garten mit einem Ball.',
   },
   {
-    id: 'fd4',
+    id: 'fd4', difficulty: 'normal',
     text: 'die lehrerin schreibt die aufgabe an die tafel.',
     errors: [
       { word: 'die',      correct: 'Die',      reason: 'Satzanfang → Großschreibung' },
@@ -375,7 +419,52 @@ export const FEHLER_DETEKTIV_TASKS = [
     corrected: 'Die Lehrerin schreibt die Aufgabe an die Tafel.',
   },
   {
-    id: 'fd5',
+    id: 'fd7', difficulty: 'normal',
+    text: 'die mutter backt einen kuchen für den geburtstag.',
+    errors: [
+      { word: 'die',        correct: 'Die',        reason: 'Satzanfang → Großschreibung' },
+      { word: 'mutter',     correct: 'Mutter',     reason: 'Nomen → Großschreibung' },
+      { word: 'kuchen',     correct: 'Kuchen',     reason: 'Nomen → Großschreibung' },
+      { word: 'geburtstag', correct: 'Geburtstag', reason: 'Nomen → Großschreibung' },
+    ],
+    corrected: 'Die Mutter backt einen Kuchen für den Geburtstag.',
+  },
+  {
+    id: 'fd8', difficulty: 'normal',
+    text: 'tom und lisa spielen nach der schule fußball.',
+    errors: [
+      { word: 'tom',     correct: 'Tom',     reason: 'Eigenname → Großschreibung' },
+      { word: 'lisa',    correct: 'Lisa',    reason: 'Eigenname → Großschreibung' },
+      { word: 'schule',  correct: 'Schule',  reason: 'Nomen → Großschreibung' },
+      { word: 'fußball', correct: 'Fußball', reason: 'Nomen → Großschreibung' },
+    ],
+    corrected: 'Tom und Lisa spielen nach der Schule Fußball.',
+  },
+  {
+    id: 'fd9', difficulty: 'normal',
+    text: 'das kaninchen frisst möhren und salat.',
+    errors: [
+      { word: 'das',       correct: 'Das',       reason: 'Satzanfang → Großschreibung' },
+      { word: 'kaninchen', correct: 'Kaninchen', reason: 'Nomen → Großschreibung' },
+      { word: 'möhren',    correct: 'Möhren',    reason: 'Nomen → Großschreibung' },
+      { word: 'salat',     correct: 'Salat',     reason: 'Nomen → Großschreibung' },
+    ],
+    corrected: 'Das Kaninchen frisst Möhren und Salat.',
+  },
+  {
+    id: 'fd10', difficulty: 'normal',
+    text: 'im winter liegt viel schnee auf dem berg.',
+    errors: [
+      { word: 'im',     correct: 'Im',     reason: 'Satzanfang → Großschreibung' },
+      { word: 'winter', correct: 'Winter', reason: 'Nomen → Großschreibung' },
+      { word: 'schnee', correct: 'Schnee', reason: 'Nomen → Großschreibung' },
+      { word: 'berg',   correct: 'Berg',   reason: 'Nomen → Großschreibung' },
+    ],
+    corrected: 'Im Winter liegt viel Schnee auf dem Berg.',
+  },
+  // ── hard: ≥4 Fehler oder schwieriger Wortschatz ──
+  {
+    id: 'fd5', difficulty: 'hard',
     text: 'der vater kauft brot und milch im supermarkt.',
     errors: [
       { word: 'der',        correct: 'Der',        reason: 'Satzanfang → Großschreibung' },
@@ -387,7 +476,7 @@ export const FEHLER_DETEKTIV_TASKS = [
     corrected: 'Der Vater kauft Brot und Milch im Supermarkt.',
   },
   {
-    id: 'fd6',
+    id: 'fd6', difficulty: 'hard',
     text: 'mein bruder liest ein buch über dinosaurier.',
     errors: [
       { word: 'mein',        correct: 'Mein',        reason: 'Satzanfang → Großschreibung' },
@@ -398,51 +487,7 @@ export const FEHLER_DETEKTIV_TASKS = [
     corrected: 'Mein Bruder liest ein Buch über Dinosaurier.',
   },
   {
-    id: 'fd7',
-    text: 'die mutter backt einen kuchen für den geburtstag.',
-    errors: [
-      { word: 'die',        correct: 'Die',        reason: 'Satzanfang → Großschreibung' },
-      { word: 'mutter',     correct: 'Mutter',     reason: 'Nomen → Großschreibung' },
-      { word: 'kuchen',     correct: 'Kuchen',      reason: 'Nomen → Großschreibung' },
-      { word: 'geburtstag', correct: 'Geburtstag', reason: 'Nomen → Großschreibung' },
-    ],
-    corrected: 'Die Mutter backt einen Kuchen für den Geburtstag.',
-  },
-  {
-    id: 'fd8',
-    text: 'tom und lisa spielen nach der schule fußball.',
-    errors: [
-      { word: 'tom',    correct: 'Tom',    reason: 'Eigenname → Großschreibung' },
-      { word: 'lisa',   correct: 'Lisa',   reason: 'Eigenname → Großschreibung' },
-      { word: 'schule', correct: 'Schule', reason: 'Nomen → Großschreibung' },
-      { word: 'fußball',correct: 'Fußball',reason: 'Nomen → Großschreibung' },
-    ],
-    corrected: 'Tom und Lisa spielen nach der Schule Fußball.',
-  },
-  {
-    id: 'fd9',
-    text: 'das kaninchen frisst möhren und salat.',
-    errors: [
-      { word: 'das',       correct: 'Das',       reason: 'Satzanfang → Großschreibung' },
-      { word: 'kaninchen', correct: 'Kaninchen', reason: 'Nomen → Großschreibung' },
-      { word: 'möhren',    correct: 'Möhren',    reason: 'Nomen → Großschreibung' },
-      { word: 'salat',     correct: 'Salat',     reason: 'Nomen → Großschreibung' },
-    ],
-    corrected: 'Das Kaninchen frisst Möhren und Salat.',
-  },
-  {
-    id: 'fd10',
-    text: 'im winter liegt viel schnee auf dem berg.',
-    errors: [
-      { word: 'im',     correct: 'Im',     reason: 'Satzanfang → Großschreibung' },
-      { word: 'winter', correct: 'Winter', reason: 'Nomen → Großschreibung' },
-      { word: 'schnee', correct: 'Schnee', reason: 'Nomen → Großschreibung' },
-      { word: 'berg',   correct: 'Berg',   reason: 'Nomen → Großschreibung' },
-    ],
-    corrected: 'Im Winter liegt viel Schnee auf dem Berg.',
-  },
-  {
-    id: 'fd11',
+    id: 'fd11', difficulty: 'hard',
     text: 'die sonne scheint und die blumen blühen im frühling.',
     errors: [
       { word: 'die',      correct: 'Die',      reason: 'Satzanfang → Großschreibung' },
@@ -453,7 +498,7 @@ export const FEHLER_DETEKTIV_TASKS = [
     corrected: 'Die Sonne scheint und die Blumen blühen im Frühling.',
   },
   {
-    id: 'fd12',
+    id: 'fd12', difficulty: 'hard',
     text: 'der arzt untersucht den patienten im krankenhaus.',
     errors: [
       { word: 'der',         correct: 'Der',         reason: 'Satzanfang → Großschreibung' },
@@ -464,7 +509,7 @@ export const FEHLER_DETEKTIV_TASKS = [
     corrected: 'Der Arzt untersucht den Patienten im Krankenhaus.',
   },
   {
-    id: 'fd13',
+    id: 'fd13', difficulty: 'hard',
     text: 'die schüler machen ihre hausaufgaben am tisch.',
     errors: [
       { word: 'die',          correct: 'Die',          reason: 'Satzanfang → Großschreibung' },
@@ -473,26 +518,6 @@ export const FEHLER_DETEKTIV_TASKS = [
       { word: 'tisch',        correct: 'Tisch',        reason: 'Nomen → Großschreibung' },
     ],
     corrected: 'Die Schüler machen ihre Hausaufgaben am Tisch.',
-  },
-  {
-    id: 'fd14',
-    text: 'paul fährt mit dem fahrrad zum schwimmbad.',
-    errors: [
-      { word: 'paul',        correct: 'Paul',        reason: 'Eigenname → Großschreibung' },
-      { word: 'fahrrad',     correct: 'Fahrrad',     reason: 'Nomen → Großschreibung' },
-      { word: 'schwimmbad',  correct: 'Schwimmbad',  reason: 'Nomen → Großschreibung' },
-    ],
-    corrected: 'Paul fährt mit dem Fahrrad zum Schwimmbad.',
-  },
-  {
-    id: 'fd15',
-    text: 'am morgen esse ich ein brötchen mit butter.',
-    errors: [
-      { word: 'am',       correct: 'Am',       reason: 'Satzanfang → Großschreibung' },
-      { word: 'brötchen', correct: 'Brötchen', reason: 'Nomen → Großschreibung' },
-      { word: 'butter',   correct: 'Butter',   reason: 'Nomen → Großschreibung' },
-    ],
-    corrected: 'Am Morgen esse ich ein Brötchen mit Butter.',
   },
 ]
 
@@ -626,168 +651,247 @@ export const PERSONEN = [
 
 // Silben-Puzzle Wörter (16 Stück)
 export const SILBEN_WOERTER = [
-  { word: 'Schule',        silben: ['Schu', 'le'] },
-  { word: 'Fenster',       silben: ['Fens', 'ter'] },
-  { word: 'Bleistift',     silben: ['Blei', 'stift'] },
-  { word: 'Hausaufgabe',   silben: ['Haus', 'auf', 'ga', 'be'] },
-  { word: 'Geburtstag',    silben: ['Ge', 'burts', 'tag'] },
-  { word: 'Schmetterling', silben: ['Schmet', 'ter', 'ling'] },
-  { word: 'Erdbeere',      silben: ['Erd', 'bee', 're'] },
-  { word: 'Frühstück',     silben: ['Früh', 'stück'] },
-  { word: 'Krankenhaus',   silben: ['Kran', 'ken', 'haus'] },
-  { word: 'Fahrrad',       silben: ['Fahr', 'rad'] },
-  { word: 'Supermarkt',    silben: ['Su', 'per', 'markt'] },
-  { word: 'Taschenlampe',  silben: ['Ta', 'schen', 'lam', 'pe'] },
-  { word: 'Handschuh',     silben: ['Hand', 'schuh'] },
-  { word: 'Winterjacke',   silben: ['Win', 'ter', 'jack', 'e'] },
-  { word: 'Blumenvase',    silben: ['Blu', 'men', 'va', 'se'] },
-  { word: 'Apfelbaum',     silben: ['Ap', 'fel', 'baum'] },
+  // ── easy: 2 Silben ──
+  { word: 'Schule',    silben: ['Schu', 'le'],          difficulty: 'easy' },
+  { word: 'Fenster',   silben: ['Fens', 'ter'],         difficulty: 'easy' },
+  { word: 'Bleistift', silben: ['Blei', 'stift'],       difficulty: 'easy' },
+  { word: 'Frühstück', silben: ['Früh', 'stück'],       difficulty: 'easy' },
+  { word: 'Fahrrad',   silben: ['Fahr', 'rad'],         difficulty: 'easy' },
+  { word: 'Handschuh', silben: ['Hand', 'schuh'],       difficulty: 'easy' },
+  // ── normal: 3 Silben ──
+  { word: 'Geburtstag',    silben: ['Ge', 'burts', 'tag'],       difficulty: 'normal' },
+  { word: 'Schmetterling', silben: ['Schmet', 'ter', 'ling'],    difficulty: 'normal' },
+  { word: 'Erdbeere',      silben: ['Erd', 'bee', 're'],         difficulty: 'normal' },
+  { word: 'Krankenhaus',   silben: ['Kran', 'ken', 'haus'],      difficulty: 'normal' },
+  { word: 'Supermarkt',    silben: ['Su', 'per', 'markt'],       difficulty: 'normal' },
+  { word: 'Apfelbaum',     silben: ['Ap', 'fel', 'baum'],        difficulty: 'normal' },
+  // ── hard: 4 Silben ──
+  { word: 'Hausaufgabe',  silben: ['Haus', 'auf', 'ga', 'be'],   difficulty: 'hard' },
+  { word: 'Taschenlampe', silben: ['Ta', 'schen', 'lam', 'pe'],  difficulty: 'hard' },
+  { word: 'Winterjacke',  silben: ['Win', 'ter', 'jack', 'e'],   difficulty: 'hard' },
+  { word: 'Blumenvase',   silben: ['Blu', 'men', 'va', 'se'],    difficulty: 'hard' },
+  { word: 'Schokolade',   silben: ['Scho', 'ko', 'la', 'de'],    difficulty: 'hard' },
 ]
 
 // Buchstaben-Chaos Wörter (15 Stück)
 export const CHAOS_WOERTER = [
-  { word: 'HUND',      scrambled: 'NDUH' },
-  { word: 'KATZE',     scrambled: 'TAEKZ' },
-  { word: 'SCHULE',    scrambled: 'LEHSCU' },
-  { word: 'BUCH',      scrambled: 'UHCB' },
-  { word: 'TISCH',     scrambled: 'CSIHT' },
-  { word: 'STUHL',     scrambled: 'SLUTH' },
-  { word: 'BRIEF',     scrambled: 'FRBIE' },
-  { word: 'APFEL',     scrambled: 'LEFAP' },
-  { word: 'BLUME',     scrambled: 'MEBLU' },
-  { word: 'VOGEL',     scrambled: 'GLOEV' },
-  { word: 'BAUM',      scrambled: 'UMAB' },
-  { word: 'HAUS',      scrambled: 'SUAH' },
-  { word: 'BRÜCKE',    scrambled: 'KÜCBRE' },
-  { word: 'GARTEN',    scrambled: 'NETRAG' },
-  { word: 'FENSTER',   scrambled: 'RENSTEF' },
+  // ── easy: 4 Buchstaben ──
+  { word: 'HUND',  scrambled: 'NDUH',   difficulty: 'easy' },
+  { word: 'BUCH',  scrambled: 'UHCB',   difficulty: 'easy' },
+  { word: 'BAUM',  scrambled: 'UMAB',   difficulty: 'easy' },
+  { word: 'HAUS',  scrambled: 'SUAH',   difficulty: 'easy' },
+  // ── normal: 5–6 Buchstaben ──
+  { word: 'KATZE',  scrambled: 'TAEKZ',  difficulty: 'normal' },
+  { word: 'TISCH',  scrambled: 'CSIHT',  difficulty: 'normal' },
+  { word: 'STUHL',  scrambled: 'SLUTH',  difficulty: 'normal' },
+  { word: 'BRIEF',  scrambled: 'FRBIE',  difficulty: 'normal' },
+  { word: 'APFEL',  scrambled: 'LEFAP',  difficulty: 'normal' },
+  { word: 'BLUME',  scrambled: 'MEBLU',  difficulty: 'normal' },
+  { word: 'VOGEL',  scrambled: 'GLOEV',  difficulty: 'normal' },
+  { word: 'SCHULE', scrambled: 'LEHSCU', difficulty: 'normal' },
+  // ── hard: 6–7 Buchstaben ──
+  { word: 'BRÜCKE',  scrambled: 'KÜCBRE',  difficulty: 'hard' },
+  { word: 'GARTEN',  scrambled: 'NETRAG',  difficulty: 'hard' },
+  { word: 'FENSTER', scrambled: 'RENSTEF', difficulty: 'hard' },
 ]
 
 // Nomen-Finder Sätze (10 Stück)
 export const NOMEN_SAETZE = [
+  // ── easy: 2 Nomen, kurzer Satz ──
   {
-    id: 'n1',
+    id: 'n1', difficulty: 'easy',
     sentence: 'Der kleine Hund läuft schnell über die Straße.',
     nouns: ['Hund', 'Straße'],
     words: ['Der', 'kleine', 'Hund', 'läuft', 'schnell', 'über', 'die', 'Straße'],
   },
   {
-    id: 'n2',
-    sentence: 'Das Mädchen liest ein Buch in der Schule.',
-    nouns: ['Mädchen', 'Buch', 'Schule'],
-    words: ['Das', 'Mädchen', 'liest', 'ein', 'Buch', 'in', 'der', 'Schule'],
-  },
-  {
-    id: 'n3',
-    sentence: 'Die Lehrerin schreibt einen Brief an die Eltern.',
-    nouns: ['Lehrerin', 'Brief', 'Eltern'],
-    words: ['Die', 'Lehrerin', 'schreibt', 'einen', 'Brief', 'an', 'die', 'Eltern'],
-  },
-  {
-    id: 'n4',
-    sentence: 'Der Vater kauft Brot und Milch im Supermarkt.',
-    nouns: ['Vater', 'Brot', 'Milch', 'Supermarkt'],
-    words: ['Der', 'Vater', 'kauft', 'Brot', 'und', 'Milch', 'im', 'Supermarkt'],
-  },
-  {
-    id: 'n5',
-    sentence: 'Das Kind spielt mit dem Ball im Garten.',
-    nouns: ['Kind', 'Ball', 'Garten'],
-    words: ['Das', 'Kind', 'spielt', 'mit', 'dem', 'Ball', 'im', 'Garten'],
-  },
-  {
-    id: 'n6',
+    id: 'n6', difficulty: 'easy',
     sentence: 'Die Katze schläft auf dem Sofa.',
     nouns: ['Katze', 'Sofa'],
     words: ['Die', 'Katze', 'schläft', 'auf', 'dem', 'Sofa'],
   },
   {
-    id: 'n7',
-    sentence: 'Der Arzt hilft dem Patienten im Krankenhaus.',
-    nouns: ['Arzt', 'Patienten', 'Krankenhaus'],
-    words: ['Der', 'Arzt', 'hilft', 'dem', 'Patienten', 'im', 'Krankenhaus'],
-  },
-  {
-    id: 'n8',
+    id: 'n8', difficulty: 'easy',
     sentence: 'Im Sommer fahren wir ans Meer.',
     nouns: ['Sommer', 'Meer'],
     words: ['Im', 'Sommer', 'fahren', 'wir', 'ans', 'Meer'],
   },
+  // ── normal: 3 Nomen, mittlere Länge ──
   {
-    id: 'n9',
+    id: 'n2', difficulty: 'normal',
+    sentence: 'Das Mädchen liest ein Buch in der Schule.',
+    nouns: ['Mädchen', 'Buch', 'Schule'],
+    words: ['Das', 'Mädchen', 'liest', 'ein', 'Buch', 'in', 'der', 'Schule'],
+  },
+  {
+    id: 'n3', difficulty: 'normal',
+    sentence: 'Die Lehrerin schreibt einen Brief an die Eltern.',
+    nouns: ['Lehrerin', 'Brief', 'Eltern'],
+    words: ['Die', 'Lehrerin', 'schreibt', 'einen', 'Brief', 'an', 'die', 'Eltern'],
+  },
+  {
+    id: 'n5', difficulty: 'normal',
+    sentence: 'Das Kind spielt mit dem Ball im Garten.',
+    nouns: ['Kind', 'Ball', 'Garten'],
+    words: ['Das', 'Kind', 'spielt', 'mit', 'dem', 'Ball', 'im', 'Garten'],
+  },
+  {
+    id: 'n9', difficulty: 'normal',
     sentence: 'Die Mutter backt einen Kuchen für den Geburtstag.',
     nouns: ['Mutter', 'Kuchen', 'Geburtstag'],
     words: ['Die', 'Mutter', 'backt', 'einen', 'Kuchen', 'für', 'den', 'Geburtstag'],
   },
   {
-    id: 'n10',
+    id: 'n10', difficulty: 'normal',
     sentence: 'Der Schüler trägt seinen Rucksack zur Schule.',
     nouns: ['Schüler', 'Rucksack', 'Schule'],
     words: ['Der', 'Schüler', 'trägt', 'seinen', 'Rucksack', 'zur', 'Schule'],
+  },
+  // ── hard: 4 Nomen oder schwieriger Wortschatz ──
+  {
+    id: 'n4', difficulty: 'hard',
+    sentence: 'Der Vater kauft Brot und Milch im Supermarkt.',
+    nouns: ['Vater', 'Brot', 'Milch', 'Supermarkt'],
+    words: ['Der', 'Vater', 'kauft', 'Brot', 'und', 'Milch', 'im', 'Supermarkt'],
+  },
+  {
+    id: 'n7', difficulty: 'hard',
+    sentence: 'Der Arzt hilft dem Patienten im Krankenhaus.',
+    nouns: ['Arzt', 'Patienten', 'Krankenhaus'],
+    words: ['Der', 'Arzt', 'hilft', 'dem', 'Patienten', 'im', 'Krankenhaus'],
   },
 ]
 
 // Satz-Baumeister Aufgaben (12 Stück)
 export const SATZ_AUFGABEN = [
-  {
-    id: 'sb1',
+  // ── easy: ≤5 Wörter ──
+  { id: 'sb1', difficulty: 'easy',
     words: ['Der', 'Hund', 'bellt', 'laut.'],
-    correct: 'Der Hund bellt laut.',
-  },
-  {
-    id: 'sb2',
-    words: ['Die', 'Katze', 'schläft', 'auf', 'dem', 'Sofa.'],
-    correct: 'Die Katze schläft auf dem Sofa.',
-  },
-  {
-    id: 'sb3',
+    correct: 'Der Hund bellt laut.' },
+  { id: 'sb3', difficulty: 'easy',
     words: ['Das', 'Kind', 'isst', 'einen', 'Apfel.'],
-    correct: 'Das Kind isst einen Apfel.',
-  },
-  {
-    id: 'sb4',
-    words: ['Wir', 'gehen', 'heute', 'in', 'den', 'Park.'],
-    correct: 'Wir gehen heute in den Park.',
-  },
-  {
-    id: 'sb5',
-    words: ['Die', 'Sonne', 'scheint', 'hell', 'am', 'Himmel.'],
-    correct: 'Die Sonne scheint hell am Himmel.',
-  },
-  {
-    id: 'sb6',
+    correct: 'Das Kind isst einen Apfel.' },
+  { id: 'sb6', difficulty: 'easy',
     words: ['Meine', 'Schwester', 'liest', 'ein', 'Buch.'],
-    correct: 'Meine Schwester liest ein Buch.',
-  },
-  {
-    id: 'sb7',
+    correct: 'Meine Schwester liest ein Buch.' },
+  { id: 'sb7', difficulty: 'easy',
     words: ['Der', 'Lehrer', 'erklärt', 'die', 'Aufgabe.'],
-    correct: 'Der Lehrer erklärt die Aufgabe.',
-  },
-  {
-    id: 'sb8',
-    words: ['Im', 'Winter', 'ist', 'es', 'sehr', 'kalt.'],
-    correct: 'Im Winter ist es sehr kalt.',
-  },
-  {
-    id: 'sb9',
-    words: ['Das', 'Mädchen', 'malt', 'ein', 'buntes', 'Bild.'],
-    correct: 'Das Mädchen malt ein buntes Bild.',
-  },
-  {
-    id: 'sb10',
+    correct: 'Der Lehrer erklärt die Aufgabe.' },
+  { id: 'sb10', difficulty: 'easy',
     words: ['Jeden', 'Morgen', 'trinke', 'ich', 'Milch.'],
-    correct: 'Jeden Morgen trinke ich Milch.',
-  },
-  {
-    id: 'sb11',
+    correct: 'Jeden Morgen trinke ich Milch.' },
+  // ── normal: 6 Wörter, bekannte Wörter ──
+  { id: 'sb2', difficulty: 'normal',
+    words: ['Die', 'Katze', 'schläft', 'auf', 'dem', 'Sofa.'],
+    correct: 'Die Katze schläft auf dem Sofa.' },
+  { id: 'sb4', difficulty: 'normal',
+    words: ['Wir', 'gehen', 'heute', 'in', 'den', 'Park.'],
+    correct: 'Wir gehen heute in den Park.' },
+  { id: 'sb5', difficulty: 'normal',
+    words: ['Die', 'Sonne', 'scheint', 'hell', 'am', 'Himmel.'],
+    correct: 'Die Sonne scheint hell am Himmel.' },
+  { id: 'sb8', difficulty: 'normal',
+    words: ['Im', 'Winter', 'ist', 'es', 'sehr', 'kalt.'],
+    correct: 'Im Winter ist es sehr kalt.' },
+  { id: 'sb11', difficulty: 'normal',
     words: ['Der', 'Vogel', 'singt', 'auf', 'dem', 'Baum.'],
-    correct: 'Der Vogel singt auf dem Baum.',
+    correct: 'Der Vogel singt auf dem Baum.' },
+  // ── hard: 6 Wörter, komplexere Struktur ──
+  { id: 'sb9', difficulty: 'hard',
+    words: ['Das', 'Mädchen', 'malt', 'ein', 'buntes', 'Bild.'],
+    correct: 'Das Mädchen malt ein buntes Bild.' },
+  { id: 'sb12', difficulty: 'hard',
+    words: ['Wir', 'spielen', 'nach', 'der', 'Schule', 'Fußball.'],
+    correct: 'Wir spielen nach der Schule Fußball.' },
+]
+
+// RegelRaupe — Konditionelle Grammatik (Sätze nach Schwierigkeit)
+// Mechanic: Wort für Wort tippen → Groß oder Klein?
+export const REGELRAUPE_SAETZE = [
+  // ── easy: 4 Wörter, nur Satzanfang + 1 Nomen ──
+  {
+    id: 'rr1', difficulty: 'easy',
+    words: [
+      { text: 'der',     capitalize: true,  rule: 'Satzanfang' },
+      { text: 'hund',    capitalize: true,  rule: 'Nomen' },
+      { text: 'läuft',   capitalize: false, rule: 'Verb' },
+      { text: 'schnell', capitalize: false, rule: 'Adjektiv' },
+    ],
   },
   {
-    id: 'sb12',
-    words: ['Wir', 'spielen', 'nach', 'der', 'Schule', 'Fußball.'],
-    correct: 'Wir spielen nach der Schule Fußball.',
+    id: 'rr2', difficulty: 'easy',
+    words: [
+      { text: 'die',     capitalize: true,  rule: 'Satzanfang' },
+      { text: 'katze',   capitalize: true,  rule: 'Nomen' },
+      { text: 'schläft', capitalize: false, rule: 'Verb' },
+      { text: 'tief',    capitalize: false, rule: 'Adjektiv' },
+    ],
+  },
+  {
+    id: 'rr3', difficulty: 'easy',
+    words: [
+      { text: 'das',   capitalize: true,  rule: 'Satzanfang' },
+      { text: 'kind',  capitalize: true,  rule: 'Nomen' },
+      { text: 'lacht', capitalize: false, rule: 'Verb' },
+      { text: 'laut',  capitalize: false, rule: 'Adjektiv' },
+    ],
+  },
+  // ── normal: 5–6 Wörter, Satzanfang + 2 Nomen + Verb/Adjektiv ──
+  {
+    id: 'rr4', difficulty: 'normal',
+    words: [
+      { text: 'der',      capitalize: true,  rule: 'Satzanfang' },
+      { text: 'vater',    capitalize: true,  rule: 'Nomen' },
+      { text: 'kauft',    capitalize: false, rule: 'Verb' },
+      { text: 'frisches', capitalize: false, rule: 'Adjektiv' },
+      { text: 'brot',     capitalize: true,  rule: 'Nomen' },
+    ],
+  },
+  {
+    id: 'rr5', difficulty: 'normal',
+    words: [
+      { text: 'anna',       capitalize: true,  rule: 'Eigenname' },
+      { text: 'liest',      capitalize: false, rule: 'Verb' },
+      { text: 'ein',        capitalize: false, rule: 'Artikel' },
+      { text: 'spannendes', capitalize: false, rule: 'Adjektiv' },
+      { text: 'buch',       capitalize: true,  rule: 'Nomen' },
+    ],
+  },
+  {
+    id: 'rr6', difficulty: 'normal',
+    words: [
+      { text: 'die',      capitalize: true,  rule: 'Satzanfang' },
+      { text: 'lehrerin', capitalize: true,  rule: 'Nomen' },
+      { text: 'schreibt', capitalize: false, rule: 'Verb' },
+      { text: 'die',      capitalize: false, rule: 'Artikel' },
+      { text: 'aufgabe',  capitalize: true,  rule: 'Nomen' },
+      { text: 'auf',      capitalize: false, rule: 'Präposition' },
+    ],
+  },
+  // ── hard: 6–8 Wörter, 3 Regeltypen ──
+  {
+    id: 'rr7', difficulty: 'hard',
+    words: [
+      { text: 'im',         capitalize: true,  rule: 'Satzanfang' },
+      { text: 'supermarkt', capitalize: true,  rule: 'Nomen' },
+      { text: 'kauft',      capitalize: false, rule: 'Verb' },
+      { text: 'der',        capitalize: false, rule: 'Artikel' },
+      { text: 'vater',      capitalize: true,  rule: 'Nomen' },
+      { text: 'frische',    capitalize: false, rule: 'Adjektiv' },
+      { text: 'milch',      capitalize: true,  rule: 'Nomen' },
+    ],
+  },
+  {
+    id: 'rr8', difficulty: 'hard',
+    words: [
+      { text: 'paul',       capitalize: true,  rule: 'Eigenname' },
+      { text: 'fährt',      capitalize: false, rule: 'Verb' },
+      { text: 'mit',        capitalize: false, rule: 'Präposition' },
+      { text: 'dem',        capitalize: false, rule: 'Artikel' },
+      { text: 'fahrrad',    capitalize: true,  rule: 'Nomen' },
+      { text: 'zum',        capitalize: false, rule: 'Präposition' },
+      { text: 'schwimmbad', capitalize: true,  rule: 'Nomen' },
+    ],
   },
 ]
 
@@ -1738,5 +1842,63 @@ export const EMOJI_BAUKASTEN_AUFGABEN = [
     richtige: ['🌡️','💊','🍵','🛏️'],
     falsche:  ['⛷️','🎉','🍕','🎮'],
     fakt: '🤒 Thermometer, Medizin und heisser Tee helfen beim Gesundwerden!',
+  },
+]
+
+// WortFamilien — Mustererkennung in Wortfamilien
+// Mechanic: Wörter der gleichen Wurzel einem Familien-Eimer zuordnen
+export const WORTFAMILIEN_SETS = [
+  // ── easy: 2 Familien, je 3 Wörter, klare Wurzeln ──
+  {
+    id: 'wf1', difficulty: 'easy',
+    families: [
+      { id: 'a', root: 'fahr', label: 'fahr-', color: '#4f46e5', words: ['fahren', 'Fahrer', 'Fahrt'] },
+      { id: 'b', root: 'lauf', label: 'lauf-', color: '#10b981', words: ['laufen', 'Läufer', 'Lauf'] },
+    ],
+  },
+  {
+    id: 'wf2', difficulty: 'easy',
+    families: [
+      { id: 'a', root: 'spiel', label: 'spiel-', color: '#f97316', words: ['spielen', 'Spieler', 'Spiel'] },
+      { id: 'b', root: 'lern', label: 'lern-',  color: '#6366f1', words: ['lernen', 'Lerner', 'Lernzeit'] },
+    ],
+  },
+  {
+    id: 'wf3', difficulty: 'easy',
+    families: [
+      { id: 'a', root: 'back', label: 'back-', color: '#ec4899', words: ['backen', 'Bäcker', 'Backwerk'] },
+      { id: 'b', root: 'koch', label: 'koch-', color: '#f59e0b', words: ['kochen', 'Koch', 'Kochzeit'] },
+    ],
+  },
+  // ── normal: 2 Familien, je 5 Wörter, ähnlich klingende Wurzeln ──
+  {
+    id: 'wf4', difficulty: 'normal',
+    families: [
+      { id: 'a', root: 'fahr', label: 'fahr-', color: '#4f46e5',
+        words: ['fahren', 'Fahrer', 'Fahrt', 'Abfahrt', 'Einfahrt'] },
+      { id: 'b', root: 'lauf', label: 'lauf-', color: '#10b981',
+        words: ['laufen', 'Läufer', 'Lauf', 'Auflauf', 'Anlauf'] },
+    ],
+  },
+  {
+    id: 'wf5', difficulty: 'normal',
+    families: [
+      { id: 'a', root: 'schreib', label: 'schreib-', color: '#6366f1',
+        words: ['schreiben', 'Schreiber', 'Schrift', 'Aufschrift', 'beschriften'] },
+      { id: 'b', root: 'les', label: 'les-', color: '#ec4899',
+        words: ['lesen', 'Leser', 'Lesung', 'vorlesen', 'ablesen'] },
+    ],
+  },
+  // ── hard: 3 Familien, je 4 Wörter, Fallen ──
+  {
+    id: 'wf6', difficulty: 'hard',
+    families: [
+      { id: 'a', root: 'fahr', label: 'fahr-', color: '#4f46e5',
+        words: ['fahren', 'Fahrer', 'Abfahrt', 'einfahren'] },
+      { id: 'b', root: 'lauf', label: 'lauf-', color: '#10b981',
+        words: ['laufen', 'Läufer', 'Auflauf', 'anlaufen'] },
+      { id: 'c', root: 'spring', label: 'spring-', color: '#f97316',
+        words: ['springen', 'Springer', 'Sprung', 'Absprung'] },
+    ],
   },
 ]
