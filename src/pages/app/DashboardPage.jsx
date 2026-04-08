@@ -29,6 +29,7 @@ const GAME_ROUTES = {
   emojiBaukasten:       '/app/spiel/emoji-baukasten',
   emotionenKarten:      '/app/spiel/emotionen-karten',
   fruechtZaehlen:       '/app/spiel/fruechtZaehlen',
+  regelRaupe:           '/app/spiel/regel-raupe',
 }
 
 const MATHE_GAME_ROUTES = {

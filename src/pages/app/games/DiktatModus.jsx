@@ -11,6 +11,7 @@ import { useHints } from '../../../hooks/useHints.js'
 import { useOzzy } from '../../../hooks/useOzzy.js'
 import OzzyMascot from '../../../components/game/OzzyMascot.jsx'
 import { shouldOfferHint } from '../../../lib/adaptivityEngine.js'
+import { playComplete } from '../../../lib/sounds.js'
 
 function shuffle(arr) { return [...arr].sort(() => Math.random() - 0.5) }
 
@@ -101,6 +102,7 @@ export default function DiktatModus() {
     const pct   = score / totalWords
     const stars = pct >= 0.9 ? 3 : pct >= 0.6 ? 2 : 1
     ozzReact('celebrate')
+    playComplete()
     await completeSession({
       missionId: 'diktat-1',
       xpEarned: Math.round(pct * 25),
