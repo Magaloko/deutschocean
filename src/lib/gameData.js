@@ -150,6 +150,17 @@ export const MISSIONS = [
     color: '#10b981',
   },
   {
+    id: 'wort-familien-1',
+    type: 'wortFamilien',
+    title: 'WortFamilien',
+    description: 'Sortiere Wörter nach ihrer Wortwurzel!',
+    icon: '🌳',
+    xp: 20,
+    stars: 3,
+    level: 1,
+    color: '#10b981',
+  },
+  {
     id: 'nomen-1',
     type: 'nomenFinder',
     title: 'Nomen-Jäger',
@@ -1831,5 +1842,63 @@ export const EMOJI_BAUKASTEN_AUFGABEN = [
     richtige: ['🌡️','💊','🍵','🛏️'],
     falsche:  ['⛷️','🎉','🍕','🎮'],
     fakt: '🤒 Thermometer, Medizin und heisser Tee helfen beim Gesundwerden!',
+  },
+]
+
+// WortFamilien — Mustererkennung in Wortfamilien
+// Mechanic: Wörter der gleichen Wurzel einem Familien-Eimer zuordnen
+export const WORTFAMILIEN_SETS = [
+  // ── easy: 2 Familien, je 3 Wörter, klare Wurzeln ──
+  {
+    id: 'wf1', difficulty: 'easy',
+    families: [
+      { id: 'a', root: 'fahr', label: 'fahr-', color: '#4f46e5', words: ['fahren', 'Fahrer', 'Fahrt'] },
+      { id: 'b', root: 'lauf', label: 'lauf-', color: '#10b981', words: ['laufen', 'Läufer', 'Lauf'] },
+    ],
+  },
+  {
+    id: 'wf2', difficulty: 'easy',
+    families: [
+      { id: 'a', root: 'spiel', label: 'spiel-', color: '#f97316', words: ['spielen', 'Spieler', 'Spiel'] },
+      { id: 'b', root: 'lern', label: 'lern-',  color: '#6366f1', words: ['lernen', 'Lerner', 'Lernzeit'] },
+    ],
+  },
+  {
+    id: 'wf3', difficulty: 'easy',
+    families: [
+      { id: 'a', root: 'back', label: 'back-', color: '#ec4899', words: ['backen', 'Bäcker', 'Backwerk'] },
+      { id: 'b', root: 'koch', label: 'koch-', color: '#f59e0b', words: ['kochen', 'Koch', 'Kochzeit'] },
+    ],
+  },
+  // ── normal: 2 Familien, je 5 Wörter, ähnlich klingende Wurzeln ──
+  {
+    id: 'wf4', difficulty: 'normal',
+    families: [
+      { id: 'a', root: 'fahr', label: 'fahr-', color: '#4f46e5',
+        words: ['fahren', 'Fahrer', 'Fahrt', 'Abfahrt', 'Einfahrt'] },
+      { id: 'b', root: 'lauf', label: 'lauf-', color: '#10b981',
+        words: ['laufen', 'Läufer', 'Lauf', 'Auflauf', 'Anlauf'] },
+    ],
+  },
+  {
+    id: 'wf5', difficulty: 'normal',
+    families: [
+      { id: 'a', root: 'schreib', label: 'schreib-', color: '#6366f1',
+        words: ['schreiben', 'Schreiber', 'Schrift', 'Aufschrift', 'beschriften'] },
+      { id: 'b', root: 'les', label: 'les-', color: '#ec4899',
+        words: ['lesen', 'Leser', 'Lesung', 'vorlesen', 'ablesen'] },
+    ],
+  },
+  // ── hard: 3 Familien, je 4 Wörter, Fallen ──
+  {
+    id: 'wf6', difficulty: 'hard',
+    families: [
+      { id: 'a', root: 'fahr', label: 'fahr-', color: '#4f46e5',
+        words: ['fahren', 'Fahrer', 'Abfahrt', 'einfahren'] },
+      { id: 'b', root: 'lauf', label: 'lauf-', color: '#10b981',
+        words: ['laufen', 'Läufer', 'Auflauf', 'anlaufen'] },
+      { id: 'c', root: 'spring', label: 'spring-', color: '#f97316',
+        words: ['springen', 'Springer', 'Sprung', 'Absprung'] },
+    ],
   },
 ]
