@@ -17,10 +17,12 @@ import { speak } from '../lib/sounds.js'
  *   hint: { text: string, tts: boolean } | null,
  *   showHint: () => void,
  *   dismissHint: () => void,
+ *   hintsUsedCount: number,
  * }}
  */
 export function useHints(hintsMap, difficulty, wrongCount) {
-  const [hint, setHint] = useState(null)
+  const [hint, setHint]                     = useState(null)
+  const [hintsUsedCount, setHintsUsedCount] = useState(0)
 
   const showHint = useCallback(() => {
     if (!shouldOfferHint(difficulty, wrongCount)) return
@@ -28,10 +30,11 @@ export function useHints(hintsMap, difficulty, wrongCount) {
     const h = hintsMap[level]
     if (!h) return
     setHint(h)
+    setHintsUsedCount((n) => n + 1)
     if (h.tts) speak(h.text)
   }, [hintsMap, difficulty, wrongCount])
 
   const dismissHint = useCallback(() => setHint(null), [])
 
-  return { hint, showHint, dismissHint }
+  return { hint, showHint, dismissHint, hintsUsedCount }
 }

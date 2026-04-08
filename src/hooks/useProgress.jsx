@@ -10,7 +10,7 @@ export function useProgress() {
   const { profile } = useAuth()
   const [saving, setSaving] = useState(false)
 
-  async function completeSession({ missionId, xpEarned, stars, correct, total }) {
+  async function completeSession({ missionId, xpEarned, stars, correct, total, hintsUsed = 0 }) {
     if (!profile || !auth.currentUser) return { newBadges: [] }
     setSaving(true)
     try {
@@ -42,6 +42,11 @@ export function useProgress() {
         const currentSR = profile.spacedRepetition?.[missionId] ?? {}
         const nextSR = sm2Next(currentSR, accuracy)
         updates[`spacedRepetition.${missionId}`] = nextSR
+      }
+
+      // Hint usage tracking
+      if (hintsUsed > 0) {
+        updates.totalHintsUsed = increment(hintsUsed)
       }
 
       await updateDoc(doc(db, 'users', auth.currentUser.uid), updates)

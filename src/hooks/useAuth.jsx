@@ -31,6 +31,7 @@ function makeProfile(uid, name, avatar, schoolModule, isAnonymous) {
     lastActiveDate:    null,
     completedMissions: [],
     unlockedBadges:    [],
+    totalHintsUsed:    0,
     createdAt:         now,
     updatedAt:         now,
   }
