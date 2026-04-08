@@ -164,6 +164,15 @@ export default function DashboardPage() {
     [allowedLevels, completed],
   )
 
+  // A level is unlocked if:
+  // - It's level 0 (always unlocked)
+  // - OR the previous level has at least 1 completed mission
+  function isLevelUnlocked(lvl, completedMissions, allLeveledGames) {
+    if (lvl === 0) return true
+    const prevGames = allLeveledGames[lvl - 1] ?? []
+    return prevGames.some((g) => g.completedCount > 0)
+  }
+
   return (
     <div className={`${styles.page} fade-in`}>
 
@@ -275,6 +284,7 @@ export default function DashboardPage() {
         const meta = levelMeta[lvl] ?? { label: `Level ${lvl}`, emoji: '📖', color: '#6b7280' }
         const totalVariants = games.reduce((s, g) => s + g.variants.length, 0)
         const doneVariants  = games.reduce((s, g) => s + g.completedCount, 0)
+        const unlocked = isLevelUnlocked(lvl, completed, leveledGames)
         return (
           <section key={lvl}>
             <div className={styles.levelHeader}>
@@ -283,10 +293,28 @@ export default function DashboardPage() {
                 <span style={{ color: meta.color, fontWeight: 800 }}>{meta.label}</span>
               </div>
               <span className={styles.levelProgress}>{doneVariants}/{totalVariants} erledigt</span>
+              {!unlocked && <span className={styles.levelLockBadge}>🔒 Noch gesperrt</span>}
             </div>
 
             <div className={styles.gameGrid}>
               {games.map((g) => {
+                if (!unlocked) {
+                  return (
+                    <div key={g.type} className={`${styles.gameLink} ${styles.gameLinkLocked}`}>
+                      <div className={`${styles.gameCard} ${styles.gameCardLocked}`} style={{ '--accent': g.color }}>
+                        <div className={styles.lockOverlay}>
+                          <span className={styles.lockIcon}>🔒</span>
+                          <span className={styles.lockHint}>Vorherige Aufgaben lösen!</span>
+                        </div>
+                        <div className={styles.gameIconBig} style={{ opacity: 0.35 }}>{g.icon}</div>
+                        <div className={styles.gameTitle} style={{ opacity: 0.35 }}>{g.title}</div>
+                        <div className={styles.gameCardMeta} style={{ opacity: 0.35 }}>
+                          <span className={styles.gameXp}>+{g.xp} XP</span>
+                        </div>
+                      </div>
+                    </div>
+                  )
+                }
                 const route = GAME_ROUTES[g.type]
                 const anyDone = g.completedCount > 0
                 const allDone = g.completedCount >= g.variants.length
@@ -356,6 +384,7 @@ export default function DashboardPage() {
                       ?? { label: `Level ${lvl}`, emoji: '🔢', color: '#6366f1' }
             const totalVariants = games.reduce((s, g) => s + g.variants.length, 0)
             const doneVariants  = games.reduce((s, g) => s + g.completedCount, 0)
+            const unlocked = isLevelUnlocked(lvl, completed, mathedLeveledGames)
             return (
               <section key={lvl}>
                 <div className={styles.levelHeader}>
@@ -364,9 +393,27 @@ export default function DashboardPage() {
                     <span style={{ color: meta.color, fontWeight: 800 }}>{meta.label}</span>
                   </div>
                   <span className={styles.levelProgress}>{doneVariants}/{totalVariants} erledigt</span>
+                  {!unlocked && <span className={styles.levelLockBadge}>🔒 Noch gesperrt</span>}
                 </div>
                 <div className={styles.gameGrid}>
                   {games.map((g) => {
+                    if (!unlocked) {
+                      return (
+                        <div key={g.type} className={`${styles.gameLink} ${styles.gameLinkLocked}`}>
+                          <div className={`${styles.gameCard} ${styles.gameCardLocked}`} style={{ '--accent': g.color }}>
+                            <div className={styles.lockOverlay}>
+                              <span className={styles.lockIcon}>🔒</span>
+                              <span className={styles.lockHint}>Vorherige Aufgaben lösen!</span>
+                            </div>
+                            <div className={styles.gameIconBig} style={{ opacity: 0.35 }}>{g.icon}</div>
+                            <div className={styles.gameTitle} style={{ opacity: 0.35 }}>{g.title}</div>
+                            <div className={styles.gameCardMeta} style={{ opacity: 0.35 }}>
+                              <span className={styles.gameXp}>+{g.xp} XP</span>
+                            </div>
+                          </div>
+                        </div>
+                      )
+                    }
                     const route = MATHE_GAME_ROUTES[g.type]
                     const anyDone = g.completedCount > 0
                     const allDone = g.completedCount >= g.variants.length
