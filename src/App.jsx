@@ -32,6 +32,7 @@ const EmotionenKarten  = lazy(() => import('./pages/app/games/EmotionenKarten.js
 const FruechtZaehlen   = lazy(() => import('./pages/app/games/FruechtZaehlen.jsx'))
 const Zahlenstrahl    = lazy(() => import('./pages/app/games/mathe/Zahlenstrahl.jsx'))
 const RegelRaupe      = lazy(() => import('./pages/app/games/RegelRaupe.jsx'))
+const WortFamilien    = lazy(() => import('./pages/app/games/WortFamilien.jsx'))
 
 // Blog
 const BlogListPage       = lazy(() => import('./pages/blog/BlogListPage.jsx'))
@@ -97,6 +98,7 @@ export default function App() {
             <Route path="spiel/emotionen-karten"       element={<EmotionenKarten />} />
             <Route path="spiel/fruechtZaehlen"          element={<FruechtZaehlen />} />
             <Route path="spiel/regel-raupe"            element={<RegelRaupe />} />
+            <Route path="spiel/wort-familien"          element={<WortFamilien />} />
             <Route path="mathe/zahlenstrahl"    element={<Zahlenstrahl />} />
             <Route path="mathe/mehr-weniger"    element={<MehrWeniger />} />
             <Route path="mathe/minus-rakete"    element={<MinusRakete />} />

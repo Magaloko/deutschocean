@@ -30,6 +30,7 @@ const GAME_ROUTES = {
   emotionenKarten:      '/app/spiel/emotionen-karten',
   fruechtZaehlen:       '/app/spiel/fruechtZaehlen',
   regelRaupe:           '/app/spiel/regel-raupe',
+  wortFamilien:         '/app/spiel/wort-familien',
 }
 
 const MATHE_GAME_ROUTES = {
