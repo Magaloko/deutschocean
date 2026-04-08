@@ -52,10 +52,18 @@ describe('shouldOfferHint', () => {
     expect(shouldOfferHint('hard', 2)).toBe(false)
     expect(shouldOfferHint('hard', 3)).toBe(true)
   })
+
+  it('unknown difficulty: never offers hint', () => {
+    expect(shouldOfferHint('unknown', 99)).toBe(false)
+  })
 })
 
 describe('getHintLevel', () => {
   it('easy → long', ()   => expect(getHintLevel('easy')).toBe('long'))
   it('normal → medium', () => expect(getHintLevel('normal')).toBe('medium'))
   it('hard → short', ()  => expect(getHintLevel('hard')).toBe('short'))
+
+  it('unknown difficulty → medium (safe fallthrough)', () => {
+    expect(getHintLevel('unknown')).toBe('medium')
+  })
 })
