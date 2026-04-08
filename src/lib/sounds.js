@@ -73,6 +73,7 @@ const FEEDBACK_HINTS = {
     'Jede Silbe hat einen Vokal: A, E, I, O oder U.',
     'Sprich das Wort langsam — jede Silbe ist ein kleiner Beat.',
   ],
+  // Für Phonik-/Hörspiele (BuchstabenChaos nutzt 'anagramm')
   buchstaben: [
     'Hör nochmal genau hin — welcher Buchstabe klingt so?',
     'Sprich den Laut laut aus und schau, welcher Buchstabe passt.',
@@ -90,7 +91,7 @@ const FEEDBACK_HINTS = {
   fehler: [
     'Lies den Satz laut vor — klingt etwas komisch?',
     'Schau auf Groß- und Kleinschreibung!',
-    'Schau genau — stimmt die Groß- und Kleinschreibung?',
+    'Lies den Satz noch einmal ganz langsam!',
   ],
   // Reserviert für FarbenJaeger + TierGeraeusche (noch nicht verdrahtet)
   farben: [

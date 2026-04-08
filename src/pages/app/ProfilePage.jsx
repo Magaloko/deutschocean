@@ -71,7 +71,7 @@ export default function ProfilePage() {
     setDeleteError(null)
     try {
       await deleteAccount()
-      navigate('/start')
+      navigate('/')
     } catch (err) {
       setDeletingAccount(false)
       setConfirmDelete(false)

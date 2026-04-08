@@ -1,7 +1,6 @@
 import React, { useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { useAuth } from '../../hooks/useAuth.jsx'
-import { useProgress } from '../../hooks/useProgress.jsx'
 import { useRecommendedPosts } from '../../hooks/useRecommendedPosts.js'
 import PostCard from '../../components/blog/PostCard.jsx'
 import Badge from '../../components/ui/Badge.jsx'
@@ -136,7 +135,7 @@ function getTagesaufgabe(completed) {
 
 export default function DashboardPage() {
   const { profile } = useAuth()
-  const { weakGames } = useProgress()
+  const weakGames = profile?.weakGames ?? {}
 
   const xp           = profile?.xp ?? 0
   const stars        = profile?.stars ?? 0
@@ -286,7 +285,7 @@ export default function DashboardPage() {
                       className={`${styles.gameCard} ${allDone ? styles.gameCardDone : anyDone ? styles.gameCardPartial : ''}`}
                       style={{ '--accent': g.color }}
                     >
-                      {weakGames[g.id] >= 1 && (
+                      {weakGames[g.id] >= 2 && (
                         <span className={styles.weakIndicator} title="Mehr üben!">⚠️</span>
                       )}
                       <div className={styles.gameIconBig}>{g.icon}</div>
@@ -369,7 +368,7 @@ export default function DashboardPage() {
                           className={`${styles.gameCard} ${allDone ? styles.gameCardDone : anyDone ? styles.gameCardPartial : ''}`}
                           style={{ '--accent': g.color }}
                         >
-                          {weakGames[g.id] >= 1 && (
+                          {weakGames[g.id] >= 2 && (
                             <span className={styles.weakIndicator} title="Mehr üben!">⚠️</span>
                           )}
                           <div className={styles.gameIconBig}>{g.icon}</div>
