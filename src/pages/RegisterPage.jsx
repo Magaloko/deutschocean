@@ -1,6 +1,6 @@
 // src/pages/RegisterPage.jsx
 import React, { useState } from 'react'
-import { Link, useNavigate, useSearchParams } from 'react-router-dom'
+import { Link, useNavigate, useSearchParams, Navigate } from 'react-router-dom'
 import { useAuth } from '../hooks/useAuth.jsx'
 import Button from '../components/ui/Button.jsx'
 import Input from '../components/ui/Input.jsx'
@@ -20,9 +20,6 @@ export default function RegisterPage() {
   const [params] = useSearchParams()
   const isUpgrade = params.get('upgrade') === 'true'
 
-  // If already logged in and NOT upgrading → go to app
-  if (profile && !profile.isAnonymous) { navigate('/app', { replace: true }); return null }
-
   const [name,         setName]         = useState(profile?.name || '')
   const [email,        setEmail]        = useState('')
   const [password,     setPassword]     = useState('')
@@ -30,6 +27,9 @@ export default function RegisterPage() {
   const [schoolModule, setSchoolModule] = useState(profile?.schoolModule || 'volksschule')
   const [error,        setError]        = useState('')
   const [loading,      setLoading]      = useState(false)
+
+  // If already logged in and NOT upgrading → go to app (after all hooks)
+  if (profile && !profile.isAnonymous && !isUpgrade) return <Navigate to="/app" replace />
 
   async function handleSubmit(e) {
     e.preventDefault()

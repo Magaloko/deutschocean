@@ -51,6 +51,10 @@ const MiniMarkt       = lazy(() => import('./pages/app/games/mathe/MiniMarkt.jsx
 const EinmaleinsBlitz = lazy(() => import('./pages/app/games/mathe/EinmaleinsBlitz.jsx'))
 const StatsPage       = lazy(() => import('./pages/app/StatsPage.jsx'))
 const ChatPage        = lazy(() => import('./pages/app/ChatPage.jsx'))
+const RoboterSchule   = lazy(() => import('./pages/app/fach/RoboterSchule.jsx'))
+const CoderKids       = lazy(() => import('./pages/app/fach/CoderKids.jsx'))
+const MiniBoss        = lazy(() => import('./pages/app/fach/MiniBoss.jsx'))
+const CoolBleiben     = lazy(() => import('./pages/app/fach/CoolBleiben.jsx'))
 
 function PageLoader() {
   return (
@@ -106,6 +110,10 @@ export default function App() {
             <Route path="mathe/wuerfel-rechnen" element={<WuerfelRechnen />} />
             <Route path="mathe/mini-markt"      element={<MiniMarkt />} />
             <Route path="mathe/einmaleins"      element={<EinmaleinsBlitz />} />
+            <Route path="fach/roboter"          element={<RoboterSchule />} />
+            <Route path="fach/coden"            element={<CoderKids />} />
+            <Route path="fach/miniboss"         element={<MiniBoss />} />
+            <Route path="fach/cool"             element={<CoolBleiben />} />
           </Route>
 
           {/* Blog (public) */}

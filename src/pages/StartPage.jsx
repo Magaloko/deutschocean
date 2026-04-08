@@ -1,6 +1,6 @@
 // src/pages/StartPage.jsx
 import React, { useState } from 'react'
-import { useNavigate, Link } from 'react-router-dom'
+import { Navigate, Link, useNavigate } from 'react-router-dom'
 import { useAuth } from '../hooks/useAuth.jsx'
 import Button from '../components/ui/Button.jsx'
 import styles from './StartPage.module.css'
@@ -16,14 +16,15 @@ export default function StartPage() {
   const { loginAnonymously, profile } = useAuth()
   const navigate = useNavigate()
 
-  // Already logged in → go to app
-  if (profile) { navigate('/app', { replace: true }); return null }
-
+  // All hooks must be declared before any conditional return
   const [step,   setStep]   = useState(0)   // 0=hub, 1=avatar+name, 2=module
   const [name,   setName]   = useState('')
   const [avatar, setAvatar] = useState('🐬')
   const [error,  setError]  = useState('')
   const [busy,   setBusy]   = useState(false)
+
+  // Already logged in → go to app (declarative, safe in render)
+  if (profile) return <Navigate to="/app" replace />
 
   async function handleSelectModule(moduleId) {
     setBusy(true)

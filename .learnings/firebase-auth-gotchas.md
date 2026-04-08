@@ -41,3 +41,31 @@ Available link exports: `linkWithCredential`, `linkWithPhoneNumber`, `linkWithPo
 **Root cause:** Vite reads `.env.*` files only at server startup, not via HMR. A running `npm run dev` process does NOT pick up new `.env.local` files.
 
 **Fix:** Stop and restart the dev server (or use `preview_stop` + `preview_start` in Claude Code).
+
+---
+
+## 4. Firestore Security Rules — must include full wrapper, not just `match` block
+
+**Symptom:** Firebase Console shows error: `mismatched input 'match' expecting {'function', 'import', 'service', 'rules_version'}` when saving rules.
+
+**Root cause:** Pasting only the inner `match /collection/{doc}` block without the required outer structure.
+
+**Fix:** Always wrap rules in the full boilerplate:
+```
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // your match blocks here
+  }
+}
+```
+
+---
+
+## 5. Finding Firebase UID — use Firebase Console, not Google Cloud IAM
+
+**Symptom:** User navigates to Google Cloud Console → IAM looking for their UID but only sees service accounts and IAM roles.
+
+**Root cause:** Firebase UIDs are in Firebase Authentication, not Google Cloud IAM. The two consoles are separate.
+
+**Fix:** Go to **console.firebase.google.com** → project → **Authentication** → **Users** tab → copy the `Nutzer-UID` column.

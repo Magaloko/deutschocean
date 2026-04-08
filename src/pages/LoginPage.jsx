@@ -1,6 +1,6 @@
 // src/pages/LoginPage.jsx
 import React, { useState } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link, useNavigate, Navigate } from 'react-router-dom'
 import { useAuth } from '../hooks/useAuth.jsx'
 import Button from '../components/ui/Button.jsx'
 import Input from '../components/ui/Input.jsx'
@@ -11,12 +11,12 @@ export default function LoginPage() {
   const { login, loginWithGoogle, profile } = useAuth()
   const navigate = useNavigate()
 
-  if (profile) { navigate('/app', { replace: true }); return null }
-
   const [email,    setEmail]    = useState('')
   const [password, setPassword] = useState('')
   const [error,    setError]    = useState('')
   const [loading,  setLoading]  = useState(false)
+
+  if (profile) return <Navigate to="/app" replace />
 
   async function handleEmailLogin(e) {
     e.preventDefault()

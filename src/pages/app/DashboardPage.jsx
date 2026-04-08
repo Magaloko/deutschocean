@@ -6,6 +6,7 @@ import PostCard from '../../components/blog/PostCard.jsx'
 import Badge from '../../components/ui/Badge.jsx'
 import ProgressBar from '../../components/ui/ProgressBar.jsx'
 import { MISSIONS, BADGES } from '../../lib/gameData.js'
+import { FAECHER } from '../../lib/fachData.js'
 import { isDueToday } from '../../lib/spacedRepetition.js'
 import styles from './DashboardPage.module.css'
 
@@ -308,6 +309,14 @@ export default function DashboardPage() {
           className={`${styles.tab} ${activeTab === 'mathe' ? styles.tabActive : ''}`}
           onClick={() => setActiveTab('mathe')}
         >🔢 Mathe</button>
+        {FAECHER.map(f => (
+          <button
+            key={f.tab}
+            className={`${styles.tab} ${activeTab === f.tab ? styles.tabActive : ''}`}
+            style={activeTab === f.tab ? { '--tab-color': f.color } : {}}
+            onClick={() => setActiveTab(f.tab)}
+          >{f.emoji} {f.label}</button>
+        ))}
       </div>
 
       {/* ── Deutsch Tab ── */}
@@ -513,6 +522,41 @@ export default function DashboardPage() {
           )}
         </>
       )}
+
+      {/* ── Fach-Tabs (Roboter, Coden, Mini-Boss, Cool Bleiben) ── */}
+      {FAECHER.map(f => activeTab === f.tab && (
+        <section key={f.tab}>
+          <div className={styles.levelHeader}>
+            <div className={styles.levelPill} style={{ background: `${f.color}18`, border: `2px solid ${f.color}40` }}>
+              <span>{f.emoji}</span>
+              <span style={{ color: f.color, fontWeight: 800 }}>{f.title}</span>
+            </div>
+          </div>
+          <p style={{ color: '#6b7280', fontSize: '0.9rem', margin: '0 0 0.75rem' }}>{f.subtitle}</p>
+          <div className={styles.gameGrid}>
+            {Object.entries(f.levels).map(([lvl, meta]) => (
+              <Link
+                key={lvl}
+                to={`${f.route}?level=${lvl}`}
+                className={styles.gameLink}
+              >
+                <div className={styles.gameCard} style={{ '--accent': f.color }}>
+                  <div className={styles.gameIconBig}>{meta.emoji}</div>
+                  <div className={styles.gameTitle}>{meta.label}</div>
+                  <div style={{ fontSize: '0.75rem', color: '#6b7280', marginBottom: '0.25rem' }}>{meta.desc}</div>
+                  <div className={styles.gameCardMeta}>
+                    <span className={styles.gameXp}>+{(Number(lvl) + 1) * 24} XP</span>
+                  </div>
+                  <button type="button" className={styles.gamePlayBtn}>▶ Quiz starten</button>
+                </div>
+              </Link>
+            ))}
+          </div>
+          <div style={{ marginTop: '0.75rem', padding: '0.6rem 0.875rem', background: '#f9fafb', borderRadius: '0.75rem', fontSize: '0.75rem', color: '#9ca3af' }}>
+            📖 Basiert auf: {f.bookSource}
+          </div>
+        </section>
+      ))}
 
       {/* ── Abzeichen ── */}
       {badges.length > 0 && (
