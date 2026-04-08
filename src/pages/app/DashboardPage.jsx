@@ -133,6 +133,15 @@ function getTagesaufgabe(completed) {
   return uncompleted[dayOfYear % uncompleted.length]
 }
 
+// A level is unlocked if:
+// - It's level 0 (always unlocked)
+// - OR the previous level has at least 1 completed mission
+function isLevelUnlocked(lvl, allLeveledGames) {
+  if (lvl === 0) return true
+  const prevGames = allLeveledGames[lvl - 1] ?? []
+  return prevGames.some((g) => g.completedCount > 0)
+}
+
 export default function DashboardPage() {
   const { profile } = useAuth()
 
@@ -163,15 +172,6 @@ export default function DashboardPage() {
     () => Object.fromEntries(allowedLevels.map((lvl) => [lvl, getUniqueMatheGames(lvl, completed)])),
     [allowedLevels, completed],
   )
-
-  // A level is unlocked if:
-  // - It's level 0 (always unlocked)
-  // - OR the previous level has at least 1 completed mission
-  function isLevelUnlocked(lvl, completedMissions, allLeveledGames) {
-    if (lvl === 0) return true
-    const prevGames = allLeveledGames[lvl - 1] ?? []
-    return prevGames.some((g) => g.completedCount > 0)
-  }
 
   return (
     <div className={`${styles.page} fade-in`}>
@@ -284,7 +284,7 @@ export default function DashboardPage() {
         const meta = levelMeta[lvl] ?? { label: `Level ${lvl}`, emoji: '📖', color: '#6b7280' }
         const totalVariants = games.reduce((s, g) => s + g.variants.length, 0)
         const doneVariants  = games.reduce((s, g) => s + g.completedCount, 0)
-        const unlocked = isLevelUnlocked(lvl, completed, leveledGames)
+        const unlocked = isLevelUnlocked(lvl, leveledGames)
         return (
           <section key={lvl}>
             <div className={styles.levelHeader}>
@@ -300,7 +300,14 @@ export default function DashboardPage() {
               {games.map((g) => {
                 if (!unlocked) {
                   return (
-                    <div key={g.type} className={`${styles.gameLink} ${styles.gameLinkLocked}`}>
+                    <div
+                      key={g.type}
+                      className={`${styles.gameLink} ${styles.gameLinkLocked}`}
+                      role="button"
+                      aria-disabled="true"
+                      aria-label={`${g.title} – gesperrt. Erst vorherige Aufgaben lösen.`}
+                      tabIndex={-1}
+                    >
                       <div className={`${styles.gameCard} ${styles.gameCardLocked}`} style={{ '--accent': g.color }}>
                         <div className={styles.lockOverlay}>
                           <span className={styles.lockIcon}>🔒</span>
@@ -384,7 +391,7 @@ export default function DashboardPage() {
                       ?? { label: `Level ${lvl}`, emoji: '🔢', color: '#6366f1' }
             const totalVariants = games.reduce((s, g) => s + g.variants.length, 0)
             const doneVariants  = games.reduce((s, g) => s + g.completedCount, 0)
-            const unlocked = isLevelUnlocked(lvl, completed, mathedLeveledGames)
+            const unlocked = isLevelUnlocked(lvl, mathedLeveledGames)
             return (
               <section key={lvl}>
                 <div className={styles.levelHeader}>
@@ -399,7 +406,14 @@ export default function DashboardPage() {
                   {games.map((g) => {
                     if (!unlocked) {
                       return (
-                        <div key={g.type} className={`${styles.gameLink} ${styles.gameLinkLocked}`}>
+                        <div
+                          key={g.type}
+                          className={`${styles.gameLink} ${styles.gameLinkLocked}`}
+                          role="button"
+                          aria-disabled="true"
+                          aria-label={`${g.title} – gesperrt. Erst vorherige Aufgaben lösen.`}
+                          tabIndex={-1}
+                        >
                           <div className={`${styles.gameCard} ${styles.gameCardLocked}`} style={{ '--accent': g.color }}>
                             <div className={styles.lockOverlay}>
                               <span className={styles.lockIcon}>🔒</span>
