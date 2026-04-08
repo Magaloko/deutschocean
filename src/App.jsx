@@ -48,6 +48,7 @@ const WuerfelRechnen  = lazy(() => import('./pages/app/games/mathe/WuerfelRechne
 const MiniMarkt       = lazy(() => import('./pages/app/games/mathe/MiniMarkt.jsx'))
 const EinmaleinsBlitz = lazy(() => import('./pages/app/games/mathe/EinmaleinsBlitz.jsx'))
 const StatsPage       = lazy(() => import('./pages/app/StatsPage.jsx'))
+const ChatPage        = lazy(() => import('./pages/app/ChatPage.jsx'))
 
 function PageLoader() {
   return (
@@ -73,6 +74,7 @@ export default function App() {
             <Route index element={<DashboardPage />} />
             <Route path="profil" element={<ProfilePage />} />
             <Route path="stats" element={<StatsPage />} />
+            <Route path="chat" element={<ChatPage />} />
             <Route path="missionen" element={<Navigate to="/app" replace />} />
             <Route path="spiel/fehler-detektiv"       element={<FehlerDetektiv />} />
             <Route path="spiel/personenbeschreibung"  element={<Personenbeschreibung />} />
