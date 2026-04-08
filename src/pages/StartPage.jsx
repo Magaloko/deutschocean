@@ -32,7 +32,8 @@ export default function StartPage() {
       await loginAnonymously(name.trim(), avatar, moduleId)
       navigate('/app')
     } catch (e) {
-      setError('Fehler beim Starten. Bitte nochmal versuchen.')
+      console.error('handleSelectModule error:', e)
+      setError(`Fehler beim Starten: ${e.code || e.message || 'Unbekannter Fehler'}`)
       setBusy(false)
     }
   }

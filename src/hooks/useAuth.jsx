@@ -142,6 +142,7 @@ export function AuthProvider({ children }) {
           const userRef = doc(db, 'users', fbUser.uid)
           unsubRef.current = onSnapshot(userRef, (snap) => {
             const data = snap.exists() ? snap.data() : null
+            if (data) localStorage.removeItem('pendingGuestProfile')
             setProfileState(data)
             setLoading(false)
             // Update streak once per session (first snapshot only)
@@ -152,7 +153,17 @@ export function AuthProvider({ children }) {
           })
         } catch (err) {
           console.error('Auth state error:', err)
-          setProfileState(null)
+          // Firestore temporarily offline — use localStorage fallback so the
+          // user can still access the app. Firestore will sync on next load.
+          const pending = localStorage.getItem('pendingGuestProfile')
+          if (fbUser && pending) {
+            try {
+              const { name, avatar, schoolModule } = JSON.parse(pending)
+              setProfileState(makeProfile(fbUser.uid, name, avatar, schoolModule, fbUser.isAnonymous))
+            } catch { setProfileState(null) }
+          } else {
+            setProfileState(null)
+          }
           setLoading(false)
         }
       })()
@@ -170,15 +181,24 @@ export function AuthProvider({ children }) {
 
   async function loginAnonymously(name, avatar, schoolModule) {
     requireFirebase()
+    // Save to localStorage FIRST so onAuthStateChanged fallback can use it
+    // even if Firestore is temporarily unreachable.
+    const pending = { name: name || 'Gast', avatar: avatar || '🐬', schoolModule: schoolModule || 'volksschule' }
+    localStorage.setItem('pendingGuestProfile', JSON.stringify(pending))
+
     const { user: fbUser } = await signInAnonymously(auth)
-    // Pass overrides to ensureFirestoreProfile so the user-supplied values are used.
-    // The onAuthStateChanged path will skip writing since the doc will exist.
-    await ensureFirestoreProfile(fbUser, {
-      name:         name         || 'Gast',
-      avatar:       avatar       || '🐬',
-      schoolModule: schoolModule || 'volksschule',
-      isAnonymous:  true,
-    })
+    // Try to write to Firestore, but never throw — Firebase Auth succeeded,
+    // the onAuthStateChanged listener will handle Firestore when it's available.
+    try {
+      await ensureFirestoreProfile(fbUser, {
+        name:         pending.name,
+        avatar:       pending.avatar,
+        schoolModule: pending.schoolModule,
+        isAnonymous:  true,
+      })
+    } catch (err) {
+      console.warn('Firestore write skipped (offline?), will retry on next load:', err.message)
+    }
   }
 
   async function login(email, password) {
