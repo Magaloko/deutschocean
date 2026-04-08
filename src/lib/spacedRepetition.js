@@ -4,6 +4,11 @@
 // Basiert auf: Wozniak 1987 (SuperMemo 2)
 // =============================================
 
+function todayLocal() {
+  const d = new Date()
+  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`
+}
+
 /**
  * Berechnet das nächste Review-Datum und den neuen Intervall.
  *
@@ -46,7 +51,7 @@ export function sm2Next(current, score) {
   // Next review date: today + interval days
   const nextDate = new Date()
   nextDate.setDate(nextDate.getDate() + newInterval)
-  const nextReview = nextDate.toISOString().slice(0, 10)  // "YYYY-MM-DD"
+  const nextReview = `${nextDate.getFullYear()}-${String(nextDate.getMonth() + 1).padStart(2, '0')}-${String(nextDate.getDate()).padStart(2, '0')}`
 
   return {
     interval:    newInterval,
@@ -62,6 +67,6 @@ export function sm2Next(current, score) {
  */
 export function isDueToday(nextReview) {
   if (!nextReview) return false
-  const today = new Date().toISOString().slice(0, 10)
+  const today = todayLocal()
   return nextReview <= today
 }

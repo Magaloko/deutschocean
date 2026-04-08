@@ -1,4 +1,4 @@
-import { useState, useCallback, useRef } from 'react'
+import { useState, useCallback, useRef, useEffect } from 'react'
 
 const CORRECT_MESSAGES = [
   'Super! 🌟',
@@ -63,6 +63,13 @@ export function useOzzy() {
       setMood('idle')
       setMessage(null)
     }, delay)
+  }, [])
+
+  // Cleanup timer on unmount
+  useEffect(() => {
+    return () => {
+      if (timerRef.current) clearTimeout(timerRef.current)
+    }
   }, [])
 
   return { mood, message, react }
