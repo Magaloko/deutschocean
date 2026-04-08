@@ -139,6 +139,17 @@ export const MISSIONS = [
     color: '#f59e0b',
   },
   {
+    id: 'regel-raupe-1',
+    type: 'regelRaupe',
+    title: 'RegelRaupe',
+    description: 'Entscheide Wort für Wort: Groß oder Klein?',
+    icon: '🐛',
+    xp: 20,
+    stars: 3,
+    level: 1,
+    color: '#10b981',
+  },
+  {
     id: 'nomen-1',
     type: 'nomenFinder',
     title: 'Nomen-Jäger',
@@ -653,21 +664,24 @@ export const SILBEN_WOERTER = [
 
 // Buchstaben-Chaos Wörter (15 Stück)
 export const CHAOS_WOERTER = [
-  { word: 'HUND',      scrambled: 'NDUH' },
-  { word: 'KATZE',     scrambled: 'TAEKZ' },
-  { word: 'SCHULE',    scrambled: 'LEHSCU' },
-  { word: 'BUCH',      scrambled: 'UHCB' },
-  { word: 'TISCH',     scrambled: 'CSIHT' },
-  { word: 'STUHL',     scrambled: 'SLUTH' },
-  { word: 'BRIEF',     scrambled: 'FRBIE' },
-  { word: 'APFEL',     scrambled: 'LEFAP' },
-  { word: 'BLUME',     scrambled: 'MEBLU' },
-  { word: 'VOGEL',     scrambled: 'GLOEV' },
-  { word: 'BAUM',      scrambled: 'UMAB' },
-  { word: 'HAUS',      scrambled: 'SUAH' },
-  { word: 'BRÜCKE',    scrambled: 'KÜCBRE' },
-  { word: 'GARTEN',    scrambled: 'NETRAG' },
-  { word: 'FENSTER',   scrambled: 'RENSTEF' },
+  // ── easy: 4 Buchstaben ──
+  { word: 'HUND',  scrambled: 'NDUH',   difficulty: 'easy' },
+  { word: 'BUCH',  scrambled: 'UHCB',   difficulty: 'easy' },
+  { word: 'BAUM',  scrambled: 'UMAB',   difficulty: 'easy' },
+  { word: 'HAUS',  scrambled: 'SUAH',   difficulty: 'easy' },
+  // ── normal: 5–6 Buchstaben ──
+  { word: 'KATZE',  scrambled: 'TAEKZ',  difficulty: 'normal' },
+  { word: 'TISCH',  scrambled: 'CSIHT',  difficulty: 'normal' },
+  { word: 'STUHL',  scrambled: 'SLUTH',  difficulty: 'normal' },
+  { word: 'BRIEF',  scrambled: 'FRBIE',  difficulty: 'normal' },
+  { word: 'APFEL',  scrambled: 'LEFAP',  difficulty: 'normal' },
+  { word: 'BLUME',  scrambled: 'MEBLU',  difficulty: 'normal' },
+  { word: 'VOGEL',  scrambled: 'GLOEV',  difficulty: 'normal' },
+  { word: 'SCHULE', scrambled: 'LEHSCU', difficulty: 'normal' },
+  // ── hard: 6–7 Buchstaben ──
+  { word: 'BRÜCKE',  scrambled: 'KÜCBRE',  difficulty: 'hard' },
+  { word: 'GARTEN',  scrambled: 'NETRAG',  difficulty: 'hard' },
+  { word: 'FENSTER', scrambled: 'RENSTEF', difficulty: 'hard' },
 ]
 
 // Nomen-Finder Sätze (10 Stück)
@@ -739,65 +753,134 @@ export const NOMEN_SAETZE = [
 
 // Satz-Baumeister Aufgaben (12 Stück)
 export const SATZ_AUFGABEN = [
-  {
-    id: 'sb1',
+  // ── easy: ≤5 Wörter ──
+  { id: 'sb1', difficulty: 'easy',
     words: ['Der', 'Hund', 'bellt', 'laut.'],
-    correct: 'Der Hund bellt laut.',
-  },
-  {
-    id: 'sb2',
-    words: ['Die', 'Katze', 'schläft', 'auf', 'dem', 'Sofa.'],
-    correct: 'Die Katze schläft auf dem Sofa.',
-  },
-  {
-    id: 'sb3',
+    correct: 'Der Hund bellt laut.' },
+  { id: 'sb3', difficulty: 'easy',
     words: ['Das', 'Kind', 'isst', 'einen', 'Apfel.'],
-    correct: 'Das Kind isst einen Apfel.',
-  },
-  {
-    id: 'sb4',
-    words: ['Wir', 'gehen', 'heute', 'in', 'den', 'Park.'],
-    correct: 'Wir gehen heute in den Park.',
-  },
-  {
-    id: 'sb5',
-    words: ['Die', 'Sonne', 'scheint', 'hell', 'am', 'Himmel.'],
-    correct: 'Die Sonne scheint hell am Himmel.',
-  },
-  {
-    id: 'sb6',
+    correct: 'Das Kind isst einen Apfel.' },
+  { id: 'sb6', difficulty: 'easy',
     words: ['Meine', 'Schwester', 'liest', 'ein', 'Buch.'],
-    correct: 'Meine Schwester liest ein Buch.',
-  },
-  {
-    id: 'sb7',
+    correct: 'Meine Schwester liest ein Buch.' },
+  { id: 'sb7', difficulty: 'easy',
     words: ['Der', 'Lehrer', 'erklärt', 'die', 'Aufgabe.'],
-    correct: 'Der Lehrer erklärt die Aufgabe.',
-  },
-  {
-    id: 'sb8',
-    words: ['Im', 'Winter', 'ist', 'es', 'sehr', 'kalt.'],
-    correct: 'Im Winter ist es sehr kalt.',
-  },
-  {
-    id: 'sb9',
-    words: ['Das', 'Mädchen', 'malt', 'ein', 'buntes', 'Bild.'],
-    correct: 'Das Mädchen malt ein buntes Bild.',
-  },
-  {
-    id: 'sb10',
+    correct: 'Der Lehrer erklärt die Aufgabe.' },
+  { id: 'sb10', difficulty: 'easy',
     words: ['Jeden', 'Morgen', 'trinke', 'ich', 'Milch.'],
-    correct: 'Jeden Morgen trinke ich Milch.',
-  },
-  {
-    id: 'sb11',
+    correct: 'Jeden Morgen trinke ich Milch.' },
+  // ── normal: 6 Wörter, bekannte Wörter ──
+  { id: 'sb2', difficulty: 'normal',
+    words: ['Die', 'Katze', 'schläft', 'auf', 'dem', 'Sofa.'],
+    correct: 'Die Katze schläft auf dem Sofa.' },
+  { id: 'sb4', difficulty: 'normal',
+    words: ['Wir', 'gehen', 'heute', 'in', 'den', 'Park.'],
+    correct: 'Wir gehen heute in den Park.' },
+  { id: 'sb5', difficulty: 'normal',
+    words: ['Die', 'Sonne', 'scheint', 'hell', 'am', 'Himmel.'],
+    correct: 'Die Sonne scheint hell am Himmel.' },
+  { id: 'sb8', difficulty: 'normal',
+    words: ['Im', 'Winter', 'ist', 'es', 'sehr', 'kalt.'],
+    correct: 'Im Winter ist es sehr kalt.' },
+  { id: 'sb11', difficulty: 'normal',
     words: ['Der', 'Vogel', 'singt', 'auf', 'dem', 'Baum.'],
-    correct: 'Der Vogel singt auf dem Baum.',
+    correct: 'Der Vogel singt auf dem Baum.' },
+  // ── hard: 6 Wörter, komplexere Struktur ──
+  { id: 'sb9', difficulty: 'hard',
+    words: ['Das', 'Mädchen', 'malt', 'ein', 'buntes', 'Bild.'],
+    correct: 'Das Mädchen malt ein buntes Bild.' },
+  { id: 'sb12', difficulty: 'hard',
+    words: ['Wir', 'spielen', 'nach', 'der', 'Schule', 'Fußball.'],
+    correct: 'Wir spielen nach der Schule Fußball.' },
+]
+
+// RegelRaupe — Konditionelle Grammatik (Sätze nach Schwierigkeit)
+// Mechanic: Wort für Wort tippen → Groß oder Klein?
+export const REGELRAUPE_SAETZE = [
+  // ── easy: 4 Wörter, nur Satzanfang + 1 Nomen ──
+  {
+    id: 'rr1', difficulty: 'easy',
+    words: [
+      { text: 'der',     capitalize: true,  rule: 'Satzanfang' },
+      { text: 'hund',    capitalize: true,  rule: 'Nomen' },
+      { text: 'läuft',   capitalize: false, rule: 'Verb' },
+      { text: 'schnell', capitalize: false, rule: 'Adjektiv' },
+    ],
   },
   {
-    id: 'sb12',
-    words: ['Wir', 'spielen', 'nach', 'der', 'Schule', 'Fußball.'],
-    correct: 'Wir spielen nach der Schule Fußball.',
+    id: 'rr2', difficulty: 'easy',
+    words: [
+      { text: 'die',     capitalize: true,  rule: 'Satzanfang' },
+      { text: 'katze',   capitalize: true,  rule: 'Nomen' },
+      { text: 'schläft', capitalize: false, rule: 'Verb' },
+      { text: 'tief',    capitalize: false, rule: 'Adjektiv' },
+    ],
+  },
+  {
+    id: 'rr3', difficulty: 'easy',
+    words: [
+      { text: 'das',   capitalize: true,  rule: 'Satzanfang' },
+      { text: 'kind',  capitalize: true,  rule: 'Nomen' },
+      { text: 'lacht', capitalize: false, rule: 'Verb' },
+      { text: 'laut',  capitalize: false, rule: 'Adjektiv' },
+    ],
+  },
+  // ── normal: 5–6 Wörter, Satzanfang + 2 Nomen + Verb/Adjektiv ──
+  {
+    id: 'rr4', difficulty: 'normal',
+    words: [
+      { text: 'der',      capitalize: true,  rule: 'Satzanfang' },
+      { text: 'vater',    capitalize: true,  rule: 'Nomen' },
+      { text: 'kauft',    capitalize: false, rule: 'Verb' },
+      { text: 'frisches', capitalize: false, rule: 'Adjektiv' },
+      { text: 'brot',     capitalize: true,  rule: 'Nomen' },
+    ],
+  },
+  {
+    id: 'rr5', difficulty: 'normal',
+    words: [
+      { text: 'anna',       capitalize: true,  rule: 'Eigenname' },
+      { text: 'liest',      capitalize: false, rule: 'Verb' },
+      { text: 'ein',        capitalize: false, rule: 'Artikel' },
+      { text: 'spannendes', capitalize: false, rule: 'Adjektiv' },
+      { text: 'buch',       capitalize: true,  rule: 'Nomen' },
+    ],
+  },
+  {
+    id: 'rr6', difficulty: 'normal',
+    words: [
+      { text: 'die',      capitalize: true,  rule: 'Satzanfang' },
+      { text: 'lehrerin', capitalize: true,  rule: 'Nomen' },
+      { text: 'schreibt', capitalize: false, rule: 'Verb' },
+      { text: 'die',      capitalize: false, rule: 'Artikel' },
+      { text: 'aufgabe',  capitalize: true,  rule: 'Nomen' },
+      { text: 'auf',      capitalize: false, rule: 'Präposition' },
+    ],
+  },
+  // ── hard: 6–8 Wörter, 3 Regeltypen ──
+  {
+    id: 'rr7', difficulty: 'hard',
+    words: [
+      { text: 'im',         capitalize: true,  rule: 'Satzanfang' },
+      { text: 'supermarkt', capitalize: true,  rule: 'Nomen' },
+      { text: 'kauft',      capitalize: false, rule: 'Verb' },
+      { text: 'der',        capitalize: false, rule: 'Artikel' },
+      { text: 'vater',      capitalize: true,  rule: 'Nomen' },
+      { text: 'frische',    capitalize: false, rule: 'Adjektiv' },
+      { text: 'milch',      capitalize: true,  rule: 'Nomen' },
+    ],
+  },
+  {
+    id: 'rr8', difficulty: 'hard',
+    words: [
+      { text: 'paul',       capitalize: true,  rule: 'Eigenname' },
+      { text: 'fährt',      capitalize: false, rule: 'Verb' },
+      { text: 'mit',        capitalize: false, rule: 'Präposition' },
+      { text: 'dem',        capitalize: false, rule: 'Artikel' },
+      { text: 'fahrrad',    capitalize: true,  rule: 'Nomen' },
+      { text: 'zum',        capitalize: false, rule: 'Präposition' },
+      { text: 'schwimmbad', capitalize: true,  rule: 'Nomen' },
+    ],
   },
 ]
 
