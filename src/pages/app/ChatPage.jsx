@@ -128,6 +128,7 @@ export default function ChatPage() {
               rows={2}
               maxLength={300}
               disabled={loading}
+              aria-label="Nachricht eingeben"
             />
             <button
               className={styles.sendBtn}
