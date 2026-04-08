@@ -47,6 +47,7 @@ const Zahlenfolge     = lazy(() => import('./pages/app/games/mathe/Zahlenfolge.j
 const WuerfelRechnen  = lazy(() => import('./pages/app/games/mathe/WuerfelRechnen.jsx'))
 const MiniMarkt       = lazy(() => import('./pages/app/games/mathe/MiniMarkt.jsx'))
 const EinmaleinsBlitz = lazy(() => import('./pages/app/games/mathe/EinmaleinsBlitz.jsx'))
+const StatsPage       = lazy(() => import('./pages/app/StatsPage.jsx'))
 
 function PageLoader() {
   return (
@@ -71,6 +72,7 @@ export default function App() {
           <Route path="/app" element={<AppLayout />}>
             <Route index element={<DashboardPage />} />
             <Route path="profil" element={<ProfilePage />} />
+            <Route path="stats" element={<StatsPage />} />
             <Route path="missionen" element={<Navigate to="/app" replace />} />
             <Route path="spiel/fehler-detektiv"       element={<FehlerDetektiv />} />
             <Route path="spiel/personenbeschreibung"  element={<Personenbeschreibung />} />

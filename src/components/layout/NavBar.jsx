@@ -22,6 +22,9 @@ export default function NavBar() {
           <NavLink to="/app" end className={({ isActive }) => isActive ? styles.linkActive : styles.link}>
             Dashboard
           </NavLink>
+          <NavLink to="/app/stats" className={({ isActive }) => isActive ? styles.linkActive : styles.link}>
+            📊 Stats
+          </NavLink>
         </div>
 
         <div className={styles.right}>
