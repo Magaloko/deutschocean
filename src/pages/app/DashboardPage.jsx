@@ -200,11 +200,15 @@ export default function DashboardPage() {
             <span className={styles.heroStatNum}>{completed.length}</span>
             <span className={styles.heroStatLabel}>🏅 Gespielt</span>
           </div>
-          <div className={styles.heroStatDiv} />
-          <div className={styles.heroStat}>
-            <span className={styles.heroStatNum}>{streakDays}</span>
-            <span className={styles.heroStatLabel}>🔥 Tage</span>
-          </div>
+          {streakDays > 0 && (
+            <>
+              <div className={styles.heroStatDiv} />
+              <div className={styles.heroStat}>
+                <span className={styles.heroStatNum}>{streakDays}</span>
+                <span className={styles.heroStatLabel}>🔥 Tage</span>
+              </div>
+            </>
+          )}
         </div>
         <div className={styles.xpBarWrap}>
           <span className={styles.xpBarLabel}>Lvl {level}</span>

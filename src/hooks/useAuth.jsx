@@ -69,18 +69,33 @@ async function ensureFirestoreProfile(fbUser, overrides = {}) {
   await setDoc(userRef, profile)
 }
 
+function toLocalDateStr(date = new Date()) {
+  const y = date.getFullYear()
+  const m = String(date.getMonth() + 1).padStart(2, '0')
+  const d = String(date.getDate()).padStart(2, '0')
+  return `${y}-${m}-${d}`
+}
+
 async function updateStreak(fbUser, currentProfile) {
-  const today = new Date().toISOString().slice(0, 10)  // "2026-04-08"
-  const last  = currentProfile.lastActiveDate
-    ? new Date(currentProfile.lastActiveDate).toISOString().slice(0, 10)
-    : null
+  const today = toLocalDateStr()
+
+  let last = null
+  if (currentProfile.lastActiveDate) {
+    // Handle both full ISO strings and any legacy plain date strings
+    const raw = currentProfile.lastActiveDate
+    last = raw.length === 10 ? raw : toLocalDateStr(new Date(raw))
+  }
 
   if (last === today) return  // already updated today
 
-  const yesterday = new Date(Date.now() - 86400000).toISOString().slice(0, 10)
+  // Compute yesterday in local time (DST-safe)
+  const yd = new Date()
+  yd.setDate(yd.getDate() - 1)
+  const yesterday = toLocalDateStr(yd)
+
   const newStreak = last === yesterday
-    ? (currentProfile.streakDays ?? 0) + 1   // consecutive day
-    : 1                                        // streak broken or first day
+    ? (currentProfile.streakDays ?? 0) + 1
+    : 1
 
   await updateDoc(doc(db, 'users', fbUser.uid), {
     streakDays:     newStreak,
