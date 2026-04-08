@@ -254,6 +254,17 @@
 }
 .gameCardPartial::before { background: var(--accent); }
 
+/* ── Schwächen-Indikator ── */
+.weakIndicator {
+  position: absolute;
+  top: 0.4rem;
+  left: 0.4rem;
+  font-size: 0.75rem;
+  line-height: 1;
+  z-index: 1;
+  filter: drop-shadow(0 1px 2px rgba(0,0,0,0.15));
+}
+
 .gameIconBig {
   font-size: 3.2rem;
   line-height: 1;

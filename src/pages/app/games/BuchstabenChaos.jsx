@@ -6,7 +6,7 @@ import Badge from '../../../components/ui/Badge.jsx'
 import Input from '../../../components/ui/Input.jsx'
 import { CHAOS_WOERTER } from '../../../lib/gameData.js'
 import { useProgress } from '../../../hooks/useProgress.jsx'
-import { playCorrect, playWrong, playComplete } from '../../../lib/sounds.js'
+import { playCorrect, playWrong, playComplete, speakFeedback } from '../../../lib/sounds.js'
 import styles from './Game.module.css'
 
 function shuffle(arr) { return [...arr].sort(() => Math.random() - 0.5) }
@@ -34,6 +34,7 @@ export default function BuchstabenChaos() {
       playCorrect()
     } else {
       playWrong()
+      speakFeedback('anagramm')
       setShake(true)
       setTimeout(() => setShake(false), 500)
     }

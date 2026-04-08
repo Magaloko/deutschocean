@@ -62,6 +62,65 @@ export function playCoin() {
   tone(1108, t + 0.07, 0.1)
 }
 
+const FEEDBACK_HINTS = {
+  nomen: [
+    'Nomen sind immer großgeschrieben! Schau nochmal genau hin.',
+    'Nomen sind Personen, Tiere, Dinge oder Orte.',
+    'Großbuchstabe am Anfang? Dann ist es ein Nomen!',
+  ],
+  silben: [
+    'Klatsche das Wort in Silben! So findest du sie besser.',
+    'Jede Silbe hat einen Vokal: A, E, I, O oder U.',
+    'Sprich das Wort langsam — jede Silbe ist ein kleiner Beat.',
+  ],
+  // Für Phonik-/Hörspiele (BuchstabenChaos nutzt 'anagramm')
+  buchstaben: [
+    'Hör nochmal genau hin — welcher Buchstabe klingt so?',
+    'Sprich den Laut laut aus und schau, welcher Buchstabe passt.',
+  ],
+  anagramm: [
+    'Schau auf die Buchstaben — kannst du ein Wort erkennen?',
+    'Leg die Buchstaben der Reihe nach hin!',
+    'Probiere eine andere Reihenfolge!',
+  ],
+  satz: [
+    'Das Verb steht meistens an zweiter Stelle im Satz.',
+    'Wer oder was macht etwas? Das ist das Subjekt.',
+    'Achte auf die Reihenfolge: Subjekt, Verb, dann der Rest.',
+  ],
+  fehler: [
+    'Lies den Satz laut vor — klingt etwas komisch?',
+    'Schau auf Groß- und Kleinschreibung!',
+    'Lies den Satz noch einmal ganz langsam!',
+  ],
+  // Reserviert für FarbenJaeger + TierGeraeusche (noch nicht verdrahtet)
+  farben: [
+    'Schau nochmal genau — welche Farbe ist das wirklich?',
+    'Welche Farbe siehst du? Schau nochmal hin!',
+  ],
+  tier: [
+    'Hör dem Geräusch nochmal zu!',
+    'Welches Tier macht dieses Geräusch? Denk nach!',
+  ],
+  general: [
+    'Fast! Probier es nochmal.',
+    'Nicht ganz — schau nochmal genau hin!',
+    'Du schaffst das! Nochmal versuchen.',
+  ],
+}
+
+/**
+ * Spricht einen kurzen kontextuellen Hinweis nach einer falschen Antwort.
+ * @param {string} gameType - z.B. 'nomen', 'silben', 'buchstaben', 'anagramm', 'satz', 'fehler', 'farben', 'tier'
+ */
+export function speakFeedback(gameType) {
+  const hints = FEEDBACK_HINTS[gameType]
+  if (!hints) return speak('Probier es nochmal!')
+
+  const text = hints[Math.floor(Math.random() * hints.length)]
+  speak(text)
+}
+
 /** Text-to-Speech auf Deutsch — für Kinder die noch nicht lesen können */
 export function speak(text) {
   if (!('speechSynthesis' in window)) return

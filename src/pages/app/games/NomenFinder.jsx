@@ -5,7 +5,7 @@ import Button from '../../../components/ui/Button.jsx'
 import Badge from '../../../components/ui/Badge.jsx'
 import { NOMEN_SAETZE } from '../../../lib/gameData.js'
 import { useProgress } from '../../../hooks/useProgress.jsx'
-import { playCorrect, playWrong, playComplete } from '../../../lib/sounds.js'
+import { playCorrect, playWrong, playComplete, speakFeedback } from '../../../lib/sounds.js'
 import styles from './Game.module.css'
 
 function shuffle(arr) { return [...arr].sort(() => Math.random() - 0.5) }
@@ -39,7 +39,13 @@ export default function NomenFinder() {
   function handleCheck() {
     const allFound = task.nouns.every((n) => selected.has(n))
     const noFalse  = [...selected].every((w) => nouns.has(w))
-    if (allFound && noFalse) { setScore((s) => s + 1); playCorrect() } else { playWrong() }
+    if (allFound && noFalse) {
+      setScore((s) => s + 1)
+      playCorrect()
+    } else {
+      playWrong()
+      speakFeedback('nomen')
+    }
     setChecked(true)
   }
 

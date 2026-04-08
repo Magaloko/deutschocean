@@ -135,6 +135,7 @@ function getTagesaufgabe(completed) {
 
 export default function DashboardPage() {
   const { profile } = useAuth()
+  const weakGames = profile?.weakGames ?? {}
 
   const xp           = profile?.xp ?? 0
   const stars        = profile?.stars ?? 0
@@ -284,6 +285,9 @@ export default function DashboardPage() {
                       className={`${styles.gameCard} ${allDone ? styles.gameCardDone : anyDone ? styles.gameCardPartial : ''}`}
                       style={{ '--accent': g.color }}
                     >
+                      {weakGames[g.id] >= 2 && (
+                        <span className={styles.weakIndicator} title="Mehr üben!">⚠️</span>
+                      )}
                       <div className={styles.gameIconBig}>{g.icon}</div>
                       <div className={styles.gameTitle}>{g.title}</div>
 
@@ -364,6 +368,9 @@ export default function DashboardPage() {
                           className={`${styles.gameCard} ${allDone ? styles.gameCardDone : anyDone ? styles.gameCardPartial : ''}`}
                           style={{ '--accent': g.color }}
                         >
+                          {weakGames[g.id] >= 2 && (
+                            <span className={styles.weakIndicator} title="Mehr üben!">⚠️</span>
+                          )}
                           <div className={styles.gameIconBig}>{g.icon}</div>
                           <div className={styles.gameTitle}>{g.title}</div>
                           {g.variants.length > 1 && (
