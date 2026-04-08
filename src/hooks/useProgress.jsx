@@ -9,7 +9,7 @@ export function useProgress() {
   const { profile } = useAuth()
   const [saving, setSaving] = useState(false)
 
-  async function completeSession({ missionId, xpEarned, stars }) {
+  async function completeSession({ missionId, xpEarned, stars, correct, total }) {
     if (!profile || !auth.currentUser) return { newBadges: [] }
     setSaving(true)
     try {
@@ -28,6 +28,18 @@ export function useProgress() {
       }
       if (newBadges.length) updates.unlockedBadges = arrayUnion(...newBadges)
 
+      // Weakness tracking
+      if (typeof correct === 'number' && typeof total === 'number' && total > 0) {
+        const accuracy = correct / total
+        if (accuracy < 0.6) {
+          const currentWeak = profile.weakGames ?? {}
+          updates.weakGames = {
+            ...currentWeak,
+            [missionId]: (currentWeak[missionId] ?? 0) + 1,
+          }
+        }
+      }
+
       await updateDoc(doc(db, 'users', auth.currentUser.uid), updates)
       return { newBadges }
     } finally {
@@ -39,5 +51,6 @@ export function useProgress() {
     completeSession,
     saving,
     completedMissions: profile?.completedMissions ?? [],
+    weakGames: profile?.weakGames ?? {},
   }
 }
