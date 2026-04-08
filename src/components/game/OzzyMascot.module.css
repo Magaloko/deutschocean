@@ -1,0 +1,130 @@
+/* =============================================
+   Ozzy der Oktopus — Maskottchen
+   ============================================= */
+
+.ozzy {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.25rem;
+  width: 80px;
+  flex-shrink: 0;
+  /* Place Ozzy to the right of game content */
+  position: relative;
+}
+
+/* ── Sprechblase ── */
+.bubble {
+  background: var(--surface);
+  border: 2px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 0.4rem 0.65rem;
+  min-height: 2.5rem;
+  max-width: 160px;
+  min-width: 60px;
+  text-align: center;
+  position: relative;
+  box-shadow: var(--shadow-sm);
+  /* Tail pointing down toward Ozzy */
+}
+.bubble::after {
+  content: '';
+  position: absolute;
+  bottom: -10px;
+  left: 50%;
+  transform: translateX(-50%);
+  border: 5px solid transparent;
+  border-top-color: var(--border);
+}
+.bubble::before {
+  content: '';
+  position: absolute;
+  bottom: -7px;
+  left: 50%;
+  transform: translateX(-50%);
+  border: 5px solid transparent;
+  border-top-color: var(--surface);
+  z-index: 1;
+}
+
+.bubbleText {
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: var(--text);
+  margin: 0;
+  line-height: 1.3;
+  font-family: inherit;
+}
+
+/* ── Character ── */
+.character {
+  font-size: 2.8rem;
+  line-height: 1;
+  cursor: default;
+  user-select: none;
+}
+
+.face {
+  display: block;
+}
+
+/* ── Mood Animations ── */
+
+/* idle — gentle bob */
+.mood_idle .character {
+  animation: ozzyBob 2.5s ease-in-out infinite;
+}
+
+/* correct — jump up */
+.mood_correct .character {
+  animation: ozzyJump 0.5s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
+}
+
+/* wrong — shake side to side */
+.mood_wrong .character {
+  animation: ozzyShake 0.4s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
+}
+
+/* thinking — slow bob */
+.mood_thinking .character {
+  animation: ozzyThink 1.5s ease-in-out infinite;
+}
+
+/* celebrate — spin + scale */
+.mood_celebrate .character {
+  animation: ozzyCelebrate 0.8s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
+}
+
+@keyframes ozzyBob {
+  0%, 100% { transform: translateY(0); }
+  50%       { transform: translateY(-5px); }
+}
+
+@keyframes ozzyJump {
+  0%   { transform: translateY(0)     scale(1); }
+  30%  { transform: translateY(-18px) scale(1.15); }
+  60%  { transform: translateY(-8px)  scale(1.05); }
+  100% { transform: translateY(0)     scale(1); }
+}
+
+@keyframes ozzyShake {
+  0%, 100% { transform: translateX(0); }
+  20%       { transform: translateX(-6px) rotate(-5deg); }
+  40%       { transform: translateX(6px)  rotate(5deg); }
+  60%       { transform: translateX(-4px) rotate(-3deg); }
+  80%       { transform: translateX(4px)  rotate(3deg); }
+}
+
+@keyframes ozzyThink {
+  0%, 100% { transform: translateY(0)   rotate(0deg); }
+  25%       { transform: translateY(-3px) rotate(-5deg); }
+  75%       { transform: translateY(-3px) rotate(5deg); }
+}
+
+@keyframes ozzyCelebrate {
+  0%   { transform: scale(1)    rotate(0deg); }
+  25%  { transform: scale(1.3)  rotate(-15deg); }
+  50%  { transform: scale(1.2)  rotate(15deg); }
+  75%  { transform: scale(1.15) rotate(-8deg); }
+  100% { transform: scale(1)    rotate(0deg); }
+}

@@ -4,6 +4,7 @@ import { doc, updateDoc, arrayUnion, increment } from 'firebase/firestore'
 import { auth, db } from '../lib/firebase.js'
 import { useAuth } from './useAuth.jsx'
 import { BADGES } from '../lib/gameData.js'
+import { sm2Next } from '../lib/spacedRepetition.js'
 
 export function useProgress() {
   const { profile } = useAuth()
@@ -29,6 +30,7 @@ export function useProgress() {
       if (newBadges.length) updates.unlockedBadges = arrayUnion(...newBadges)
 
       // Weakness tracking — uses atomic increment to avoid race conditions
+      // Spaced Repetition (SM-2)
       if (typeof correct === 'number' && typeof total === 'number' && total > 0) {
         const accuracy = correct / total
         if (accuracy < 0.6) {
@@ -37,6 +39,9 @@ export function useProgress() {
           // Perfect score — reset the weakness counter for this game
           updates[`weakGames.${missionId}`] = 0
         }
+        const currentSR = profile.spacedRepetition?.[missionId] ?? {}
+        const nextSR = sm2Next(currentSR, accuracy)
+        updates[`spacedRepetition.${missionId}`] = nextSR
       }
 
       await updateDoc(doc(db, 'users', auth.currentUser.uid), updates)
@@ -50,6 +55,7 @@ export function useProgress() {
     completeSession,
     saving,
     completedMissions: profile?.completedMissions ?? [],
-    weakGames: profile?.weakGames ?? {},
+    weakGames:         profile?.weakGames         ?? {},
+    spacedRepetition:  profile?.spacedRepetition  ?? {},
   }
 }

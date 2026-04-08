@@ -6,6 +6,8 @@ import Badge from '../../../components/ui/Badge.jsx'
 import { SILBEN_WOERTER } from '../../../lib/gameData.js'
 import { useProgress } from '../../../hooks/useProgress.jsx'
 import { playCorrect, playWrong, playComplete, speakFeedback } from '../../../lib/sounds.js'
+import OzzyMascot from '../../../components/game/OzzyMascot.jsx'
+import { useOzzy } from '../../../hooks/useOzzy.js'
 import styles from './Game.module.css'
 
 function shuffle(arr) { return [...arr].sort(() => Math.random() - 0.5) }
@@ -15,6 +17,8 @@ const TOTAL = 5
 export default function SilbenPuzzle() {
   const navigate = useNavigate()
   const { completeSession, saving } = useProgress()
+
+  const { mood, message, react: ozzReact } = useOzzy()
 
   const [words]    = useState(() => shuffle(SILBEN_WOERTER).slice(0, TOTAL))
   const [idx, setIdx]       = useState(0)
@@ -56,9 +60,11 @@ export default function SilbenPuzzle() {
     if (attempt === word.word) {
       setScore((s) => s + 1)
       playCorrect()
+      ozzReact('correct')
     } else {
       playWrong()
       speakFeedback('silben')
+      ozzReact('wrong')
     }
     setChecked(true)
   }
@@ -74,6 +80,7 @@ export default function SilbenPuzzle() {
   async function handleFinish() {
     const stars = score === TOTAL ? 3 : score >= TOTAL * 0.6 ? 2 : 1
     playComplete()
+    ozzReact('celebrate')
     await completeSession({
       missionId: 'silben-1',
       xpEarned: score * 3,
@@ -115,6 +122,11 @@ export default function SilbenPuzzle() {
           <h1 className={styles.gameTitle}>Silben-Puzzle</h1>
         </div>
         <Badge color="gray">{idx + 1}/{TOTAL}</Badge>
+      </div>
+
+      {/* ── Ozzy ── */}
+      <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '-0.5rem' }}>
+        <OzzyMascot mood={mood} message={message} />
       </div>
 
       <Card padding="lg" className={`${styles.gameCard} ${isCorrect ? styles.cardSuccess : isWrong ? styles.cardError : ''}`}>

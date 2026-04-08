@@ -6,6 +6,8 @@ import Badge from '../../../components/ui/Badge.jsx'
 import { NOMEN_SAETZE } from '../../../lib/gameData.js'
 import { useProgress } from '../../../hooks/useProgress.jsx'
 import { playCorrect, playWrong, playComplete, speakFeedback } from '../../../lib/sounds.js'
+import OzzyMascot from '../../../components/game/OzzyMascot.jsx'
+import { useOzzy } from '../../../hooks/useOzzy.js'
 import styles from './Game.module.css'
 
 function shuffle(arr) { return [...arr].sort(() => Math.random() - 0.5) }
@@ -15,6 +17,8 @@ const TOTAL = NOMEN_SAETZE.length
 export default function NomenFinder() {
   const navigate = useNavigate()
   const { completeSession, saving } = useProgress()
+
+  const { mood, message, react: ozzReact } = useOzzy()
 
   const [tasks]   = useState(() => shuffle(NOMEN_SAETZE))
   const [idx, setIdx]         = useState(0)
@@ -42,9 +46,11 @@ export default function NomenFinder() {
     if (allFound && noFalse) {
       setScore((s) => s + 1)
       playCorrect()
+      ozzReact('correct')
     } else {
       playWrong()
       speakFeedback('nomen')
+      ozzReact('wrong')
     }
     setChecked(true)
   }
@@ -62,6 +68,7 @@ export default function NomenFinder() {
   async function handleFinish() {
     const stars = score === TOTAL ? 3 : score >= 2 ? 2 : 1
     playComplete()
+    ozzReact('celebrate')
     await completeSession({
       missionId: 'nomen-1',
       xpEarned: score * 5,
@@ -99,6 +106,11 @@ export default function NomenFinder() {
           <h1 className={styles.gameTitle}>Nomen-Jäger</h1>
         </div>
         <Badge color="gray">{idx + 1}/{TOTAL}</Badge>
+      </div>
+
+      {/* ── Ozzy ── */}
+      <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '-0.5rem' }}>
+        <OzzyMascot mood={mood} message={message} />
       </div>
 
       <Card padding="lg" className={styles.gameCard}>
