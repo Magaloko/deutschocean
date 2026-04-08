@@ -7,6 +7,8 @@ const MOODS = {
   wrong:     { face: '🐙' },
   thinking:  { face: '🐙' },
   celebrate: { face: '🐙' },
+  levelUp:   { face: '🐙' },
+  levelDown: { face: '🐙' },
 }
 
 /**

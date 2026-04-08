@@ -21,6 +21,18 @@ const CELEBRATE_MESSAGES = [
   'Du bist ein Star! ⭐',
 ]
 
+const LEVEL_UP_MESSAGES = [
+  'Du wirst immer besser! 🚀',
+  'Toll, jetzt kommt die Herausforderung! ⭐',
+  'Super Fortschritt! 💪',
+]
+
+const LEVEL_DOWN_MESSAGES = [
+  'Kein Stress, wir üben weiter! 😊',
+  'Schritt für Schritt! 🐾',
+  'Du schaffst das — einfachere Aufgaben! 🌟',
+]
+
 function pick(arr) {
   return arr[Math.floor(Math.random() * arr.length)]
 }
@@ -52,6 +64,14 @@ export function useOzzy() {
       case 'thinking':
         setMood('thinking')
         setMessage('Hmm… 🤔')
+        break
+      case 'levelUp':
+        setMood('levelUp')
+        setMessage(pick(LEVEL_UP_MESSAGES))
+        break
+      case 'levelDown':
+        setMood('levelDown')
+        setMessage(pick(LEVEL_DOWN_MESSAGES))
         break
       default:
         setMood('idle')
