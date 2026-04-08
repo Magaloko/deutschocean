@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react'
+import React, { useState, useCallback, useEffect, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
 import Card from '../../../components/ui/Card.jsx'
 import Button from '../../../components/ui/Button.jsx'
@@ -6,6 +6,11 @@ import Badge from '../../../components/ui/Badge.jsx'
 import { DIKTAT_TEXTS } from '../../../lib/gameData.js'
 import { useProgress } from '../../../hooks/useProgress.jsx'
 import styles from './Game.module.css'
+import { useAdaptivity } from '../../../hooks/useAdaptivity.js'
+import { useHints } from '../../../hooks/useHints.js'
+import { useOzzy } from '../../../hooks/useOzzy.js'
+import OzzyMascot from '../../../components/game/OzzyMascot.jsx'
+import { shouldOfferHint } from '../../../lib/adaptivityEngine.js'
 
 function shuffle(arr) { return [...arr].sort(() => Math.random() - 0.5) }
 
@@ -23,9 +28,21 @@ function compareTexts(original, typed) {
 
 const TOTAL = 3
 
+const HINTS = {
+  long:   { text: 'Hör dir den Satz nochmal genau an. Schreibe jeden Buchstaben einzeln. Nomen schreibt man groß!', tts: true },
+  medium: { text: 'Nomen werden groß geschrieben. Höre nochmal hin.', tts: false },
+  short:  { text: '💡 Nochmal anhören!', tts: false },
+}
+
 export default function DiktatModus() {
   const navigate = useNavigate()
-  const { completeSession, saving } = useProgress()
+  const { completeSession, saving, weakGames } = useProgress()
+
+  const initialDifficulty = (weakGames['diktat-1'] ?? 0) > 0 ? 'easy' : 'normal'
+  const { difficulty, wrongCount, recordAnswer } = useAdaptivity(initialDifficulty)
+  const { hint, showHint, dismissHint }          = useHints(HINTS, difficulty, wrongCount)
+  const { mood, message, react: ozzReact }       = useOzzy()
+  const prevDiffRef = useRef(initialDifficulty)
 
   const [tasks]   = useState(() => shuffle(DIKTAT_TEXTS).slice(0, TOTAL))
   const [idx, setIdx]       = useState(0)
@@ -37,6 +54,14 @@ export default function DiktatModus() {
   const [playCount, setPlayCount] = useState(0)
 
   const task = tasks[idx]
+
+  useEffect(() => {
+    if (difficulty !== prevDiffRef.current) {
+      if (difficulty === 'hard') ozzReact('levelUp')
+      else if (difficulty === 'easy') ozzReact('levelDown')
+      prevDiffRef.current = difficulty
+    }
+  }, [difficulty, ozzReact])
 
   const speak = useCallback(() => {
     if (!window.speechSynthesis || speaking) return
@@ -51,6 +76,11 @@ export default function DiktatModus() {
 
   function handleCheck() {
     const result = compareTexts(task.text, typed)
+    const correct = result.correct === result.total
+    recordAnswer(correct)
+    dismissHint()
+    if (correct) ozzReact('correct')
+    else ozzReact('wrong')
     setScore((s) => s + result.correct)
     setChecked(result)
   }
@@ -70,6 +100,7 @@ export default function DiktatModus() {
     const totalWords = tasks.reduce((acc, t) => acc + t.text.split(' ').length, 0)
     const pct   = score / totalWords
     const stars = pct >= 0.9 ? 3 : pct >= 0.6 ? 2 : 1
+    ozzReact('celebrate')
     await completeSession({
       missionId: 'diktat-1',
       xpEarned: Math.round(pct * 25),
@@ -110,7 +141,20 @@ export default function DiktatModus() {
         <Badge color="gray">{idx + 1}/{TOTAL}</Badge>
       </div>
 
+      <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '-0.5rem' }}>
+        <OzzyMascot mood={mood} message={message} />
+      </div>
+
       <Card padding="lg" className={styles.gameCard}>
+        {hint ? (
+          <div className={styles.hintBox}>
+            <p className={styles.hintText}>{hint.text}</p>
+            <button className={styles.hintDismiss} onClick={dismissHint} aria-label="Tipp schließen">✕</button>
+          </div>
+        ) : (checked && !checked.correct && shouldOfferHint(difficulty, wrongCount)) && (
+          <button className={styles.hintBtn} onClick={showHint}>💡 Tipp anzeigen</button>
+        )}
+
         {!hasSpeechAPI && (
           <div className={styles.warningBox}>
             Dein Browser unterstützt leider keine Sprachausgabe. Bitte verwende Chrome oder Edge.

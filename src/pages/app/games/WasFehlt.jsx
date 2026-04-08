@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
 import Card from '../../../components/ui/Card.jsx'
 import Button from '../../../components/ui/Button.jsx'
@@ -7,15 +7,32 @@ import { WAS_FEHLT_RUNDEN } from '../../../lib/gameData.js'
 import { useProgress } from '../../../hooks/useProgress.jsx'
 import { playCorrect, playWrong, playComplete, speak } from '../../../lib/sounds.js'
 import styles from './Game.module.css'
+import { useAdaptivity } from '../../../hooks/useAdaptivity.js'
+import { useHints } from '../../../hooks/useHints.js'
+import { useOzzy } from '../../../hooks/useOzzy.js'
+import OzzyMascot from '../../../components/game/OzzyMascot.jsx'
+import { shouldOfferHint } from '../../../lib/adaptivityEngine.js'
 
 function shuffle(arr) { return [...arr].sort(() => Math.random() - 0.5) }
 
 const TOTAL = 5
 const SHOW_MS = 3000
 
+const HINTS = {
+  long:   { text: 'Merke dir alle Gegenstände genau — schau dir Farbe, Form und Position an! Dann verschwindet einer...', tts: true },
+  medium: { text: 'Konzentriere dich auf jeden Gegenstand einzeln, dann überprüfe sie alle.', tts: false },
+  short:  { text: '💡 Was war da — was fehlt jetzt?', tts: false },
+}
+
 export default function WasFehlt() {
   const navigate = useNavigate()
-  const { completeSession, saving } = useProgress()
+  const { completeSession, saving, weakGames } = useProgress()
+
+  const initialDifficulty = (weakGames['was-fehlt-1'] ?? 0) > 0 ? 'easy' : 'normal'
+  const { difficulty, wrongCount, recordAnswer } = useAdaptivity(initialDifficulty)
+  const { hint, showHint, dismissHint }          = useHints(HINTS, difficulty, wrongCount)
+  const { mood, message, react: ozzReact }       = useOzzy()
+  const prevDiffRef = useRef(initialDifficulty)
 
   const [runden] = useState(() =>
     shuffle(WAS_FEHLT_RUNDEN).slice(0, TOTAL).map((r) => {
@@ -41,6 +58,14 @@ export default function WasFehlt() {
   const runde = runden[idx]
 
   useEffect(() => {
+    if (difficulty !== prevDiffRef.current) {
+      if (difficulty === 'hard') ozzReact('levelUp')
+      else if (difficulty === 'easy') ozzReact('levelDown')
+      prevDiffRef.current = difficulty
+    }
+  }, [difficulty, ozzReact])
+
+  useEffect(() => {
     if (phase === 'memorize') speak('Merke dir alle Bilder!')
     else speak('Was fehlt?')
   }, [phase, idx])
@@ -54,7 +79,17 @@ export default function WasFehlt() {
   function handleChoice(choice) {
     if (selected) return
     setSelected(choice)
-    if (choice.correct) { setScore((s) => s + 1); playCorrect() } else { playWrong() }
+    const correct = choice.correct
+    recordAnswer(correct)
+    dismissHint()
+    if (correct) {
+      setScore((s) => s + 1)
+      playCorrect()
+      ozzReact('correct')
+    } else {
+      playWrong()
+      ozzReact('wrong')
+    }
   }
 
   function handleNext() {
@@ -70,6 +105,7 @@ export default function WasFehlt() {
   async function handleFinish() {
     const stars = score === TOTAL ? 3 : score >= 3 ? 2 : 1
     playComplete()
+    ozzReact('celebrate')
     await completeSession({ missionId: 'was-fehlt-1', xpEarned: score * 2, stars, correct: score, total: TOTAL })
     navigate('/app')
   }
@@ -104,7 +140,20 @@ export default function WasFehlt() {
         <Badge color="gray">{idx + 1}/{TOTAL}</Badge>
       </div>
 
+      <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '-0.5rem' }}>
+        <OzzyMascot mood={mood} message={message} />
+      </div>
+
       <Card padding="lg" className={styles.gameCard}>
+        {hint ? (
+          <div className={styles.hintBox}>
+            <p className={styles.hintText}>{hint.text}</p>
+            <button className={styles.hintDismiss} onClick={dismissHint} aria-label="Tipp schließen">✕</button>
+          </div>
+        ) : (!selected && phase === 'guess' && shouldOfferHint(difficulty, wrongCount)) && (
+          <button className={styles.hintBtn} onClick={showHint}>💡 Tipp anzeigen</button>
+        )}
+
         {phase === 'memorize' ? (
           <>
             <div className={styles.targetDisplay}>
