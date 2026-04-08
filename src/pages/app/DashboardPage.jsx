@@ -303,10 +303,7 @@ export default function DashboardPage() {
                     <div
                       key={g.type}
                       className={`${styles.gameLink} ${styles.gameLinkLocked}`}
-                      role="button"
-                      aria-disabled="true"
-                      aria-label={`${g.title} – gesperrt. Erst vorherige Aufgaben lösen.`}
-                      tabIndex={-1}
+                      aria-hidden="true"
                     >
                       <div className={`${styles.gameCard} ${styles.gameCardLocked}`} style={{ '--accent': g.color }}>
                         <div className={styles.lockOverlay}>
@@ -409,10 +406,7 @@ export default function DashboardPage() {
                         <div
                           key={g.type}
                           className={`${styles.gameLink} ${styles.gameLinkLocked}`}
-                          role="button"
-                          aria-disabled="true"
-                          aria-label={`${g.title} – gesperrt. Erst vorherige Aufgaben lösen.`}
-                          tabIndex={-1}
+                          aria-hidden="true"
                         >
                           <div className={`${styles.gameCard} ${styles.gameCardLocked}`} style={{ '--accent': g.color }}>
                             <div className={styles.lockOverlay}>

@@ -95,11 +95,13 @@ async function updateStreak(fbUser, currentProfile) {
 
   const newStreak = last === yesterday
     ? (currentProfile.streakDays ?? 0) + 1
-    : 1
+    : last === null
+      ? 0      // first ever visit — no streak yet
+      : 1      // streak broken, reset to 1
 
   await updateDoc(doc(db, 'users', fbUser.uid), {
     streakDays:     newStreak,
-    lastActiveDate: new Date().toISOString(),
+    lastActiveDate: toLocalDateStr(),
     updatedAt:      new Date().toISOString(),
   })
 }
