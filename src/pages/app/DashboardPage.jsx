@@ -258,7 +258,7 @@ export default function DashboardPage() {
               <div className={styles.featuredMeta}>
                 <Badge color="purple">+{featured.xp} XP</Badge>
               </div>
-              <div className={styles.featuredPlayBtn}>▶ JETZT SPIELEN</div>
+              <button type="button" className={styles.featuredPlayBtn}>▶ JETZT SPIELEN</button>
             </div>
           </Link>
         </section>
@@ -328,6 +328,7 @@ export default function DashboardPage() {
               <span className={styles.levelProgress}>{doneVariants}/{totalVariants} erledigt</span>
               {!unlocked && <span className={styles.levelLockBadge}>🔒 Noch gesperrt</span>}
             </div>
+            <ProgressBar value={doneVariants} max={totalVariants} color="green" />
 
             <div className={styles.gameGrid}>
               {games.map((g) => {
@@ -386,9 +387,9 @@ export default function DashboardPage() {
                       <div className={styles.gameCardMeta}>
                         <span className={styles.gameXp}>+{g.xp} XP</span>
                       </div>
-                      <div className={`${styles.gamePlayBtn} ${allDone ? styles.gameDoneBtn : anyDone ? styles.gamePartialBtn : ''}`}>
+                      <button type="button" className={`${styles.gamePlayBtn} ${allDone ? styles.gameDoneBtn : anyDone ? styles.gamePartialBtn : ''}`}>
                         {allDone ? '✓ Alle gespielt' : anyDone ? `${g.completedCount}/${g.variants.length} gespielt` : '▶ Spielen'}
-                      </div>
+                      </button>
                     </div>
                   </Link>
                 )
@@ -438,6 +439,7 @@ export default function DashboardPage() {
                   <span className={styles.levelProgress}>{doneVariants}/{totalVariants} erledigt</span>
                   {!unlocked && <span className={styles.levelLockBadge}>🔒 Noch gesperrt</span>}
                 </div>
+                <ProgressBar value={doneVariants} max={totalVariants} color="green" />
                 <div className={styles.gameGrid}>
                   {games.map((g) => {
                     if (!unlocked) {
@@ -492,9 +494,9 @@ export default function DashboardPage() {
                           <div className={styles.gameCardMeta}>
                             <span className={styles.gameXp}>+{g.xp} XP</span>
                           </div>
-                          <div className={`${styles.gamePlayBtn} ${allDone ? styles.gameDoneBtn : anyDone ? styles.gamePartialBtn : ''}`}>
+                          <button type="button" className={`${styles.gamePlayBtn} ${allDone ? styles.gameDoneBtn : anyDone ? styles.gamePartialBtn : ''}`}>
                             {allDone ? '✓ Alle gespielt' : anyDone ? `${g.completedCount}/${g.variants.length} gespielt` : '▶ Spielen'}
-                          </div>
+                          </button>
                         </div>
                       </Link>
                     )
@@ -504,8 +506,9 @@ export default function DashboardPage() {
             )
           })}
           {(!mathedLeveledGames[0]?.length && !mathedLeveledGames[1]?.length && !mathedLeveledGames[2]?.length) && (
-            <div style={{ padding: '2rem', textAlign: 'center', color: 'var(--text-muted)', fontWeight: 700 }}>
-              Mathe-Spiele werden gleich geladen...
+            <div className={styles.comingSoon}>
+              <span className={styles.comingSoonEmoji}>⏳</span>
+              <p className={styles.comingSoonText}>Mathe-Spiele werden gleich geladen…</p>
             </div>
           )}
         </>
