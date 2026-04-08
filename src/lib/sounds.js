@@ -77,6 +77,11 @@ const FEEDBACK_HINTS = {
     'Hör nochmal genau hin — welcher Buchstabe klingt so?',
     'Sprich den Laut laut aus und schau, welcher Buchstabe passt.',
   ],
+  anagramm: [
+    'Schau auf die Buchstaben — kannst du ein Wort erkennen?',
+    'Leg die Buchstaben der Reihe nach hin!',
+    'Probiere eine andere Reihenfolge!',
+  ],
   satz: [
     'Das Verb steht meistens an zweiter Stelle im Satz.',
     'Wer oder was macht etwas? Das ist das Subjekt.',
@@ -85,10 +90,12 @@ const FEEDBACK_HINTS = {
   fehler: [
     'Lies den Satz laut vor — klingt etwas komisch?',
     'Schau auf Groß- und Kleinschreibung!',
-    'Prüf ob alle Kommas und Punkte richtig sitzen.',
+    'Schau genau — stimmt die Groß- und Kleinschreibung?',
   ],
+  // Reserviert für FarbenJaeger + TierGeraeusche (noch nicht verdrahtet)
   farben: [
     'Schau nochmal genau — welche Farbe ist das wirklich?',
+    'Welche Farbe siehst du? Schau nochmal hin!',
   ],
   tier: [
     'Hör dem Geräusch nochmal zu!',
@@ -103,18 +110,13 @@ const FEEDBACK_HINTS = {
 
 /**
  * Spricht einen kurzen kontextuellen Hinweis nach einer falschen Antwort.
- * @param {string} gameType - z.B. 'nomen', 'silben', 'buchstaben', 'satz', 'fehler', 'farben', 'tier'
- * @param {object} [context] - optional extra context e.g. { correct: 'Hund', word: 'hund' }
+ * @param {string} gameType - z.B. 'nomen', 'silben', 'buchstaben', 'anagramm', 'satz', 'fehler', 'farben', 'tier'
  */
-export function speakFeedback(gameType, context = {}) {
+export function speakFeedback(gameType) {
   const hints = FEEDBACK_HINTS[gameType]
   if (!hints) return speak('Probier es nochmal!')
 
-  // Pick a random hint from the list, substituting context values
-  const raw = hints[Math.floor(Math.random() * hints.length)]
-  const text = raw
-    .replace('{correct}', context.correct ?? '')
-    .replace('{word}', context.word ?? '')
+  const text = hints[Math.floor(Math.random() * hints.length)]
   speak(text)
 }
 

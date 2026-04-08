@@ -34,7 +34,7 @@ export default function BuchstabenChaos() {
       playCorrect()
     } else {
       playWrong()
-      speakFeedback('buchstaben')
+      speakFeedback('anagramm')
       setShake(true)
       setTimeout(() => setShake(false), 500)
     }
