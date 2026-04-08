@@ -22,6 +22,7 @@ export default function ProfilePage() {
   const [savingModule, setSavingModule] = useState(false)
   const [deletingAccount, setDeletingAccount] = useState(false)
   const [confirmDelete, setConfirmDelete] = useState(false)
+  const [deleteError, setDeleteError] = useState(null)
 
   if (!profile) return null
 
@@ -63,15 +64,22 @@ export default function ProfilePage() {
   async function handleDeleteAccount() {
     if (!confirmDelete) {
       setConfirmDelete(true)
+      setDeleteError(null)
       return
     }
     setDeletingAccount(true)
+    setDeleteError(null)
     try {
       await deleteAccount()
       navigate('/start')
-    } catch {
+    } catch (err) {
       setDeletingAccount(false)
       setConfirmDelete(false)
+      if (err?.code === 'auth/requires-recent-login') {
+        setDeleteError('Bitte melde dich ab und wieder an, dann versuche es erneut.')
+      } else {
+        setDeleteError('Fehler beim Löschen. Bitte versuche es später nochmal.')
+      }
     }
   }
 
@@ -209,6 +217,9 @@ export default function ProfilePage() {
                 </button>
               </div>
             </div>
+          )}
+          {deleteError && (
+            <p className={styles.deleteError}>{deleteError}</p>
           )}
         </div>
       </section>
