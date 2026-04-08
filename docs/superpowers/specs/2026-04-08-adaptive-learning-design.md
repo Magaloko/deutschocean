@@ -123,25 +123,17 @@ Ozzy (Sprint 3) reagiert auf Schwierigkeitswechsel:
 
 ## weakGames-Anbindung
 
-`weakGames` ist in StatsPage (Sprint 4) als lokale Computed-Variable implementiert — kein eigenes Firestore-Feld. Für Sprint 5 muss die Berechnungslogik in eine geteilte Hilfsfunktion extrahiert werden:
+`weakGames` wird von Sprint 1 (`useProgress`) als Firestore-Objekt `{ [missionId]: number }` in das Benutzerprofil geschrieben — kein Compute nötig. `weakGames[missionId]` ist ein Zähler: wie oft das Spiel mit Fehlerrate > 60% abgeschlossen wurde. Sprint 1 schreibt auch 0 zurück bei perfekter Performance.
+
+`useProgress()` gibt `weakGames` bereits zurück. Verwendung in jedem Spiel beim Start:
 
 ```js
-// src/lib/adaptivityEngine.js (Ergänzung)
-export function computeWeakGames(completedMissions) → string[]
-// Gibt Mission-IDs zurück deren Erfolgsrate unter 50% liegt
-// Bereits in StatsPage berechnet — wird nach adaptivityEngine.js verschoben
-```
-
-Verwendung in jedem Spiel beim Start:
-
-```js
-const missionId = 'nomen-finder' // game-spezifisch
-const weakGames = computeWeakGames(profile?.completedMissions ?? [])
-const initialDifficulty = weakGames.includes(missionId) ? 'easy' : 'normal'
+const { completeSession, saving, weakGames } = useProgress()
+const initialDifficulty = (weakGames['nomen-1'] ?? 0) > 0 ? 'easy' : 'normal'
 const { difficulty, wrongCount, recordAnswer } = useAdaptivity(initialDifficulty)
 ```
 
-StatsPage importiert `computeWeakGames` nach der Migration — kein Verhaltensunterschied, nur geteilter Code.
+Kein Extract in adaptivityEngine nötig — `weakGames` kommt direkt aus Firestore.
 
 Paper-Befund direkt umgesetzt: schwache Lernende beginnen im einfachen Modus.
 
