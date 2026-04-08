@@ -69,11 +69,32 @@ async function ensureFirestoreProfile(fbUser, overrides = {}) {
   await setDoc(userRef, profile)
 }
 
+async function updateStreak(fbUser, currentProfile) {
+  const today = new Date().toISOString().slice(0, 10)  // "2026-04-08"
+  const last  = currentProfile.lastActiveDate
+    ? new Date(currentProfile.lastActiveDate).toISOString().slice(0, 10)
+    : null
+
+  if (last === today) return  // already updated today
+
+  const yesterday = new Date(Date.now() - 86400000).toISOString().slice(0, 10)
+  const newStreak = last === yesterday
+    ? (currentProfile.streakDays ?? 0) + 1   // consecutive day
+    : 1                                        // streak broken or first day
+
+  await updateDoc(doc(db, 'users', fbUser.uid), {
+    streakDays:     newStreak,
+    lastActiveDate: new Date().toISOString(),
+    updatedAt:      new Date().toISOString(),
+  })
+}
+
 export function AuthProvider({ children }) {
   const [profile,  setProfileState] = useState(null)
   const [loading,  setLoading]      = useState(true)
-  const unsubRef   = useRef(null)
-  const profileRef = useRef(null)
+  const unsubRef        = useRef(null)
+  const profileRef      = useRef(null)
+  const streakUpdatedRef = useRef(false)
 
   useEffect(() => {
     if (!FIREBASE_CONFIGURED) {
@@ -87,6 +108,9 @@ export function AuthProvider({ children }) {
         // Tear down previous Firestore listener
         if (unsubRef.current) { unsubRef.current(); unsubRef.current = null }
 
+        // Reset streak flag for new session
+        streakUpdatedRef.current = false
+
         if (!fbUser) {
           setProfileState(null)
           setLoading(false)
@@ -98,8 +122,14 @@ export function AuthProvider({ children }) {
           await ensureFirestoreProfile(fbUser)
           const userRef = doc(db, 'users', fbUser.uid)
           unsubRef.current = onSnapshot(userRef, (snap) => {
-            setProfileState(snap.exists() ? snap.data() : null)
+            const data = snap.exists() ? snap.data() : null
+            setProfileState(data)
             setLoading(false)
+            // Update streak once per session (first snapshot only)
+            if (data && !streakUpdatedRef.current) {
+              streakUpdatedRef.current = true
+              updateStreak(fbUser, data).catch(console.error)
+            }
           })
         } catch (err) {
           console.error('Auth state error:', err)

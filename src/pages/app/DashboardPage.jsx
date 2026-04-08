@@ -138,6 +138,7 @@ export default function DashboardPage() {
 
   const xp           = profile?.xp ?? 0
   const stars        = profile?.stars ?? 0
+  const streakDays   = profile?.streakDays ?? 0
   const badges       = profile?.unlockedBadges ?? []
   const completed    = profile?.completedMissions ?? []
   const name         = profile?.name || 'Spieler'
@@ -172,11 +173,13 @@ export default function DashboardPage() {
         <div className={styles.heroText}>
           <h1 className={styles.heroTitle}>Hallo, {name}! 👋</h1>
           <p className={styles.heroSub}>
-            {xp === 0
-              ? 'Wähle ein Spiel und leg los!'
-              : xpInLevel < 50
-                ? `Noch ${xpToNext} XP bis Level ${level + 1}!`
-                : `Du bist auf Level ${level} — weiter so!`}
+            {streakDays >= 3
+              ? `🔥 ${streakDays} Tage in Folge — unaufhaltbar!`
+              : xp === 0
+                ? 'Wähle ein Spiel und leg los!'
+                : xpInLevel < 50
+                  ? `Noch ${xpToNext} XP bis Level ${level + 1}!`
+                  : `Du bist auf Level ${level} — weiter so!`}
           </p>
           <div className={styles.modulePill} style={{ background: `${moduleMeta.color}20`, color: moduleMeta.color }}>
             {moduleMeta.emoji} {moduleMeta.label}
@@ -196,6 +199,11 @@ export default function DashboardPage() {
           <div className={styles.heroStat}>
             <span className={styles.heroStatNum}>{completed.length}</span>
             <span className={styles.heroStatLabel}>🏅 Gespielt</span>
+          </div>
+          <div className={styles.heroStatDiv} />
+          <div className={styles.heroStat}>
+            <span className={styles.heroStatNum}>{streakDays}</span>
+            <span className={styles.heroStatLabel}>🔥 Tage</span>
           </div>
         </div>
         <div className={styles.xpBarWrap}>
