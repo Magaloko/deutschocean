@@ -6,6 +6,7 @@ import PostCard from '../../components/blog/PostCard.jsx'
 import Badge from '../../components/ui/Badge.jsx'
 import ProgressBar from '../../components/ui/ProgressBar.jsx'
 import { MISSIONS, BADGES } from '../../lib/gameData.js'
+import { isDueToday } from '../../lib/spacedRepetition.js'
 import styles from './DashboardPage.module.css'
 
 const GAME_ROUTES = {
@@ -153,6 +154,16 @@ export default function DashboardPage() {
   const [activeTab, setActiveTab]   = useState('deutsch')
   const recommendedPosts            = useRecommendedPosts(profile)
 
+  const spacedRepetition = profile?.spacedRepetition ?? {}
+
+  // Missions due for review today
+  const dueForReview = useMemo(() => {
+    return MISSIONS.filter((m) => {
+      const sr = spacedRepetition[m.id]
+      return sr && isDueToday(sr.nextReview) && GAME_ROUTES[m.type]
+    }).slice(0, 4)  // max 4 at a time
+  }, [spacedRepetition])
+
   const featured      = useMemo(() => getTagesaufgabe(completed), [completed])
   const leveledGames  = useMemo(
     () => Object.fromEntries(allowedLevels.map((lvl) => [lvl, getUniqueGames(lvl, completed)])),
@@ -226,6 +237,25 @@ export default function DashboardPage() {
               <div className={styles.featuredPlayBtn}>▶ JETZT SPIELEN</div>
             </div>
           </Link>
+        </section>
+      )}
+
+      {/* ── Zum Wiederholen ── */}
+      {dueForReview.length > 0 && (
+        <section className={styles.reviewSection}>
+          <div className={styles.reviewHeader}>
+            <span className={styles.reviewLabel}>🔁 Heute wiederholen</span>
+            <span className={styles.reviewCount}>{dueForReview.length} fällig</span>
+          </div>
+          <div className={styles.reviewGrid}>
+            {dueForReview.map((m) => (
+              <Link key={m.id} to={GAME_ROUTES[m.type]} className={styles.reviewCard}>
+                <span className={styles.reviewIcon}>{m.icon}</span>
+                <span className={styles.reviewTitle}>{m.title}</span>
+                <span className={styles.reviewArrow}>→</span>
+              </Link>
+            ))}
+          </div>
         </section>
       )}
 
