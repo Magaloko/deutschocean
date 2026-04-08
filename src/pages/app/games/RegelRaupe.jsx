@@ -45,7 +45,7 @@ export default function RegelRaupe() {
 
   const initialDifficulty = (weakGames['regel-raupe-1'] ?? 0) > 0 ? 'easy' : 'normal'
   const { difficulty, wrongCount, recordAnswer } = useAdaptivity(initialDifficulty)
-  const { hint, showHint, dismissHint }          = useHints(HINTS, difficulty, wrongCount)
+  const { hint, showHint, dismissHint, hintsUsedCount } = useHints(HINTS, difficulty, wrongCount)
   const { mood, message, react: ozzReact }       = useOzzy()
 
   const prevDiffRef = useRef(initialDifficulty)
@@ -117,7 +117,7 @@ export default function RegelRaupe() {
     const stars    = sentScore === TOTAL_SENTENCES ? 3 : sentScore >= 2 ? 2 : 1
     playComplete()
     ozzReact('celebrate')
-    await completeSession({ missionId: 'regel-raupe-1', xpEarned, stars, correct: sentScore, total: TOTAL_SENTENCES })
+    await completeSession({ missionId: 'regel-raupe-1', xpEarned, stars, correct: sentScore, total: TOTAL_SENTENCES, hintsUsed: hintsUsedCount })
     navigate('/app')
   }
 

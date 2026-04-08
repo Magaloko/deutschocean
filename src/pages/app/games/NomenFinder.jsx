@@ -37,7 +37,7 @@ export default function NomenFinder() {
 
   const initialDifficulty = (weakGames['nomen-1'] ?? 0) > 0 ? 'easy' : 'normal'
   const { difficulty, wrongCount, recordAnswer } = useAdaptivity(initialDifficulty)
-  const { hint, showHint, dismissHint }          = useHints(HINTS, difficulty, wrongCount)
+  const { hint, showHint, dismissHint, hintsUsedCount } = useHints(HINTS, difficulty, wrongCount)
   const { mood, message, react: ozzReact }       = useOzzy()
 
   const prevDiffRef = useRef(initialDifficulty)
@@ -95,7 +95,7 @@ export default function NomenFinder() {
     const stars = score === tasks.length ? 3 : score >= tasks.length * 0.6 ? 2 : 1
     playComplete()
     ozzReact('celebrate')
-    await completeSession({ missionId: 'nomen-1', xpEarned: score * 5, stars, correct: score, total: tasks.length })
+    await completeSession({ missionId: 'nomen-1', xpEarned: score * 5, stars, correct: score, total: tasks.length, hintsUsed: hintsUsedCount })
     navigate('/app')
   }
 

@@ -38,7 +38,7 @@ export default function SatzBuilder() {
 
   const initialDifficulty = (weakGames['satz-builder-1'] ?? 0) > 0 ? 'easy' : 'normal'
   const { difficulty, wrongCount, recordAnswer } = useAdaptivity(initialDifficulty)
-  const { hint, showHint, dismissHint }          = useHints(HINTS, difficulty, wrongCount)
+  const { hint, showHint, dismissHint, hintsUsedCount } = useHints(HINTS, difficulty, wrongCount)
   const { mood, message, react: ozzReact }       = useOzzy()
 
   const prevDiffRef = useRef(initialDifficulty)
@@ -101,7 +101,7 @@ export default function SatzBuilder() {
     const stars = score === TOTAL ? 3 : score >= TOTAL * 0.6 ? 2 : 1
     playComplete()
     ozzReact('celebrate')
-    await completeSession({ missionId: 'satz-builder-1', xpEarned: score * 4, stars, correct: score, total: TOTAL })
+    await completeSession({ missionId: 'satz-builder-1', xpEarned: score * 4, stars, correct: score, total: TOTAL, hintsUsed: hintsUsedCount })
     navigate('/app')
   }
 
