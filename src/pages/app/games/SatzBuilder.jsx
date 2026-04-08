@@ -1,22 +1,49 @@
-import React, { useState } from 'react'
+// src/pages/app/games/SatzBuilder.jsx
+import React, { useState, useEffect, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
 import Card from '../../../components/ui/Card.jsx'
 import Button from '../../../components/ui/Button.jsx'
 import Badge from '../../../components/ui/Badge.jsx'
 import { SATZ_AUFGABEN } from '../../../lib/gameData.js'
 import { useProgress } from '../../../hooks/useProgress.jsx'
-import { playCorrect, playWrong, playComplete, speakFeedback } from '../../../lib/sounds.js'
+import { useAdaptivity } from '../../../hooks/useAdaptivity.js'
+import { useHints } from '../../../hooks/useHints.js'
+import { useOzzy } from '../../../hooks/useOzzy.js'
+import OzzyMascot from '../../../components/game/OzzyMascot.jsx'
+import { playCorrect, playWrong, playComplete } from '../../../lib/sounds.js'
+import { shouldOfferHint } from '../../../lib/adaptivityEngine.js'
 import styles from './Game.module.css'
 
 function shuffle(arr) { return [...arr].sort(() => Math.random() - 0.5) }
 
 const TOTAL = 6
 
+const HINTS = {
+  long:   {
+    text: 'Ein Satz hat Subjekt (Wer?), Verb (Was tut er?) und Objekt (Was/Wen?). Das Verb steht oft an zweiter Stelle im Satz!',
+    tts:  true,
+  },
+  medium: { text: 'Das Verb (Tunwort) steht im Deutschen meist an zweiter Stelle.', tts: false },
+  short:  { text: '💡 Verb an zweite Stelle!', tts: false },
+}
+
+function getTaskPool(difficulty) {
+  const pool = SATZ_AUFGABEN.filter((t) => t.difficulty === difficulty)
+  return pool.length >= TOTAL ? pool : SATZ_AUFGABEN
+}
+
 export default function SatzBuilder() {
   const navigate = useNavigate()
-  const { completeSession, saving } = useProgress()
+  const { completeSession, saving, weakGames } = useProgress()
 
-  const [tasks]   = useState(() => shuffle(SATZ_AUFGABEN).slice(0, TOTAL))
+  const initialDifficulty = (weakGames['satz-builder-1'] ?? 0) > 0 ? 'easy' : 'normal'
+  const { difficulty, wrongCount, recordAnswer } = useAdaptivity(initialDifficulty)
+  const { hint, showHint, dismissHint }          = useHints(HINTS, difficulty, wrongCount)
+  const { mood, message, react: ozzReact }       = useOzzy()
+
+  const prevDiffRef = useRef(initialDifficulty)
+
+  const [tasks]               = useState(() => shuffle(getTaskPool(initialDifficulty)).slice(0, TOTAL))
   const [idx, setIdx]         = useState(0)
   const [bank, setBank]       = useState([])
   const [placed, setPlaced]   = useState([])
@@ -26,13 +53,22 @@ export default function SatzBuilder() {
 
   const task = tasks[idx]
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (tasks[idx]) {
       setBank(shuffle([...tasks[idx].words]))
       setPlaced([])
       setChecked(false)
+      dismissHint()
     }
   }, [idx])
+
+  useEffect(() => {
+    if (difficulty !== prevDiffRef.current) {
+      if (difficulty === 'hard') ozzReact('levelUp')
+      else if (difficulty === 'easy') ozzReact('levelDown')
+      prevDiffRef.current = difficulty
+    }
+  }, [difficulty, ozzReact])
 
   function addWord(word, bankIdx) {
     if (checked) return
@@ -48,34 +84,24 @@ export default function SatzBuilder() {
 
   function handleCheck() {
     const attempt = placed.join(' ')
-    if (attempt === task.correct) {
-      setScore((s) => s + 1)
-      playCorrect()
-    } else {
-      playWrong()
-      speakFeedback('satz')
-    }
+    const correct = attempt === task.correct
+    if (correct) { setScore((s) => s + 1); playCorrect(); ozzReact('correct') }
+    else         { playWrong(); ozzReact('wrong') }
+    recordAnswer(correct)
     setChecked(true)
+    dismissHint()
   }
 
   function handleNext() {
-    if (idx + 1 >= TOTAL) {
-      setPhase('result')
-    } else {
-      setIdx((i) => i + 1)
-    }
+    if (idx + 1 >= TOTAL) { setPhase('result') }
+    else { setIdx((i) => i + 1) }
   }
 
   async function handleFinish() {
     const stars = score === TOTAL ? 3 : score >= TOTAL * 0.6 ? 2 : 1
     playComplete()
-    await completeSession({
-      missionId: 'satz-builder-1',
-      xpEarned: score * 4,
-      stars,
-      correct: score,
-      total: TOTAL,
-    })
+    ozzReact('celebrate')
+    await completeSession({ missionId: 'satz-builder-1', xpEarned: score * 4, stars, correct: score, total: TOTAL })
     navigate('/app')
   }
 
@@ -112,12 +138,24 @@ export default function SatzBuilder() {
         <Badge color="gray">{idx + 1}/{TOTAL}</Badge>
       </div>
 
+      <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '-0.5rem' }}>
+        <OzzyMascot mood={mood} message={message} />
+      </div>
+
       <Card padding="lg" className={`${styles.gameCard} ${isCorrect ? styles.cardSuccess : isWrong ? styles.cardError : ''}`}>
         <p className={styles.instruction}>
           Tippe auf die <strong>Wörter</strong> und bringe sie in die richtige Reihenfolge!
         </p>
 
-        {/* Drop-Bereich */}
+        {hint ? (
+          <div className={styles.hintBox}>
+            <p className={styles.hintText}>{hint.text}</p>
+            <button className={styles.hintDismiss} onClick={dismissHint} aria-label="Tipp schließen">✕</button>
+          </div>
+        ) : (!checked && shouldOfferHint(difficulty, wrongCount)) && (
+          <button className={styles.hintBtn} onClick={showHint}>💡 Tipp anzeigen</button>
+        )}
+
         <div className={styles.dropZone}>
           {placed.length === 0 ? (
             <span className={styles.dropPlaceholder}>Tippe auf Wörter unten ↓</span>
@@ -135,39 +173,25 @@ export default function SatzBuilder() {
           )}
         </div>
 
-        {/* Ergebnis */}
         {checked && (
           <div className={`${styles.resultBanner} ${isCorrect ? styles.resultGreen : styles.resultRed}`}>
-            {isCorrect
-              ? `✓ Richtig! "${task.correct}"`
-              : `✗ Falsch. Richtig: "${task.correct}"`}
+            {isCorrect ? `✓ Richtig! "${task.correct}"` : `✗ Falsch. Richtig: "${task.correct}"`}
           </div>
         )}
 
-        {/* Wort-Bank */}
         <div className={styles.silbenBank}>
           {bank.map((w, i) => (
-            <button
-              key={i}
-              className={styles.silbeToken}
-              onClick={() => addWord(w, i)}
-              disabled={checked}
-            >
+            <button key={i} className={styles.silbeToken} onClick={() => addWord(w, i)} disabled={checked}>
               {w}
             </button>
           ))}
         </div>
 
         <div className={styles.actions}>
-          {!checked ? (
-            <Button onClick={handleCheck} disabled={bank.length > 0} size="lg">
-              Überprüfen
-            </Button>
-          ) : (
-            <Button onClick={handleNext} size="lg">
-              {idx + 1 >= TOTAL ? 'Ergebnis' : 'Weiter →'}
-            </Button>
-          )}
+          {!checked
+            ? <Button onClick={handleCheck} disabled={bank.length > 0} size="lg">Überprüfen</Button>
+            : <Button onClick={handleNext} size="lg">{idx + 1 >= TOTAL ? 'Ergebnis' : 'Weiter →'}</Button>
+          }
         </div>
       </Card>
 
