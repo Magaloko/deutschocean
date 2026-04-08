@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react'
+import { useState, useCallback, useRef } from 'react'
 
 const CORRECT_MESSAGES = [
   'Super! 🌟',
@@ -32,8 +32,10 @@ function pick(arr) {
 export function useOzzy() {
   const [mood, setMood]       = useState('idle')
   const [message, setMessage] = useState(null)
+  const timerRef = useRef(null)
 
   const react = useCallback((event) => {
+    if (timerRef.current) clearTimeout(timerRef.current)
     switch (event) {
       case 'correct':
         setMood('correct')
@@ -57,7 +59,7 @@ export function useOzzy() {
     }
     // Auto-reset to idle after 2s (except celebrate which stays 3s)
     const delay = event === 'celebrate' ? 3000 : 2000
-    setTimeout(() => {
+    timerRef.current = setTimeout(() => {
       setMood('idle')
       setMessage(null)
     }, delay)

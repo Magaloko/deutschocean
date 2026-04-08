@@ -1,6 +1,14 @@
 import React from 'react'
 import styles from './OzzyMascot.module.css'
 
+const MOODS = {
+  idle:      { face: '🐙' },
+  correct:   { face: '🐙' },
+  wrong:     { face: '🐙' },
+  thinking:  { face: '🐙' },
+  celebrate: { face: '🐙' },
+}
+
 /**
  * Ozzy der Oktopus — Maskottchen für alle Spiele.
  *
@@ -14,16 +22,8 @@ export default function OzzyMascot({ mood = 'idle', message }) {
         {message && <p className={styles.bubbleText}>{message}</p>}
       </div>
       <div className={styles.character} aria-label="Ozzy der Oktopus" role="img">
-        <span className={styles.face}>{MOODS[mood]?.face ?? '🐙'}</span>
+        <span className={styles.face} aria-hidden="true">{MOODS[mood]?.face ?? '🐙'}</span>
       </div>
     </div>
   )
-}
-
-const MOODS = {
-  idle:      { face: '🐙' },
-  correct:   { face: '🐙' },
-  wrong:     { face: '🐙' },
-  thinking:  { face: '🐙' },
-  celebrate: { face: '🐙' },
 }
