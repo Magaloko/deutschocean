@@ -362,6 +362,9 @@ export default function DashboardPage() {
                       {weakGames[g.id] >= 2 && (
                         <span className={styles.weakIndicator} title="Mehr üben!">⚠️</span>
                       )}
+                      {(weakGames[g.id] ?? 0) > 0 && (
+                        <span className={styles.difficultyBadge}>🟢 Leicht-Modus aktiv</span>
+                      )}
                       <div className={styles.gameIconBig}>{g.icon}</div>
                       <div className={styles.gameTitle}>{g.title}</div>
 
@@ -467,6 +470,9 @@ export default function DashboardPage() {
                         >
                           {weakGames[g.id] >= 2 && (
                             <span className={styles.weakIndicator} title="Mehr üben!">⚠️</span>
+                          )}
+                          {(weakGames[g.id] ?? 0) > 0 && (
+                            <span className={styles.difficultyBadge}>🟢 Leicht-Modus aktiv</span>
                           )}
                           <div className={styles.gameIconBig}>{g.icon}</div>
                           <div className={styles.gameTitle}>{g.title}</div>
