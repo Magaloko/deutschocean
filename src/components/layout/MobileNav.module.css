@@ -1,0 +1,60 @@
+/* Mobile-only bottom nav — hidden on desktop */
+.nav {
+  display: none;
+}
+
+@media (max-width: 640px) {
+  .nav {
+    display: flex;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 90;
+    background: rgba(255, 255, 255, 0.96);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-top: 1px solid var(--border);
+    padding: 0.5rem 0 env(safe-area-inset-bottom, 0.5rem);
+    gap: 0;
+  }
+
+  .item {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.2rem;
+    padding: 0.4rem 0.5rem;
+    text-decoration: none;
+    color: var(--text-muted);
+    transition: color 0.15s;
+    min-height: 56px;
+    border-radius: 0;
+  }
+
+  .item:active {
+    background: var(--surface-2);
+  }
+
+  .itemActive {
+    color: var(--primary);
+  }
+
+  .icon {
+    font-size: 1.6rem;
+    line-height: 1;
+  }
+
+  .label {
+    font-size: 0.7rem;
+    font-weight: 700;
+    font-family: var(--font-display);
+    letter-spacing: 0.02em;
+  }
+
+  .itemActive .icon {
+    filter: drop-shadow(0 2px 6px rgba(79, 70, 229, 0.35));
+  }
+}

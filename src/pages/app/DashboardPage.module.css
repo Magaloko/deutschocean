@@ -17,7 +17,7 @@
   top: -10px;
   right: -10px;
   font-size: 7rem;
-  opacity: 0.12;
+  opacity: 0.20;
   user-select: none;
   transform: rotate(-15deg);
   animation: float 4s ease-in-out infinite;
@@ -242,9 +242,20 @@
   border-color: var(--accent, #4f46e5);
 }
 
+@keyframes shimmerGreen {
+  0%, 100% {
+    box-shadow: 0 0 0 3px #86efac55, 0 4px 16px rgba(34,197,94,0.15);
+  }
+  50% {
+    box-shadow: 0 0 0 5px #86efac77, 0 4px 20px rgba(34,197,94,0.25);
+  }
+}
+
 .gameCardDone {
   background: #f0fdf4;
   border-color: #bbf7d0;
+  box-shadow: 0 0 0 3px #86efac55, 0 4px 16px rgba(34,197,94,0.15);
+  animation: shimmerGreen 2.5s ease-in-out infinite;
 }
 .gameCardDone::before { background: #22c55e; }
 
@@ -254,6 +265,17 @@
 }
 .gameCardPartial::before { background: var(--accent); }
 
+/* ── Schwächen-Indikator ── */
+.weakIndicator {
+  position: absolute;
+  top: 0.4rem;
+  left: 0.4rem;
+  font-size: 0.75rem;
+  line-height: 1;
+  z-index: 1;
+  filter: drop-shadow(0 1px 2px rgba(0,0,0,0.15));
+}
+
 .gameIconBig {
   font-size: 3.2rem;
   line-height: 1;
@@ -261,7 +283,7 @@
   filter: drop-shadow(0 2px 6px rgba(0,0,0,0.1));
 }
 .gameTitle {
-  font-size: 0.85rem;
+  font-size: clamp(0.95rem, 2.5vw, 1.1rem);
   font-weight: 800;
   line-height: 1.25;
   font-family: var(--font-display);
@@ -287,11 +309,15 @@
   background: var(--accent, #4f46e5);
   color: #fff;
   border-radius: var(--radius-sm);
-  padding: 0.4rem 0.5rem;
+  padding: 0.65rem 1rem;
   font-size: 0.73rem;
   font-weight: 800;
   letter-spacing: 0.03em;
   margin-top: auto;
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 .gameDoneBtn   { background: #22c55e; }
 .gamePartialBtn{ background: var(--accent); }
@@ -299,7 +325,7 @@
 /* Schwierigkeits-Punkte */
 .diffDots { display: flex; gap: 0.3rem; justify-content: center; }
 .diffDot {
-  width: 8px; height: 8px;
+  width: 12px; height: 12px;
   border-radius: 50%;
   background: var(--border);
   border: var(--border-2) solid var(--accent, #4f46e5);
@@ -376,6 +402,65 @@
   overflow-x: auto;
 }
 
+/* ── Spaced Repetition Review Section ── */
+.reviewSection {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+.reviewHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+.reviewLabel {
+  font-size: 0.9rem;
+  font-weight: 800;
+  color: var(--text);
+}
+.reviewCount {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--text-muted);
+  background: var(--surface-2);
+  border-radius: 99px;
+  padding: 0.15rem 0.6rem;
+}
+.reviewGrid {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+.reviewCard {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.65rem 0.9rem;
+  background: var(--surface);
+  border: 2px solid #fbbf24;
+  border-radius: var(--radius);
+  text-decoration: none;
+  color: var(--text);
+  font-weight: 700;
+  transition: background 0.15s, transform 0.15s;
+  box-shadow: 0 2px 8px rgba(251, 191, 36, 0.15);
+}
+.reviewCard:hover {
+  background: #fffbeb;
+  transform: translateX(3px);
+}
+.reviewIcon { font-size: 1.3rem; }
+.reviewTitle {
+  flex: 1;
+  font-size: 0.88rem;
+  font-weight: 700;
+}
+.reviewArrow {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+}
+
 /* ── Responsive ── */
 @media (max-width: 640px) {
   .hero { padding: 1.5rem 1.25rem; border-radius: var(--radius-lg); }
@@ -383,7 +468,66 @@
   .heroStatNum { font-size: 1.3rem; }
   .gameGrid { grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 0.75rem; }
   .gameIconBig { font-size: 2.6rem; }
+  .gamePlayBtn { min-height: 40px; }
   .featuredCard { flex-direction: column; text-align: center; }
   .featuredIcon { font-size: 3rem; }
   .featuredPlayBtn { align-self: center; }
+}
+
+/* ── Learning Path Locks ── */
+.gameLinkLocked {
+  cursor: default;
+  pointer-events: none;
+}
+.gameCardLocked {
+  opacity: 0.7;
+  position: relative;
+}
+.lockOverlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.25rem;
+  z-index: 2;
+  background: rgba(255, 255, 255, 0.55);
+  border-radius: inherit;
+  backdrop-filter: blur(2px);
+  -webkit-backdrop-filter: blur(2px);
+}
+.lockIcon {
+  font-size: 1.6rem;
+  line-height: 1;
+  filter: drop-shadow(0 2px 4px rgba(0,0,0,0.15));
+}
+.lockHint {
+  font-size: 0.68rem;
+  font-weight: 700;
+  color: #374151;
+  text-align: center;
+  padding: 0 0.5rem;
+  line-height: 1.2;
+}
+.levelLockBadge {
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: #6b7280;
+  background: #f3f4f6;
+  border-radius: 99px;
+  padding: 0.2rem 0.6rem;
+  margin-left: 0.5rem;
+}
+
+/* Sprint 6: difficulty badge */
+.difficultyBadge {
+  display: inline-block;
+  font-size: 0.7rem;
+  padding: 0.15rem 0.5rem;
+  background: #dcfce7;
+  color: #166534;
+  border-radius: 999px;
+  font-weight: 600;
+  margin-bottom: 0.25rem;
 }

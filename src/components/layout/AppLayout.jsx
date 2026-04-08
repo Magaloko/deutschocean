@@ -1,6 +1,7 @@
 import React from 'react'
 import { Outlet, Navigate } from 'react-router-dom'
 import NavBar from './NavBar.jsx'
+import MobileNav from './MobileNav.jsx'
 import { useAuth } from '../../hooks/useAuth.jsx'
 import Spinner from '../ui/Spinner.jsx'
 import styles from './AppLayout.module.css'
@@ -26,6 +27,7 @@ export default function AppLayout() {
       <main className={styles.main}>
         <Outlet />
       </main>
+      <MobileNav />
     </div>
   )
 }
