@@ -17,7 +17,8 @@ export default function StatsPage() {
   const streak    = profile?.streakDays ?? 0
   const completed = profile?.completedMissions ?? []
   const badges    = profile?.unlockedBadges    ?? []
-  const weakGames = profile?.weakGames          ?? {}
+  const weakGames   = profile?.weakGames          ?? {}
+  const hintsUsed   = profile?.totalHintsUsed    ?? 0
 
   const level     = Math.floor(xp / 100) + 1
   const xpInLevel = xp % 100
@@ -89,6 +90,10 @@ export default function StatsPage() {
         <div className={styles.heroCard}>
           <div className={styles.heroNum}>{totalPlayed}/{totalGames}</div>
           <div className={styles.heroLabel}>🎮 Spiele</div>
+        </div>
+        <div className={styles.heroCard}>
+          <div className={styles.heroNum}>{hintsUsed}</div>
+          <div className={styles.heroLabel}>💡 Tipps genutzt</div>
         </div>
       </div>
 
