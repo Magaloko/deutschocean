@@ -62,6 +62,62 @@ export function playCoin() {
   tone(1108, t + 0.07, 0.1)
 }
 
+const FEEDBACK_HINTS = {
+  nomen: [
+    'Nomen sind immer großgeschrieben! Schau nochmal genau hin.',
+    'Nomen sind Personen, Tiere, Dinge oder Orte.',
+    'Großbuchstabe am Anfang? Dann ist es ein Nomen!',
+  ],
+  silben: [
+    'Klatsche das Wort in Silben! So findest du sie besser.',
+    'Jede Silbe hat einen Vokal: A, E, I, O oder U.',
+    'Sprich das Wort langsam — jede Silbe ist ein kleiner Beat.',
+  ],
+  buchstaben: [
+    'Hör nochmal genau hin — welcher Buchstabe klingt so?',
+    'Sprich den Laut laut aus und schau, welcher Buchstabe passt.',
+  ],
+  satz: [
+    'Das Verb steht meistens an zweiter Stelle im Satz.',
+    'Wer oder was macht etwas? Das ist das Subjekt.',
+    'Achte auf die Reihenfolge: Subjekt, Verb, dann der Rest.',
+  ],
+  fehler: [
+    'Lies den Satz laut vor — klingt etwas komisch?',
+    'Schau auf Groß- und Kleinschreibung!',
+    'Prüf ob alle Kommas und Punkte richtig sitzen.',
+  ],
+  farben: [
+    'Schau nochmal genau — welche Farbe ist das wirklich?',
+  ],
+  tier: [
+    'Hör dem Geräusch nochmal zu!',
+    'Welches Tier macht dieses Geräusch? Denk nach!',
+  ],
+  general: [
+    'Fast! Probier es nochmal.',
+    'Nicht ganz — schau nochmal genau hin!',
+    'Du schaffst das! Nochmal versuchen.',
+  ],
+}
+
+/**
+ * Spricht einen kurzen kontextuellen Hinweis nach einer falschen Antwort.
+ * @param {string} gameType - z.B. 'nomen', 'silben', 'buchstaben', 'satz', 'fehler', 'farben', 'tier'
+ * @param {object} [context] - optional extra context e.g. { correct: 'Hund', word: 'hund' }
+ */
+export function speakFeedback(gameType, context = {}) {
+  const hints = FEEDBACK_HINTS[gameType]
+  if (!hints) return speak('Probier es nochmal!')
+
+  // Pick a random hint from the list, substituting context values
+  const raw = hints[Math.floor(Math.random() * hints.length)]
+  const text = raw
+    .replace('{correct}', context.correct ?? '')
+    .replace('{word}', context.word ?? '')
+  speak(text)
+}
+
 /** Text-to-Speech auf Deutsch — für Kinder die noch nicht lesen können */
 export function speak(text) {
   if (!('speechSynthesis' in window)) return

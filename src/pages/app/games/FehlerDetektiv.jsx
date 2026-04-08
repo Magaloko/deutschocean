@@ -5,7 +5,7 @@ import Button from '../../../components/ui/Button.jsx'
 import Badge from '../../../components/ui/Badge.jsx'
 import { FEHLER_DETEKTIV_TASKS } from '../../../lib/gameData.js'
 import { useProgress } from '../../../hooks/useProgress.jsx'
-import { playCorrect, playWrong, playComplete } from '../../../lib/sounds.js'
+import { playCorrect, playWrong, playComplete, speakFeedback } from '../../../lib/sounds.js'
 import styles from './Game.module.css'
 
 function shuffle(arr) {
@@ -43,7 +43,13 @@ export default function FehlerDetektiv() {
   function handleCheck() {
     const correct = task.errors.every((e) => selected.has(e.word)) &&
       [...selected].every((w) => errorWords.has(w))
-    if (correct) { setScore((s) => s + 1); playCorrect() } else { playWrong() }
+    if (correct) {
+      setScore((s) => s + 1)
+      playCorrect()
+    } else {
+      playWrong()
+      speakFeedback('fehler')
+    }
     setChecked(true)
   }
 
