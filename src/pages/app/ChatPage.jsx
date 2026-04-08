@@ -14,7 +14,7 @@ export default function ChatPage() {
   const { profile }      = useAuth()
   const navigate         = useNavigate()
   const [messages, setMessages] = useState([
-    { role: 'assistant', text: STARTER_MESSAGES[0] }
+    { id: 'init', role: 'assistant', text: STARTER_MESSAGES[0] }
   ])
   const [input, setInput]       = useState('')
   const [loading, setLoading]   = useState(false)
@@ -35,13 +35,13 @@ export default function ChatPage() {
     const text = input.trim()
     setInput('')
     setError(null)
-    setMessages(prev => [...prev, { role: 'user', text }])
+    setMessages(prev => [...prev, { id: `u-${Date.now()}`, role: 'user', text }])
     setLoading(true)
     setDailyCount(c => c + 1)
 
     try {
       const reply = await sendChatMessage(text, profile?.uid ?? 'guest')
-      setMessages(prev => [...prev, { role: 'assistant', text: reply }])
+      setMessages(prev => [...prev, { id: `a-${Date.now()}`, role: 'assistant', text: reply }])
     } catch (err) {
       if (err.message === 'RATE_LIMIT') {
         setError('Du hast heute dein Limit erreicht. Morgen wieder!')
@@ -88,9 +88,9 @@ export default function ChatPage() {
 
       {/* Messages */}
       <div className={styles.messages}>
-        {messages.map((m, i) => (
+        {messages.map((m) => (
           <div
-            key={i}
+            key={m.id}
             className={`${styles.msg} ${m.role === 'user' ? styles.msgUser : styles.msgAssistant}`}
           >
             {m.role === 'assistant' && <span className={styles.msgAvatar}>🤖</span>}

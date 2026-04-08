@@ -30,6 +30,9 @@ export async function sendChatMessage(message, uid) {
   const res = await fetch(FUNCTION_URL, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
+    // SECURITY TODO: uid is unverified — backend must validate Firebase ID token.
+    // Before going live: replace uid with await getIdToken(auth.currentUser)
+    // and send as Authorization: Bearer <token> header.
     body: JSON.stringify({ message, uid }),
   })
 

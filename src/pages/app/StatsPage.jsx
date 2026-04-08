@@ -12,14 +12,12 @@ export default function StatsPage() {
   const { profile } = useAuth()
   const navigate    = useNavigate()
 
-  if (!profile) return null
-
-  const xp        = profile.xp       ?? 0
-  const stars     = profile.stars    ?? 0
-  const streak    = profile.streakDays ?? 0
-  const completed = profile.completedMissions ?? []
-  const badges    = profile.unlockedBadges    ?? []
-  const weakGames = profile.weakGames          ?? {}
+  const xp        = profile?.xp       ?? 0
+  const stars     = profile?.stars    ?? 0
+  const streak    = profile?.streakDays ?? 0
+  const completed = profile?.completedMissions ?? []
+  const badges    = profile?.unlockedBadges    ?? []
+  const weakGames = profile?.weakGames          ?? {}
 
   const level     = Math.floor(xp / 100) + 1
   const xpInLevel = xp % 100
@@ -43,6 +41,7 @@ export default function StatsPage() {
       if (!map[m.type]) map[m.type] = { title: m.title, icon: m.icon, color: m.color, done: 0, total: 0, weak: false }
       map[m.type].total++
       if (completed.includes(m.id)) map[m.type].done++
+      // weakGames populated by Sprint 1 PR — reads from profile.weakGames (Firestore)
       if (weakGames[m.id]) map[m.type].weak = true
     }
     return Object.values(map)
@@ -61,6 +60,8 @@ export default function StatsPage() {
     for (const m of MISSIONS) if (completed.includes(m.id)) played.add(m.type)
     return played.size
   }, [completed])
+
+  if (!profile) return null
 
   return (
     <div className={`${styles.page} fade-in`}>
@@ -147,6 +148,7 @@ export default function StatsPage() {
                 <div className={styles.gameInfo}>
                   <div className={styles.gameTitle}>
                     {g.title}
+                    {/* ⚠️ tag appears once weakGames is populated via Sprint 1 */}
                     {g.weak && <span className={styles.weakTag}>⚠️ Üben</span>}
                   </div>
                   <div className={styles.gameSubTrack}>

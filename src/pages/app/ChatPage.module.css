@@ -5,10 +5,10 @@
 .page {
   display: flex;
   flex-direction: column;
-  height: 100dvh;
+  height: 100%;
+  min-height: 0;
   max-width: 700px;
   margin: 0 auto;
-  /* Inside AppLayout which has its own padding — override */
   padding: 0;
 }
 
