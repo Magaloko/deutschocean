@@ -4,8 +4,9 @@ import {
   onAuthStateChanged, signInAnonymously, signInWithEmailAndPassword,
   createUserWithEmailAndPassword, signInWithPopup, signOut,
   GoogleAuthProvider, EmailAuthProvider, linkWithCredential, linkWithPopup,
+  deleteUser,
 } from 'firebase/auth'
-import { doc, getDoc, setDoc, updateDoc, onSnapshot } from 'firebase/firestore'
+import { doc, getDoc, setDoc, updateDoc, onSnapshot, deleteDoc } from 'firebase/firestore'
 import { auth, db, FIREBASE_CONFIGURED } from '../lib/firebase.js'
 
 const AuthContext = createContext(null)
@@ -178,6 +179,16 @@ export function AuthProvider({ children }) {
     await signOut(auth)
   }
 
+  async function deleteAccount() {
+    requireFirebase()
+    const fbUser = auth.currentUser
+    if (!fbUser) throw new Error('No authenticated user.')
+    // Delete Firestore document first (before auth deletion)
+    await deleteDoc(doc(db, 'users', fbUser.uid))
+    // Delete Firebase Auth account
+    await deleteUser(fbUser)
+  }
+
   const setProfile = useCallback(async (updates) => {
     requireFirebase()
     const fbUser = auth.currentUser
@@ -196,7 +207,7 @@ export function AuthProvider({ children }) {
       user, profile, loading,
       loginAnonymously, login, loginWithGoogle,
       register, upgradeWithEmail, upgradeWithGoogle,
-      logout, setProfile,
+      logout, setProfile, deleteAccount,
     }}>
       {children}
     </AuthContext.Provider>

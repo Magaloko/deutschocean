@@ -14,12 +14,14 @@ const MODULES = [
 ]
 
 export default function ProfilePage() {
-  const { profile, logout, setProfile } = useAuth()
+  const { profile, logout, setProfile, deleteAccount } = useAuth()
   const navigate = useNavigate()
   const [editAvatar, setEditAvatar] = useState(false)
   const [editModule, setEditModule] = useState(false)
   const [savingAvatar, setSavingAvatar] = useState(false)
   const [savingModule, setSavingModule] = useState(false)
+  const [deletingAccount, setDeletingAccount] = useState(false)
+  const [confirmDelete, setConfirmDelete] = useState(false)
 
   if (!profile) return null
 
@@ -55,6 +57,21 @@ export default function ProfilePage() {
     } catch {
       // Ignore logout errors — navigate anyway
       navigate('/start')
+    }
+  }
+
+  async function handleDeleteAccount() {
+    if (!confirmDelete) {
+      setConfirmDelete(true)
+      return
+    }
+    setDeletingAccount(true)
+    try {
+      await deleteAccount()
+      navigate('/start')
+    } catch {
+      setDeletingAccount(false)
+      setConfirmDelete(false)
     }
   }
 
@@ -164,6 +181,36 @@ export default function ProfilePage() {
         <button className={styles.logoutRow} onClick={handleLogout}>
           🚪 Abmelden
         </button>
+
+        <div className={styles.dangerZone}>
+          {!confirmDelete ? (
+            <button className={styles.deleteRow} onClick={handleDeleteAccount}>
+              🗑️ Konto löschen
+            </button>
+          ) : (
+            <div className={styles.deleteConfirm}>
+              <p className={styles.deleteWarning}>
+                ⚠️ Alle Daten werden unwiderruflich gelöscht!
+              </p>
+              <div className={styles.deleteConfirmBtns}>
+                <button
+                  className={styles.deleteConfirmYes}
+                  onClick={handleDeleteAccount}
+                  disabled={deletingAccount}
+                >
+                  {deletingAccount ? 'Wird gelöscht…' : 'Ja, löschen'}
+                </button>
+                <button
+                  className={styles.deleteConfirmNo}
+                  onClick={() => setConfirmDelete(false)}
+                  disabled={deletingAccount}
+                >
+                  Abbrechen
+                </button>
+              </div>
+            </div>
+          )}
+        </div>
       </section>
     </div>
   )
