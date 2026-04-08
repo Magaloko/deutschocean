@@ -648,6 +648,7 @@ export const SILBEN_WOERTER = [
   { word: 'Taschenlampe', silben: ['Ta', 'schen', 'lam', 'pe'],  difficulty: 'hard' },
   { word: 'Winterjacke',  silben: ['Win', 'ter', 'jack', 'e'],   difficulty: 'hard' },
   { word: 'Blumenvase',   silben: ['Blu', 'men', 'va', 'se'],    difficulty: 'hard' },
+  { word: 'Schokolade',   silben: ['Scho', 'ko', 'la', 'de'],    difficulty: 'hard' },
 ]
 
 // Buchstaben-Chaos Wörter (15 Stück)

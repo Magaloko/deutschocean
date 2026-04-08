@@ -30,7 +30,6 @@ function getTaskPool(difficulty) {
   return pool.length >= 3 ? pool : NOMEN_SAETZE
 }
 
-const TOTAL = NOMEN_SAETZE.length
 
 export default function NomenFinder() {
   const navigate = useNavigate()
@@ -93,7 +92,7 @@ export default function NomenFinder() {
   }
 
   async function handleFinish() {
-    const stars = score === tasks.length ? 3 : score >= 2 ? 2 : 1
+    const stars = score === tasks.length ? 3 : score >= tasks.length * 0.6 ? 2 : 1
     playComplete()
     ozzReact('celebrate')
     await completeSession({ missionId: 'nomen-1', xpEarned: score * 5, stars, correct: score, total: tasks.length })
@@ -108,7 +107,7 @@ export default function NomenFinder() {
         <p className={styles.resultSub}>{score}/{tasks.length} Sätze korrekt</p>
         <div className={styles.resultStats}>
           <Badge color="purple">+{score * 5} XP</Badge>
-          <Badge color="yellow">{'⭐'.repeat(score === tasks.length ? 3 : score >= 2 ? 2 : 1)}</Badge>
+          <Badge color="yellow">{'⭐'.repeat(score === tasks.length ? 3 : score >= tasks.length * 0.6 ? 2 : 1)}</Badge>
         </div>
         <div className={styles.resultActions}>
           <Button onClick={handleFinish} loading={saving} size="lg">Speichern</Button>

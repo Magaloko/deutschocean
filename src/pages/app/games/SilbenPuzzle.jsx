@@ -64,7 +64,7 @@ export default function SilbenPuzzle() {
 
   useEffect(() => {
     if (words[idx]) startWord(words[idx])
-  }, [idx])
+  }, [idx, startWord, words])
 
   useEffect(() => {
     if (difficulty !== prevDiffRef.current) {
