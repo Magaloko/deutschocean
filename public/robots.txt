@@ -1,0 +1,11 @@
+User-agent: *
+Allow: /
+
+# Nicht-Inhalt-Seiten (Auth, App-UI) nicht indexieren
+Disallow: /app/
+Disallow: /admin/
+Disallow: /login
+Disallow: /start
+Disallow: /registrieren
+
+Sitemap: https://deutschocean.at/sitemap.xml

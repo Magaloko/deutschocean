@@ -1,0 +1,52 @@
+rules_version = '2';
+
+// DeutschOcean — Firestore Security Rules
+//
+// Datenmodell:
+// - users/{uid}                — Profil des angemeldeten Users (Gast oder mit Account)
+// - posts/{postId}             — Blog-Posts (öffentlich lesbar, nur Admin schreibt)
+//
+// Prinzip: Jeder User kann nur SEINE eigenen Daten lesen/schreiben. Niemand
+// anderer. Blog-Posts sind öffentlich, aber nur durch Admin beschreibbar.
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // ── User-Profile ─────────────────────────────────────────────────────
+    match /users/{uid} {
+      // Nur der angemeldete User darf sein eigenes Profil lesen
+      allow read: if request.auth != null && request.auth.uid == uid;
+
+      // Create: beim Anlegen muss uid mit auth.uid übereinstimmen
+      allow create: if request.auth != null
+                    && request.auth.uid == uid
+                    && request.resource.data.uid == uid;
+
+      // Update: nur eigenes Profil, keine uid-Änderung erlaubt
+      allow update: if request.auth != null
+                    && request.auth.uid == uid
+                    && request.resource.data.uid == uid;
+
+      // Delete: User darf sein eigenes Konto löschen
+      allow delete: if request.auth != null && request.auth.uid == uid;
+    }
+
+    // ── Blog-Posts ───────────────────────────────────────────────────────
+    match /posts/{postId} {
+      // Öffentlich lesbar (auch ohne Login)
+      allow read: if true;
+
+      // Nur Admin-UIDs dürfen schreiben. Trag hier deine Admin-UID(s) ein.
+      // (UID in Firebase Console → Authentication → Users → "Nutzer-UID".)
+      allow write: if request.auth != null
+                   && request.auth.uid in [
+                     // 'DEINE-ADMIN-UID-HIER'
+                   ];
+    }
+
+    // ── Fallback: alles andere verbieten ──────────────────────────────────
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}
