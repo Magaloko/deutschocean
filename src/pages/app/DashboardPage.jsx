@@ -9,6 +9,7 @@ import Icon from '../../components/ui/Icon.jsx'
 import { MISSIONS, BADGES } from '../../lib/gameData.js'
 import { FAECHER } from '../../lib/fachData.js'
 import { WELTEN, GAME_ROUTES, isWeltForModule } from '../../lib/weltenData.js'
+import { CAMPAIGNS, getCampaignStatus, isCampaignForModule } from '../../lib/campaignsData.js'
 import { isDueToday } from '../../lib/spacedRepetition.js'
 import styles from './DashboardPage.module.css'
 
@@ -83,6 +84,18 @@ export default function DashboardPage() {
     if (!featured) return null
     return WELTEN.find((w) => w.gameTypes.includes(featured.type))
   }, [featured])
+
+  // Aktive/verfügbare Kampagnen für das Schulmodul des Users.
+  // Zeige maximal 1 laufende + 1 verfügbare Kampagne auf dem Dashboard.
+  const visibleCampaigns = useMemo(() => {
+    const list = CAMPAIGNS
+      .filter((c) => isCampaignForModule(c, schoolModule))
+      .map((c) => ({ campaign: c, status: getCampaignStatus(c, profile) }))
+    // Sortierung: in-progress > available > complete
+    const rank = { 'in-progress': 0, 'available': 1, 'complete': 2 }
+    list.sort((a, b) => rank[a.status.status] - rank[b.status.status])
+    return list.slice(0, 2)
+  }, [profile, schoolModule])
 
   return (
     <div className={`${styles.page} fade-in`}>
@@ -187,6 +200,48 @@ export default function DashboardPage() {
                 </span>
                 <span className={styles.reviewTitle}>{m.title}</span>
                 <span className={styles.reviewArrow}>→</span>
+              </Link>
+            ))}
+          </div>
+        </section>
+      )}
+
+      {/* ── Kampagnen ── */}
+      {visibleCampaigns.length > 0 && (
+        <section>
+          <div className={styles.sectionHeader}>
+            <h2 className={styles.sectionTitle}>
+              <Icon emoji="🔍" size={22} color="#ef4444" /> Kampagnen
+            </h2>
+            <span className={styles.sectionHint}>Detektiv-Fälle in mehreren Schritten</span>
+          </div>
+          <div className={styles.campaignGrid}>
+            {visibleCampaigns.map(({ campaign, status }) => (
+              <Link
+                key={campaign.id}
+                to={`/app/kampagne/${campaign.id}`}
+                className={styles.campaignCard}
+                style={{ background: campaign.gradient, '--cc': campaign.color }}
+              >
+                <div className={styles.campaignIconWrap}>
+                  <Icon emoji={campaign.icon} size={40} color="#fff" />
+                </div>
+                <div className={styles.campaignBody}>
+                  <span className={styles.campaignTag}>
+                    {status.status === 'complete' ? 'ABGESCHLOSSEN'
+                      : status.status === 'in-progress' ? `SCHRITT ${status.currentStepIdx + 1} VON ${status.totalSteps}`
+                      : 'NEU · 3 SCHRITTE'}
+                  </span>
+                  <div className={styles.campaignTitle}>{campaign.title}</div>
+                  <div className={styles.campaignSub}>{campaign.subtitle}</div>
+                  <div className={styles.campaignBar}>
+                    <div
+                      className={styles.campaignBarFill}
+                      style={{ width: `${(status.completedSteps / status.totalSteps) * 100}%` }}
+                    />
+                  </div>
+                </div>
+                <span className={styles.weltArrow}>→</span>
               </Link>
             ))}
           </div>

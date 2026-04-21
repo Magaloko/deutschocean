@@ -157,7 +157,7 @@ export default function WortFamilien() {
 
       <p className={styles.instruction}>
         {selectedWord
-          ? <>Tippe eine Familie für <strong>"{selectedWord}"</strong>:</>
+          ? <>Tippe eine Familie für <strong>„{selectedWord}“</strong>:</>
           : 'Tippe ein Wort, dann wähle seine Familie!'}
       </p>
 

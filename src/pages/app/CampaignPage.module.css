@@ -1,0 +1,215 @@
+.page { display: flex; flex-direction: column; gap: 1.25rem; }
+
+.hero {
+  border-radius: var(--radius-xl);
+  padding: 1.5rem 1.25rem 1.75rem;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  position: relative;
+  overflow: hidden;
+  min-height: 140px;
+}
+.backBtn {
+  position: absolute;
+  top: 0.75rem;
+  left: 0.75rem;
+  background: rgba(255,255,255,0.18);
+  border: none;
+  border-radius: 999px;
+  width: 40px; height: 40px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background 0.15s;
+  z-index: 2;
+}
+.backBtn:hover { background: rgba(255,255,255,0.3); }
+.heroIcon {
+  flex-shrink: 0;
+  background: rgba(255,255,255,0.22);
+  border-radius: var(--radius-lg);
+  padding: 1rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  backdrop-filter: blur(4px);
+}
+.heroText { flex: 1; padding-left: 2.5rem; display: flex; flex-direction: column; gap: 0.3rem; }
+.heroTag {
+  font-size: 0.7rem;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  opacity: 0.8;
+}
+.heroTitle { font-size: 1.6rem; font-weight: 900; margin: 0; letter-spacing: -0.5px; }
+.heroSub   { font-size: 0.9rem; opacity: 0.9; margin: 0; }
+.heroStats {
+  display: flex;
+  gap: 0.5rem;
+  font-size: 0.8rem;
+  opacity: 0.9;
+  font-weight: 600;
+  margin-top: 0.2rem;
+  align-items: center;
+}
+
+.introCard {
+  background: var(--surface);
+  border: 2px solid var(--border);
+  border-left: 4px solid var(--primary);
+  border-radius: var(--radius-lg);
+  padding: 1rem 1.2rem;
+}
+.introText { margin: 0; font-size: 0.95rem; line-height: 1.5; color: var(--text); }
+
+.steps {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  position: relative;
+}
+.stepCard {
+  display: flex;
+  gap: 1rem;
+  background: var(--surface);
+  border: 2px solid var(--border);
+  border-radius: var(--radius-xl);
+  padding: 1rem 1.2rem;
+  transition: all 0.15s;
+}
+.stepCard.stepDone {
+  background: #ecfdf5;
+  border-color: #6ee7b7;
+}
+.stepCard.stepCurrent {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 20%, transparent);
+}
+.stepCard.stepLocked {
+  background: #f9fafb;
+  opacity: 0.7;
+}
+
+.stepBadge {
+  flex-shrink: 0;
+  width: 40px; height: 40px;
+  border-radius: 999px;
+  background: var(--accent);
+  color: #fff;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 900;
+  font-size: 1.1rem;
+}
+.stepDone .stepBadge { background: #10b981; }
+.stepLocked .stepBadge { background: #e5e7eb; }
+.stepNum { font-size: 1.05rem; }
+
+.stepBody { flex: 1; display: flex; flex-direction: column; gap: 0.4rem; }
+.stepHeader { display: flex; align-items: center; gap: 0.5rem; }
+.stepTitle { font-size: 1rem; font-weight: 800; margin: 0; }
+.stepStory { font-size: 0.88rem; color: var(--text-muted); line-height: 1.45; margin: 0; }
+
+.stepPlayBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  background: var(--accent);
+  color: #fff;
+  font-weight: 700;
+  font-size: 0.85rem;
+  padding: 0.5rem 1rem;
+  border-radius: 999px;
+  text-decoration: none;
+  align-self: flex-start;
+  margin-top: 0.3rem;
+  transition: transform 0.15s, box-shadow 0.15s;
+}
+.stepPlayBtn:hover { transform: translateY(-1px); box-shadow: 0 4px 12px rgba(0,0,0,0.12); }
+
+.stepDoneBadge {
+  font-size: 0.78rem;
+  color: #10b981;
+  font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  margin-top: 0.2rem;
+}
+.stepLockedHint {
+  font-size: 0.75rem;
+  color: #9ca3af;
+  font-weight: 600;
+  margin-top: 0.2rem;
+}
+
+.connector {
+  width: 3px;
+  height: 24px;
+  background: var(--border);
+  margin-left: 32px;
+  margin-top: 2px;
+  margin-bottom: 2px;
+}
+.connector.connectorDone { background: #10b981; }
+
+/* Reward */
+.rewardCard {
+  background: linear-gradient(135deg, #fef3c7 0%, #fef9c3 100%);
+  border: 2px solid #f59e0b;
+  border-radius: var(--radius-xl);
+  padding: 1.75rem 1.25rem;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.6rem;
+}
+.rewardTitle { font-size: 1.4rem; font-weight: 900; margin: 0; color: #78350f; }
+.rewardText  { font-size: 0.95rem; color: #713f12; line-height: 1.5; margin: 0; max-width: 48ch; }
+.claimBtn {
+  margin-top: 0.75rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+.rewardBackLink {
+  margin-top: 0.75rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  color: #78350f;
+  font-weight: 600;
+  text-decoration: none;
+  font-size: 0.9rem;
+}
+
+.notAvailable {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  padding: 3rem 1rem;
+  text-align: center;
+  color: var(--text-muted);
+}
+.backLink {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  color: var(--primary);
+  text-decoration: none;
+  font-weight: 600;
+}
+
+@media (max-width: 540px) {
+  .hero { flex-direction: column; text-align: center; padding: 1.25rem 1rem; }
+  .heroText { padding-left: 0; }
+  .heroStats { justify-content: center; }
+  .backBtn { top: 0.5rem; left: 0.5rem; }
+  .stepCard { padding: 0.9rem 1rem; }
+}

@@ -56,6 +56,7 @@ const CoderKids       = lazy(() => import('./pages/app/fach/CoderKids.jsx'))
 const MiniBoss        = lazy(() => import('./pages/app/fach/MiniBoss.jsx'))
 const CoolBleiben     = lazy(() => import('./pages/app/fach/CoolBleiben.jsx'))
 const WeltPage        = lazy(() => import('./pages/app/WeltPage.jsx'))
+const CampaignPage    = lazy(() => import('./pages/app/CampaignPage.jsx'))
 
 function PageLoader() {
   return (
@@ -116,6 +117,7 @@ export default function App() {
             <Route path="fach/miniboss"         element={<MiniBoss />} />
             <Route path="fach/cool"             element={<CoolBleiben />} />
             <Route path="welt/:weltId"          element={<WeltPage />} />
+            <Route path="kampagne/:campaignId"  element={<CampaignPage />} />
           </Route>
 
           {/* Blog (public) */}
