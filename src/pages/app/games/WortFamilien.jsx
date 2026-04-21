@@ -3,6 +3,8 @@ import React, { useState, useEffect, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
 import Button from '../../../components/ui/Button.jsx'
 import Badge from '../../../components/ui/Badge.jsx'
+import Icon from '../../../components/ui/Icon.jsx'
+import StarsRow from '../../../components/ui/StarsRow.jsx'
 import { WORTFAMILIEN_SETS } from '../../../lib/gameData.js'
 import { useProgress } from '../../../hooks/useProgress.jsx'
 import { useAdaptivity } from '../../../hooks/useAdaptivity.js'
@@ -119,14 +121,16 @@ export default function WortFamilien() {
   if (phase === 'result') {
     return (
       <div className={gameStyles.resultPage}>
-        <div className={gameStyles.resultEmoji}>{score === TOTAL_ROUNDS ? '🌳' : '⭐'}</div>
+        <div className={gameStyles.resultEmoji}>
+          <Icon emoji={score === TOTAL_ROUNDS ? '🌳' : '⭐'} size={64} color={score === TOTAL_ROUNDS ? '#10b981' : '#fbbf24'} />
+        </div>
         <h1 className={gameStyles.resultTitle}>
           {score === TOTAL_ROUNDS ? 'Wortforscher!' : 'Gut gemacht!'}
         </h1>
         <p className={gameStyles.resultSub}>{score}/{TOTAL_ROUNDS} Runden perfekt</p>
         <div className={gameStyles.resultStats}>
           <Badge color="purple">+{score * 10 + (score === TOTAL_ROUNDS ? 15 : 0)} XP</Badge>
-          <Badge color="yellow">{'⭐'.repeat(score === TOTAL_ROUNDS ? 3 : score >= 2 ? 2 : 1)}</Badge>
+          <Badge color="yellow"><StarsRow count={score === TOTAL_ROUNDS ? 3 : score >= 2 ? 2 : 1} /></Badge>
         </div>
         <div className={gameStyles.resultActions}>
           <Button onClick={handleFinish} loading={saving} size="lg">Speichern</Button>
@@ -139,9 +143,9 @@ export default function WortFamilien() {
   return (
     <div className={`${gameStyles.gamePage} fade-in`}>
       <div className={gameStyles.gameHeader}>
-        <Button variant="ghost" size="sm" onClick={() => navigate('/app')}>← Zurück</Button>
+        <Button variant="ghost" size="sm" onClick={() => navigate('/app')}><Icon emoji="←" size={14} /> Zurück</Button>
         <div className={gameStyles.gameInfo}>
-          <span className={gameStyles.gameEmoji}>🌳</span>
+          <span className={gameStyles.gameEmoji}><Icon emoji="🌳" size={24} color="#10b981" /></span>
           <h1 className={gameStyles.gameTitle}>WortFamilien</h1>
         </div>
         <Badge color="gray">{roundIdx + 1}/{TOTAL_ROUNDS}</Badge>

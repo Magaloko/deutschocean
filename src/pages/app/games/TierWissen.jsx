@@ -3,6 +3,8 @@ import { useNavigate } from 'react-router-dom'
 import Card from '../../../components/ui/Card.jsx'
 import Button from '../../../components/ui/Button.jsx'
 import Badge from '../../../components/ui/Badge.jsx'
+import Icon from '../../../components/ui/Icon.jsx'
+import StarsRow from '../../../components/ui/StarsRow.jsx'
 import { TIER_WISSEN_FRAGEN } from '../../../lib/gameData.js'
 import { useProgress } from '../../../hooks/useProgress.jsx'
 import { playCorrect, playWrong, playComplete } from '../../../lib/sounds.js'
@@ -83,14 +85,16 @@ export default function TierWissen() {
     const stars = score >= TOTAL ? 3 : score >= Math.ceil(TOTAL * 0.6) ? 2 : 1
     return (
       <div className={styles.resultPage}>
-        <div className={styles.resultEmoji}>{score >= TOTAL ? '🦁' : '⭐'}</div>
+        <div className={styles.resultEmoji}>
+          <Icon emoji={score >= TOTAL ? '🦁' : '⭐'} size={64} color={score >= TOTAL ? '#14b8a6' : '#fbbf24'} />
+        </div>
         <h1 className={styles.resultTitle}>
           {score >= TOTAL ? 'Tier-Experte!' : 'Gut gemacht!'}
         </h1>
         <p className={styles.resultSub}>{score}/{TOTAL} richtig</p>
         <div className={styles.resultStats}>
           <Badge color="purple">+{score * 2} XP</Badge>
-          <Badge color="yellow">{'⭐'.repeat(stars)}</Badge>
+          <Badge color="yellow"><StarsRow count={stars} /></Badge>
         </div>
         <div className={styles.resultActions}>
           <Button onClick={handleFinish} loading={saving} size="lg">Speichern</Button>
@@ -105,9 +109,9 @@ export default function TierWissen() {
     return (
       <div className={`${styles.gamePage} fade-in`}>
         <div className={styles.gameHeader}>
-          <Button variant="ghost" size="sm" onClick={() => navigate('/app')}>← Zurück</Button>
+          <Button variant="ghost" size="sm" onClick={() => navigate('/app')}><Icon emoji="←" size={14} /> Zurück</Button>
           <div className={styles.gameInfo}>
-            <span className={styles.gameEmoji}>🦁</span>
+            <span className={styles.gameEmoji}><Icon emoji="🦁" size={24} color="#14b8a6" /></span>
             <h1 className={styles.gameTitle}>Tier-Wissen</h1>
           </div>
           <div />

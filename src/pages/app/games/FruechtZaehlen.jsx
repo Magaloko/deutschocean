@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useProgress } from '../../../hooks/useProgress.jsx'
 import { playCorrect, playWrong, playComplete, speak } from '../../../lib/sounds.js'
+import Icon from '../../../components/ui/Icon.jsx'
+import StarsRow from '../../../components/ui/StarsRow.jsx'
 import styles from './FruechtZaehlen.module.css'
 
 // ─── Früchte-Liste ─────────────────────────────────────────────────────────
@@ -176,10 +178,12 @@ export default function FruechtZaehlen() {
     return (
       <div className={styles.page}>
         <div className={styles.result}>
-          <div className={styles.resultEmoji}>{stars === 3 ? '🏆' : stars === 2 ? '🌟' : '⭐'}</div>
+          <div className={styles.resultEmoji}>
+            <Icon emoji={stars === 3 ? '🏆' : stars === 2 ? '🌟' : '⭐'} size={64} color={stars === 3 ? '#ca8a04' : '#fbbf24'} />
+          </div>
           <h2 className={styles.resultTitle}>{stars === 3 ? 'Perfekt gezählt!' : stars === 2 ? 'Super gemacht!' : 'Weiter üben!'}</h2>
           <p className={styles.resultScore}>{score} von {TOTAL} richtig</p>
-          <div className={styles.resultStars}>{'⭐'.repeat(stars)}</div>
+          <div className={styles.resultStars}><StarsRow count={stars} size={28} /></div>
           <div className={styles.resultActions}>
             <button className={`${styles.primaryBtn} ${styles.lv1Bg}`} onClick={() => startLevel(level)}>
               Nochmal spielen
@@ -201,9 +205,9 @@ export default function FruechtZaehlen() {
     <div className={styles.page}>
       {/* Header */}
       <div className={styles.header}>
-        <button className={styles.backBtn} onClick={() => setLevel(null)}>←</button>
-        <span className={styles.badge}>🍎 Level {level}</span>
-        <button className={styles.speakBtn} onClick={() => speak(`Wie viele ${round.fruit.name} siehst du?`)}>🔊</button>
+        <button className={styles.backBtn} onClick={() => setLevel(null)} aria-label="Zurück"><Icon emoji="←" size={18} /></button>
+        <span className={styles.badge} style={{ display: 'inline-flex', alignItems: 'center', gap: '0.3rem' }}><Icon emoji="🍎" size={14} /> Level {level}</span>
+        <button className={styles.speakBtn} onClick={() => speak(`Wie viele ${round.fruit.name} siehst du?`)} aria-label="Vorlesen"><Icon emoji="🔊" size={18} /></button>
       </div>
 
       {/* Fortschritt */}
@@ -253,7 +257,7 @@ export default function FruechtZaehlen() {
       {selected !== null && (
         <>
           <div className={`${styles.feedback} ${selected === round.count ? styles.feedbackGreen : styles.feedbackRed}`}>
-            <span>{selected === round.count ? '✅' : '❌'}</span>
+            <Icon emoji={selected === round.count ? '✅' : '❌'} size={20} />
             <span>
               {selected === round.count
                 ? `Richtig! Es sind ${round.count} ${round.fruit.name}.`
@@ -261,7 +265,7 @@ export default function FruechtZaehlen() {
             </span>
           </div>
           <button className={`${styles.primaryBtn} ${styles.lv1Bg}`} onClick={handleWeiter}>
-            {idx + 1 >= TOTAL ? 'Ergebnis ansehen 🏆' : 'Weiter →'}
+            {idx + 1 >= TOTAL ? <>Ergebnis ansehen <Icon emoji="🏆" size={16} color="#fff" /></> : 'Weiter →'}
           </button>
         </>
       )}

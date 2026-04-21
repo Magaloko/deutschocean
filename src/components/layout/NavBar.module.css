@@ -38,6 +38,9 @@
   color: var(--text-muted);
   text-decoration: none;
   transition: background 0.15s, color 0.15s;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
 }
 .link:hover { background: var(--surface-2); color: var(--text); }
 .linkActive { background: rgba(79,70,229,.1); color: var(--primary); font-weight: 700; }

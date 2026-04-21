@@ -4,6 +4,8 @@ import { KARTEN_KATEGORIEN } from '../../../lib/emotionenKartenData.js'
 import { useProgress } from '../../../hooks/useProgress.jsx'
 import { playCorrect, playWrong, playComplete, speak } from '../../../lib/sounds.js'
 import PixelCharacter from '../../../components/ui/PixelCharacter.jsx'
+import Icon from '../../../components/ui/Icon.jsx'
+import StarsRow from '../../../components/ui/StarsRow.jsx'
 import styles from './EmotionenKarten.module.css'
 
 function shuffle(arr) { return [...arr].sort(() => Math.random() - 0.5) }
@@ -185,10 +187,12 @@ export default function EmotionenKarten() {
     return (
       <div className={styles.page}>
         <div className={styles.result}>
-          <div className={styles.resultEmoji}>{stars === 3 ? '🏆' : stars === 2 ? '🌟' : '⭐'}</div>
+          <div className={styles.resultEmoji}>
+            <Icon emoji={stars === 3 ? '🏆' : stars === 2 ? '🌟' : '⭐'} size={64} color={stars === 3 ? '#ca8a04' : '#fbbf24'} />
+          </div>
           <h2 className={styles.resultTitle}>{stars === 3 ? 'Perfekt!' : stars === 2 ? 'Super!' : 'Gut gemacht!'}</h2>
           <p className={styles.resultScore}>{score} von {TOTAL} richtig</p>
-          <div className={styles.resultStars}>{'⭐'.repeat(stars)}</div>
+          <div className={styles.resultStars}><StarsRow count={stars} size={28} /></div>
           <div className={styles.resultActions}>
             <button
               className={styles.weiterBtn}
@@ -215,8 +219,8 @@ export default function EmotionenKarten() {
     return (
       <div className={styles.page}>
         <div className={styles.kategorieHeader}>
-          <button className={styles.backBtn} onClick={() => navigate('/app')}>←</button>
-          <h1 className={styles.kategorieTitle}>Emotions-Karten 🎭</h1>
+          <button className={styles.backBtn} onClick={() => navigate('/app')} aria-label="Zurück"><Icon emoji="←" size={18} /></button>
+          <h1 className={styles.kategorieTitle} style={{ display: 'inline-flex', alignItems: 'center', gap: '0.4rem' }}>Emotions-Karten <Icon emoji="🎭" size={22} /></h1>
           <p className={styles.kategorieSub}>Lerne Gefühle verstehen und erkennen</p>
         </div>
         <div className={styles.kategorieGrid}>
@@ -233,10 +237,10 @@ export default function EmotionenKarten() {
                 }}
                 onClick={() => startKat(k)}
               >
-                <span className={styles.katIcon}>{locked ? '🔒' : k.icon}</span>
+                <span className={styles.katIcon}>{locked ? <Icon emoji="🔒" size={28} /> : k.icon}</span>
                 <span className={styles.katTitle}>{k.title}</span>
                 <span className={styles.katDesc}>{locked ? `Kat ${k.id - 1} zuerst!` : k.desc}</span>
-                {locked && <span className={styles.katLockBadge}>🔒</span>}
+                {locked && <span className={styles.katLockBadge}><Icon emoji="🔒" size={14} /></span>}
               </button>
             )
           })}
@@ -254,7 +258,7 @@ export default function EmotionenKarten() {
     <div className={styles.page}>
       {/* Header */}
       <div className={styles.gameHeader}>
-        <button className={styles.backBtn} onClick={() => setKat(null)}>←</button>
+        <button className={styles.backBtn} onClick={() => setKat(null)} aria-label="Zurück"><Icon emoji="←" size={18} /></button>
         <span
           className={styles.katBadge}
           style={{ background: kat.bg, color: kat.color }}
@@ -424,7 +428,7 @@ export default function EmotionenKarten() {
         {/* Feedback */}
         {feedback && (
           <div className={`${styles.feedbackBanner} ${feedback.ok ? styles.feedbackGreen : styles.feedbackRed}`}>
-            <span className={styles.feedbackIcon}>{feedback.ok ? '✅' : '❌'}</span>
+            <span className={styles.feedbackIcon}><Icon emoji={feedback.ok ? '✅' : '❌'} size={20} /></span>
             <span>{feedback.text}</span>
           </div>
         )}

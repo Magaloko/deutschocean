@@ -2,6 +2,8 @@ import React, { useState, useEffect, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
 import Button from '../../../components/ui/Button.jsx'
 import Badge from '../../../components/ui/Badge.jsx'
+import Icon from '../../../components/ui/Icon.jsx'
+import StarsRow from '../../../components/ui/StarsRow.jsx'
 import { FAHRZEUG_WELTEN } from '../../../lib/gameData.js'
 import { useProgress } from '../../../hooks/useProgress.jsx'
 import { playCorrect, playWrong, playComplete } from '../../../lib/sounds.js'
@@ -109,12 +111,14 @@ export default function FahrzeugLenker() {
     const stars = score >= TOTAL_ROUNDS ? 3 : score >= Math.ceil(TOTAL_ROUNDS * 0.6) ? 2 : 1
     return (
       <div className={styles.resultPage}>
-        <div className={styles.resultEmoji}>{score >= TOTAL_ROUNDS ? '🏆' : '⭐'}</div>
+        <div className={styles.resultEmoji}>
+          <Icon emoji={score >= TOTAL_ROUNDS ? '🏆' : '⭐'} size={64} color={score >= TOTAL_ROUNDS ? '#ca8a04' : '#fbbf24'} />
+        </div>
         <h1 className={styles.resultTitle}>{score >= TOTAL_ROUNDS ? 'Perfekt gelenkt!' : 'Gut gemacht!'}</h1>
         <p className={styles.resultSub}>{score}/{TOTAL_ROUNDS} richtig</p>
         <div className={styles.resultStats}>
           <Badge color="purple">+{score * 2} XP</Badge>
-          <Badge color="yellow">{'⭐'.repeat(stars)}</Badge>
+          <Badge color="yellow"><StarsRow count={stars} /></Badge>
         </div>
         <div className={styles.resultActions}>
           <Button onClick={handleFinish} loading={saving} size="lg">Speichern</Button>
@@ -129,9 +133,9 @@ export default function FahrzeugLenker() {
     return (
       <div className={`${styles.gamePage} fade-in`}>
         <div className={styles.gameHeader}>
-          <Button variant="ghost" size="sm" onClick={() => navigate('/app')}>← Zurück</Button>
+          <Button variant="ghost" size="sm" onClick={() => navigate('/app')}><Icon emoji="←" size={14} /> Zurück</Button>
           <div className={styles.gameInfo}>
-            <span className={styles.gameEmoji}>🚗</span>
+            <span className={styles.gameEmoji}><Icon emoji="🚗" size={24} color="#f97316" /></span>
             <h1 className={styles.gameTitle}>Fahrzeug-Lenker</h1>
           </div>
           <div />

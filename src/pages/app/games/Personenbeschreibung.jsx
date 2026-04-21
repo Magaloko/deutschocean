@@ -4,6 +4,8 @@ import Card from '../../../components/ui/Card.jsx'
 import Button from '../../../components/ui/Button.jsx'
 import Badge from '../../../components/ui/Badge.jsx'
 import Input from '../../../components/ui/Input.jsx'
+import Icon from '../../../components/ui/Icon.jsx'
+import StarsRow from '../../../components/ui/StarsRow.jsx'
 import { PERSONEN } from '../../../lib/gameData.js'
 import { useProgress } from '../../../hooks/useProgress.jsx'
 import styles from './Game.module.css'
@@ -102,12 +104,14 @@ export default function Personenbeschreibung() {
   if (phase === 'result') {
     return (
       <div className={styles.resultPage}>
-        <div className={styles.resultEmoji}>{score >= TOTAL * 3 ? '🏆' : '⭐'}</div>
+        <div className={styles.resultEmoji}>
+          <Icon emoji={score >= TOTAL * 3 ? '🏆' : '⭐'} size={64} color={score >= TOTAL * 3 ? '#ca8a04' : '#fbbf24'} />
+        </div>
         <h1 className={styles.resultTitle}>Mission abgeschlossen!</h1>
         <p className={styles.resultSub}>{score}/{TOTAL * 3} Punkte</p>
         <div className={styles.resultStats}>
           <Badge color="purple">+{score * 5 + 10} XP</Badge>
-          <Badge color="yellow">{'⭐'.repeat(score >= TOTAL * 3 ? 3 : score >= TOTAL * 1.5 ? 2 : 1)}</Badge>
+          <Badge color="yellow"><StarsRow count={score >= TOTAL * 3 ? 3 : score >= TOTAL * 1.5 ? 2 : 1} /></Badge>
         </div>
         <div className={styles.resultActions}>
           <Button onClick={handleFinish} loading={saving} size="lg">Speichern</Button>
@@ -120,9 +124,9 @@ export default function Personenbeschreibung() {
   return (
     <div className={`${styles.gamePage} fade-in`}>
       <div className={styles.gameHeader}>
-        <Button variant="ghost" size="sm" onClick={() => navigate('/app')}>← Zurück</Button>
+        <Button variant="ghost" size="sm" onClick={() => navigate('/app')}><Icon emoji="←" size={14} /> Zurück</Button>
         <div className={styles.gameInfo}>
-          <span className={styles.gameEmoji}>👁️</span>
+          <span className={styles.gameEmoji}><Icon emoji="👁️" size={24} color="#8b5cf6" /></span>
           <h1 className={styles.gameTitle}>Zeugenbericht</h1>
         </div>
         <Badge color="gray">{idx + 1}/{TOTAL}</Badge>

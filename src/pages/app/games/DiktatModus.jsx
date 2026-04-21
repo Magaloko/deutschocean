@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import Card from '../../../components/ui/Card.jsx'
 import Button from '../../../components/ui/Button.jsx'
 import Badge from '../../../components/ui/Badge.jsx'
+import Icon from '../../../components/ui/Icon.jsx'
 import { DIKTAT_TEXTS } from '../../../lib/gameData.js'
 import { useProgress } from '../../../hooks/useProgress.jsx'
 import styles from './Game.module.css'
@@ -118,7 +119,7 @@ export default function DiktatModus() {
   if (phase === 'result') {
     return (
       <div className={styles.resultPage}>
-        <div className={styles.resultEmoji}>🎧</div>
+        <div className={styles.resultEmoji}><Icon emoji="🎧" size={64} color="#06b6d4" /></div>
         <h1 className={styles.resultTitle}>Diktat abgeschlossen!</h1>
         <p className={styles.resultSub}>{score} Wörter richtig geschrieben</p>
         <div className={styles.resultStats}>
@@ -135,9 +136,9 @@ export default function DiktatModus() {
   return (
     <div className={`${styles.gamePage} fade-in`}>
       <div className={styles.gameHeader}>
-        <Button variant="ghost" size="sm" onClick={() => navigate('/app')}>← Zurück</Button>
+        <Button variant="ghost" size="sm" onClick={() => navigate('/app')}><Icon emoji="←" size={14} /> Zurück</Button>
         <div className={styles.gameInfo}>
-          <span className={styles.gameEmoji}>🎧</span>
+          <span className={styles.gameEmoji}><Icon emoji="🎧" size={24} color="#06b6d4" /></span>
           <h1 className={styles.gameTitle}>Diktat: {task.title}</h1>
         </div>
         <Badge color="gray">{idx + 1}/{TOTAL}</Badge>

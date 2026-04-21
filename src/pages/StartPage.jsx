@@ -3,6 +3,7 @@ import React, { useState } from 'react'
 import { Navigate, Link, useNavigate } from 'react-router-dom'
 import { useAuth } from '../hooks/useAuth.jsx'
 import Button from '../components/ui/Button.jsx'
+import Icon from '../components/ui/Icon.jsx'
 import styles from './StartPage.module.css'
 
 const AVATARS  = ['🐬', '🦁', '🦊', '🐸', '🦄', '🐧', '🦋', '🐼', '🦖', '🐙']
@@ -52,17 +53,19 @@ export default function StartPage() {
             <span className={styles.logoText}>DeutschOcean</span>
           </div>
 
-          <h1 className={styles.title}>Willkommen! 🌊</h1>
+          <h1 className={styles.title}>
+            Willkommen! <Icon emoji="🌊" size={26} color="#4f46e5" />
+          </h1>
           <p className={styles.sub}>Deutsch und Mathe spielerisch lernen.</p>
 
           <div className={styles.hubButtons}>
             <button className={styles.guestBtn} onClick={() => setStep(1)}>
-              <span>🎮</span>
+              <Icon emoji="🎮" size={22} color="#4f46e5" />
               <span>Als Gast spielen</span>
               <span className={styles.hint}>Kein Konto nötig</span>
             </button>
             <Link to="/registrieren" className={styles.registerBtn}>
-              <span>✨</span>
+              <Icon emoji="🌟" size={22} color="#fbbf24" />
               <span>Registrieren</span>
               <span className={styles.hint}>Fortschritt speichern</span>
             </Link>
@@ -78,7 +81,7 @@ export default function StartPage() {
     return (
       <div className={styles.page}>
         <div className={styles.card}>
-          <button className={styles.backBtn} onClick={() => setStep(0)}>← Zurück</button>
+          <button className={styles.backBtn} onClick={() => setStep(0)}><Icon emoji="←" size={16} /> Zurück</button>
           <h1 className={styles.title}>Wer bist du?</h1>
           <p className={styles.sub}>Wähle einen Avatar und deinen Namen.</p>
 
@@ -112,9 +115,11 @@ export default function StartPage() {
   return (
     <div className={styles.page}>
       <div className={`${styles.card} ${styles.cardWide}`}>
-        <button className={styles.backBtn} onClick={() => setStep(1)}>← Zurück</button>
+        <button className={styles.backBtn} onClick={() => setStep(1)}><Icon emoji="←" size={16} /> Zurück</button>
         <div className={styles.stepAvatar}>{avatar}</div>
-        <h1 className={styles.title}>Hallo, {name.trim()}! 👋</h1>
+        <h1 className={styles.title}>
+          Hallo, {name.trim()}! <Icon emoji="👋" size={26} color="#4f46e5" />
+        </h1>
         <p className={styles.sub}>Welche Schulstufe passt zu dir?</p>
 
         <div className={styles.moduleGrid}>
@@ -122,7 +127,9 @@ export default function StartPage() {
             <button key={m.id} className={styles.moduleCard} disabled={busy}
               style={{ '--mc': m.color, '--mb': m.bg, '--mbd': m.border }}
               onClick={() => handleSelectModule(m.id)}>
-              <span className={styles.moduleEmoji}>{m.emoji}</span>
+              <span className={styles.moduleEmoji}>
+                <Icon emoji={m.emoji} size={38} color={m.color} />
+              </span>
               <span className={styles.moduleTitle}>{m.title}</span>
               <span className={styles.moduleAges}>{m.ages}</span>
               <span className={styles.moduleDesc}>{m.desc}</span>

@@ -5,6 +5,7 @@ import { useAuth } from '../hooks/useAuth.jsx'
 import Button from '../components/ui/Button.jsx'
 import Input from '../components/ui/Input.jsx'
 import Card from '../components/ui/Card.jsx'
+import Icon from '../components/ui/Icon.jsx'
 import styles from './AuthPage.module.css'
 
 const AVATARS = ['🐬', '🦁', '🦊', '🐸', '🦄', '🐧', '🦋', '🐼', '🦖', '🐙']
@@ -88,8 +89,8 @@ export default function RegisterPage() {
       </div>
 
       <Card padding="lg" className={styles.card}>
-        <h1 className={styles.title}>
-          {isUpgrade ? '🔐 Konto sichern' : 'Konto erstellen'}
+        <h1 className={styles.title} style={isUpgrade ? { display: 'inline-flex', alignItems: 'center', gap: '0.45rem', justifyContent: 'center' } : undefined}>
+          {isUpgrade ? <><Icon emoji="🔒" size={24} color="#4f46e5" /> Konto sichern</> : 'Konto erstellen'}
         </h1>
         <p className={styles.sub}>
           {isUpgrade
@@ -130,9 +131,9 @@ export default function RegisterPage() {
                   {MODULES.map((m) => (
                     <button key={m.id} type="button"
                       className={`${styles.moduleOpt} ${schoolModule === m.id ? styles.moduleOptSelected : ''}`}
-                      style={{ '--mc': m.color }}
+                      style={{ '--mc': m.color, display: 'inline-flex', alignItems: 'center', gap: '0.4rem' }}
                       onClick={() => setSchoolModule(m.id)}>
-                      {m.emoji} {m.title}
+                      <Icon emoji={m.emoji} size={16} color={m.color} /> {m.title}
                     </button>
                   ))}
                 </div>

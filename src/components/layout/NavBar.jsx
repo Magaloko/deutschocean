@@ -2,6 +2,7 @@ import React from 'react'
 import { NavLink, Link } from 'react-router-dom'
 import styles from './NavBar.module.css'
 import { useAuth } from '../../hooks/useAuth.jsx'
+import Icon from '../ui/Icon.jsx'
 
 export default function NavBar() {
   const { profile } = useAuth()
@@ -20,13 +21,13 @@ export default function NavBar() {
 
         <div className={styles.links}>
           <NavLink to="/app" end className={({ isActive }) => isActive ? styles.linkActive : styles.link}>
-            Dashboard
+            <Icon emoji="🏠" size={16} /> Dashboard
           </NavLink>
           <NavLink to="/app/stats" className={({ isActive }) => isActive ? styles.linkActive : styles.link}>
-            📊 Stats
+            <Icon emoji="📊" size={16} /> Stats
           </NavLink>
           <NavLink to="/app/chat" className={({ isActive }) => isActive ? styles.linkActive : styles.link}>
-            💬 Chat
+            <Icon emoji="💬" size={16} /> Chat
           </NavLink>
         </div>
 
@@ -34,7 +35,7 @@ export default function NavBar() {
           {profile && (
             <>
               <div className={styles.xpChip}>
-                <span>⚡</span>
+                <Icon emoji="⚡" size={16} />
                 <span>{profile.xp ?? 0} XP</span>
               </div>
               <Link to="/app/profil" className={styles.avatarLink} title={`${profile.name} — Profil`}>

@@ -3,6 +3,8 @@ import React, { useState, useEffect, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
 import Button from '../../../components/ui/Button.jsx'
 import Badge from '../../../components/ui/Badge.jsx'
+import Icon from '../../../components/ui/Icon.jsx'
+import StarsRow from '../../../components/ui/StarsRow.jsx'
 import { REGELRAUPE_SAETZE } from '../../../lib/gameData.js'
 import { useProgress } from '../../../hooks/useProgress.jsx'
 import { useAdaptivity } from '../../../hooks/useAdaptivity.js'
@@ -125,14 +127,16 @@ export default function RegelRaupe() {
   if (phase === 'result') {
     return (
       <div className={gameStyles.resultPage}>
-        <div className={gameStyles.resultEmoji}>{sentScore === TOTAL_SENTENCES ? '🐛' : '⭐'}</div>
+        <div className={gameStyles.resultEmoji}>
+          <Icon emoji={sentScore === TOTAL_SENTENCES ? '🐛' : '⭐'} size={64} color={sentScore === TOTAL_SENTENCES ? '#10b981' : '#fbbf24'} />
+        </div>
         <h1 className={gameStyles.resultTitle}>
           {sentScore === TOTAL_SENTENCES ? 'Regelmeister!' : 'Gut geübt!'}
         </h1>
         <p className={gameStyles.resultSub}>{sentScore}/{TOTAL_SENTENCES} Sätze fehlerlos</p>
         <div className={gameStyles.resultStats}>
           <Badge color="purple">+{sentScore * 15 + (sentScore === TOTAL_SENTENCES ? 5 : 0)} XP</Badge>
-          <Badge color="yellow">{'⭐'.repeat(sentScore === TOTAL_SENTENCES ? 3 : sentScore >= 2 ? 2 : 1)}</Badge>
+          <Badge color="yellow"><StarsRow count={sentScore === TOTAL_SENTENCES ? 3 : sentScore >= 2 ? 2 : 1} /></Badge>
         </div>
         <div className={gameStyles.resultActions}>
           <Button onClick={handleFinish} loading={saving} size="lg">Speichern</Button>
@@ -148,9 +152,9 @@ export default function RegelRaupe() {
     return (
       <div className={`${gameStyles.gamePage} fade-in`}>
         <div className={gameStyles.gameHeader}>
-          <Button variant="ghost" size="sm" onClick={() => navigate('/app')}>← Zurück</Button>
+          <Button variant="ghost" size="sm" onClick={() => navigate('/app')}><Icon emoji="←" size={14} /> Zurück</Button>
           <div className={gameStyles.gameInfo}>
-            <span className={gameStyles.gameEmoji}>🐛</span>
+            <span className={gameStyles.gameEmoji}><Icon emoji="🐛" size={24} color="#10b981" /></span>
             <h1 className={gameStyles.gameTitle}>RegelRaupe</h1>
           </div>
           <Badge color="gray">{sentIdx + 1}/{TOTAL_SENTENCES}</Badge>
@@ -158,13 +162,13 @@ export default function RegelRaupe() {
 
         <div className={styles.wordCard}>
           {allCorrect
-            ? <p style={{ fontSize: '1.4rem', fontWeight: 700, color: '#16a34a' }}>🎉 Fehlerlos!</p>
+            ? <p style={{ fontSize: '1.4rem', fontWeight: 700, color: '#16a34a', display: 'inline-flex', alignItems: 'center', gap: '0.4rem' }}><Icon emoji="🎉" size={24} /> Fehlerlos!</p>
             : <p style={{ fontSize: '1.1rem', fontWeight: 600, color: '#dc2626' }}>Fast — ein paar Fehler:</p>
           }
           <div style={{ marginTop: '0.75rem', textAlign: 'left' }}>
             {wordResults.map((r, i) => (
               <div key={i} style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.3rem', fontSize: '0.9rem' }}>
-                <span>{r.correct ? '✓' : '✗'}</span>
+                <Icon emoji={r.correct ? '✓' : '❌'} size={16} color={r.correct ? '#16a34a' : '#dc2626'} />
                 <span style={{ color: r.correct ? '#16a34a' : '#dc2626', fontWeight: 600 }}>
                   {getCorrectForm(sentence.words[i])}
                 </span>

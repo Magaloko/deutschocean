@@ -3,6 +3,8 @@ import { useNavigate } from 'react-router-dom'
 import Card from '../../../components/ui/Card.jsx'
 import Button from '../../../components/ui/Button.jsx'
 import Badge from '../../../components/ui/Badge.jsx'
+import Icon from '../../../components/ui/Icon.jsx'
+import StarsRow from '../../../components/ui/StarsRow.jsx'
 import { EMOTIONEN_RUNDEN } from '../../../lib/gameData.js'
 import { useProgress } from '../../../hooks/useProgress.jsx'
 import { playCorrect, playWrong, playComplete } from '../../../lib/sounds.js'
@@ -102,12 +104,14 @@ export default function EmotionenSpiel() {
     const stars = score === TOTAL ? 3 : score >= Math.ceil(TOTAL * 0.6) ? 2 : 1
     return (
       <div className={styles.resultPage}>
-        <div className={styles.resultEmoji}>{score === TOTAL ? '😊' : '🌟'}</div>
+        <div className={styles.resultEmoji}>
+          <Icon emoji={score === TOTAL ? '😊' : '🌟'} size={64} color={score === TOTAL ? '#a855f7' : '#fbbf24'} />
+        </div>
         <h1 className={styles.resultTitle}>{score === TOTAL ? 'Gefühls-Profi!' : 'Gut gemacht!'}</h1>
         <p className={styles.resultSub}>{score}/{TOTAL} richtig</p>
         <div className={styles.resultStats}>
           <Badge color="purple">+{score * 2} XP</Badge>
-          <Badge color="yellow">{'⭐'.repeat(stars)}</Badge>
+          <Badge color="yellow"><StarsRow count={stars} /></Badge>
         </div>
         <div className={styles.resultActions}>
           <Button onClick={handleFinish} loading={saving} size="lg">Speichern</Button>
@@ -122,9 +126,9 @@ export default function EmotionenSpiel() {
     return (
       <div className={`${styles.gamePage} fade-in`}>
         <div className={styles.gameHeader}>
-          <Button variant="ghost" size="sm" onClick={() => navigate('/app')}>← Zurück</Button>
+          <Button variant="ghost" size="sm" onClick={() => navigate('/app')}><Icon emoji="←" size={14} /> Zurück</Button>
           <div className={styles.gameInfo}>
-            <span className={styles.gameEmoji}>😊</span>
+            <span className={styles.gameEmoji}><Icon emoji="😊" size={24} color="#a855f7" /></span>
             <h1 className={styles.gameTitle}>Gefühle</h1>
           </div>
           <div />

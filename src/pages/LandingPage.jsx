@@ -1,5 +1,6 @@
 import React, { useEffect, useRef } from 'react'
 import { Link } from 'react-router-dom'
+import Icon from '../components/ui/Icon.jsx'
 import styles from './LandingPage.module.css'
 
 const SHOWCASE_GAMES = [
@@ -124,7 +125,9 @@ export default function LandingPage() {
 
       {/* Hero */}
       <section className={styles.hero}>
-        <div className={styles.heroWave}>🌊</div>
+        <div className={styles.heroWave}>
+          <Icon emoji="🌊" size={56} color="#fff" />
+        </div>
         <div className={styles.heroBadge}>Für Österreich · Kindergarten bis NMS</div>
         <h1 className={styles.heroTitle}>
           Deutsch &amp; Mathe lernen —<br />
@@ -134,7 +137,9 @@ export default function LandingPage() {
           Missionen. Spiele. Abzeichen. <strong style={{color:'#fbbf24'}}>10 Minuten täglich</strong> reichen aus.
         </p>
         <div className={styles.heroCta}>
-          <Link to="/start" className={styles.ctaPrimary}>🎮 Jetzt kostenlos spielen</Link>
+          <Link to="/start" className={styles.ctaPrimary}>
+            <Icon emoji="🎮" size={18} color="#fff" /> Jetzt kostenlos spielen
+          </Link>
           <Link to="/login" className={styles.ctaSecondary}>Anmelden →</Link>
         </div>
         <div className={styles.heroStats}>
@@ -159,7 +164,9 @@ export default function LandingPage() {
         <div className={styles.ticker} aria-hidden="true">
           <div className={styles.tickerTrack}>
             {[...TICKER_GAMES, ...TICKER_GAMES].map((g, i) => (
-              <span key={i} className={styles.tickerItem}>{g}</span>
+              <span key={i} className={styles.tickerItem}>
+                <Icon emoji={g} size={22} />
+              </span>
             ))}
           </div>
         </div>
@@ -185,7 +192,7 @@ export default function LandingPage() {
                       <div className={styles.pdLine}><span className={styles.pdW}>Der</span><span className={styles.pdW}>Hund</span></div>
                       <div className={styles.pdLine}><span className={`${styles.pdW} ${styles.pdErr}`}>leuft</span><span className={styles.pdW}>schnell</span></div>
                       <div className={styles.pdLine}><span className={styles.pdW}>zur</span><span className={styles.pdW}>Schule</span></div>
-                      <span className={styles.pdLens}>🔍</span>
+                      <span className={styles.pdLens}><Icon emoji="🔍" size={32} color={game.color} /></span>
                     </div>
                   )}
                   {game.id === 'memory' && (
@@ -207,7 +214,7 @@ export default function LandingPage() {
                   )}
                   {game.id === 'diktat' && (
                     <div className={styles.previewDiktat}>
-                      <span className={styles.diktatMic}>🎧</span>
+                      <span className={styles.diktatMic}><Icon emoji="🎧" size={36} color={game.color} /></span>
                       <div className={styles.diktatBars}>
                         {[1,2,3,4,5,4,3,2,1].map((h, j) => (
                           <div key={j} className={styles.diktatBar} style={{ '--h': `${h * 8}px`, '--d': `${j * 0.1}s` }} />
@@ -220,7 +227,7 @@ export default function LandingPage() {
                       {['🍎','🍌','🍊','🍇','🍓'].map((f, j) => (
                         <span key={j} className={styles.frucht} style={{ '--d': `${j * 0.2}s` }}>{f}</span>
                       ))}
-                      <div className={styles.frCount}>5 ✓</div>
+                      <div className={styles.frCount}>5 <Icon emoji="✓" size={14} color="#10b981" /></div>
                     </div>
                   )}
                   {game.id === 'mathe' && (
@@ -237,7 +244,9 @@ export default function LandingPage() {
                 {/* Info */}
                 <div className={styles.gameInfo}>
                   <div className={styles.gameIconRow}>
-                    <span className={styles.gameIcon}>{game.icon}</span>
+                    <span className={styles.gameIcon}>
+                      <Icon emoji={game.icon} size={26} color={game.color} />
+                    </span>
                     <span className={styles.gameBadge}>{game.badge}</span>
                   </div>
                   <h3 className={styles.gameTitle}>{game.title}</h3>
@@ -255,11 +264,13 @@ export default function LandingPage() {
 
       {/* Features */}
       <section className={styles.features}>
-        <h2 className={styles.sectionTitle}>Was dich erwartet 🎯</h2>
+        <h2 className={styles.sectionTitle}>
+          Was dich erwartet <Icon emoji="🎯" size={26} />
+        </h2>
         <div className={styles.featureGrid}>
           {FEATURES.map((f) => (
             <div key={f.title} className={styles.featureCard}>
-              <span className={styles.featureIcon}>{f.icon}</span>
+              <span className={styles.featureIcon}><Icon emoji={f.icon} size={36} color="#4f46e5" /></span>
               <h3 className={styles.featureTitle}>{f.title}</h3>
               <p className={styles.featureDesc}>{f.desc}</p>
             </div>
@@ -270,11 +281,13 @@ export default function LandingPage() {
       {/* Schulstufen */}
       <section className={styles.modules}>
         <div className={styles.modulesInner}>
-          <h2 className={styles.sectionTitle}>Für jede Schulstufe 🎒</h2>
+          <h2 className={styles.sectionTitle}>
+            Für jede Schulstufe <Icon emoji="🎓" size={26} />
+          </h2>
           <div className={styles.moduleGrid}>
             {MODULES.map((m) => (
               <Link key={m.title} to="/start" className={styles.moduleCard}>
-                <span className={styles.moduleCardIcon}>{m.icon}</span>
+                <span className={styles.moduleCardIcon}><Icon emoji={m.icon} size={42} color={m.color} /></span>
                 <div>
                   <div className={styles.moduleCardTitle} style={{ color: m.color }}>{m.title}</div>
                   <div className={styles.moduleCardAges}>{m.ages}</div>
@@ -287,9 +300,11 @@ export default function LandingPage() {
 
       {/* CTA Banner */}
       <section className={styles.ctaBanner}>
-        <h2>Bereit für das Deutsch-Abenteuer? 🌊</h2>
+        <h2>Bereit für das Deutsch-Abenteuer? <Icon emoji="🌊" size={26} color="#fff" /></h2>
         <p>Starte jetzt — kostenlos, ohne Download, direkt im Browser.</p>
-        <Link to="/start" className={styles.ctaPrimary}>🚀 Kostenlos registrieren</Link>
+        <Link to="/start" className={styles.ctaPrimary}>
+          <Icon emoji="🚀" size={18} color="#fff" /> Kostenlos registrieren
+        </Link>
       </section>
 
       {/* Footer */}

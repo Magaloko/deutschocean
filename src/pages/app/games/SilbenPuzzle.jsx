@@ -1,9 +1,11 @@
 // src/pages/app/games/SilbenPuzzle.jsx
-import React, { useState, useEffect, useRef, useCallback } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
 import Card from '../../../components/ui/Card.jsx'
 import Button from '../../../components/ui/Button.jsx'
 import Badge from '../../../components/ui/Badge.jsx'
+import Icon from '../../../components/ui/Icon.jsx'
+import StarsRow from '../../../components/ui/StarsRow.jsx'
 import { SILBEN_WOERTER } from '../../../lib/gameData.js'
 import { useProgress } from '../../../hooks/useProgress.jsx'
 import { useAdaptivity } from '../../../hooks/useAdaptivity.js'
@@ -53,18 +55,15 @@ export default function SilbenPuzzle() {
 
   const word = words[idx]
 
-  const initBank = useCallback((w) => shuffle([...w.silben]), [])
-
-  function startWord(w) {
-    setBank(initBank(w))
+  useEffect(() => {
+    const w = words[idx]
+    if (!w) return
+    setBank(shuffle([...w.silben]))
     setPlaced([])
     setChecked(false)
     dismissHint()
-  }
-
-  useEffect(() => {
-    if (words[idx]) startWord(words[idx])
-  }, [idx, startWord, words])
+    // words is initialized once; dismissHint is stable (useCallback [])
+  }, [idx, dismissHint, words])
 
   useEffect(() => {
     if (difficulty !== prevDiffRef.current) {
@@ -112,12 +111,14 @@ export default function SilbenPuzzle() {
   if (phase === 'result') {
     return (
       <div className={styles.resultPage}>
-        <div className={styles.resultEmoji}>{score === TOTAL ? '🧩' : '⭐'}</div>
+        <div className={styles.resultEmoji}>
+          <Icon emoji={score === TOTAL ? '🧩' : '⭐'} size={64} color={score === TOTAL ? '#10b981' : '#fbbf24'} />
+        </div>
         <h1 className={styles.resultTitle}>{score === TOTAL ? 'Puzzle gelöst!' : 'Gut gemacht!'}</h1>
         <p className={styles.resultSub}>{score}/{TOTAL} Wörter korrekt</p>
         <div className={styles.resultStats}>
           <Badge color="purple">+{score * 3} XP</Badge>
-          <Badge color="yellow">{'⭐'.repeat(score === TOTAL ? 3 : score >= 3 ? 2 : 1)}</Badge>
+          <Badge color="yellow"><StarsRow count={score === TOTAL ? 3 : score >= 3 ? 2 : 1} /></Badge>
         </div>
         <div className={styles.resultActions}>
           <Button onClick={handleFinish} loading={saving} size="lg">Speichern</Button>
@@ -134,9 +135,9 @@ export default function SilbenPuzzle() {
   return (
     <div className={`${styles.gamePage} fade-in`}>
       <div className={styles.gameHeader}>
-        <Button variant="ghost" size="sm" onClick={() => navigate('/app')}>← Zurück</Button>
+        <Button variant="ghost" size="sm" onClick={() => navigate('/app')}><Icon emoji="←" size={14} /> Zurück</Button>
         <div className={styles.gameInfo}>
-          <span className={styles.gameEmoji}>🧩</span>
+          <span className={styles.gameEmoji}><Icon emoji="🧩" size={24} color="#10b981" /></span>
           <h1 className={styles.gameTitle}>Silben-Puzzle</h1>
         </div>
         <Badge color="gray">{idx + 1}/{TOTAL}</Badge>

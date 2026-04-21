@@ -241,7 +241,11 @@
   color: inherit;
 }
 .moduleCard:hover { box-shadow: var(--shadow); transform: translateY(-2px); }
-.moduleCardIcon { font-size: 2.4rem; flex-shrink: 0; }
+.moduleCardIcon { font-size: 2.4rem; flex-shrink: 0; display: inline-flex; align-items: center; justify-content: center; }
+.featureIcon { display: inline-flex; align-items: center; justify-content: center; }
+.tickerItem { display: inline-flex; align-items: center; justify-content: center; }
+.gameIcon { display: inline-flex; align-items: center; justify-content: center; }
+.sectionTitle { display: inline-flex; align-items: center; gap: 0.5rem; flex-wrap: wrap; justify-content: center; }
 .moduleCardTitle { font-weight: 800; font-size: 1rem; font-family: var(--font-display); }
 .moduleCardAges { font-size: 0.8rem; color: var(--text-muted); margin-top: 0.1rem; }
 

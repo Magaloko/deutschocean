@@ -3,6 +3,8 @@ import React, { useState, useRef, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../../hooks/useAuth.jsx'
 import { sendChatMessage, CHAT_CONFIGURED } from '../../lib/chatApi.js'
+import Icon from '../../components/ui/Icon.jsx'
+import { Send, Moon, Info } from 'lucide-react'
 import styles from './ChatPage.module.css'
 
 const MAX_DAILY = 10
@@ -66,9 +68,13 @@ export default function ChatPage() {
     <div className={styles.page}>
       {/* Header */}
       <div className={styles.header}>
-        <button className={styles.backBtn} onClick={() => navigate('/app')}>←</button>
+        <button className={styles.backBtn} onClick={() => navigate('/app')} aria-label="Zurück">
+          <Icon emoji="←" size={22} />
+        </button>
         <div className={styles.headerTitle}>
-          <span className={styles.headerIcon}>🤖</span>
+          <span className={styles.headerIcon}>
+            <Icon emoji="🤖" size={26} color="#4f46e5" />
+          </span>
           <div>
             <div className={styles.headerName}>KI-Deutschlehrer</div>
             <div className={styles.headerSub}>
@@ -81,8 +87,8 @@ export default function ChatPage() {
 
       {/* Config banner */}
       {!CHAT_CONFIGURED && (
-        <div className={styles.demoBanner}>
-          ℹ️ Demo-Modus — Setze <code>VITE_CHAT_FUNCTION_URL</code> für echte KI-Antworten.
+        <div className={styles.demoBanner} style={{ display: 'inline-flex', alignItems: 'center', gap: '0.4rem' }}>
+          <Info size={16} /> Demo-Modus — Setze <code>VITE_CHAT_FUNCTION_URL</code> für echte KI-Antworten.
         </div>
       )}
 
@@ -93,13 +99,19 @@ export default function ChatPage() {
             key={m.id}
             className={`${styles.msg} ${m.role === 'user' ? styles.msgUser : styles.msgAssistant}`}
           >
-            {m.role === 'assistant' && <span className={styles.msgAvatar}>🤖</span>}
+            {m.role === 'assistant' && (
+              <span className={styles.msgAvatar}>
+                <Icon emoji="🤖" size={22} color="#4f46e5" />
+              </span>
+            )}
             <div className={styles.msgBubble}>{m.text}</div>
           </div>
         ))}
         {loading && (
           <div className={`${styles.msg} ${styles.msgAssistant}`}>
-            <span className={styles.msgAvatar}>🤖</span>
+            <span className={styles.msgAvatar}>
+              <Icon emoji="🤖" size={22} color="#4f46e5" />
+            </span>
             <div className={`${styles.msgBubble} ${styles.msgTyping}`}>
               <span /><span /><span />
             </div>
@@ -114,8 +126,8 @@ export default function ChatPage() {
       {/* Input */}
       <div className={styles.inputRow}>
         {remaining <= 0 ? (
-          <div className={styles.limitMsg}>
-            🌙 Du hast heute {MAX_DAILY} Nachrichten geschickt — morgen wieder!
+          <div className={styles.limitMsg} style={{ display: 'inline-flex', alignItems: 'center', gap: '0.4rem' }}>
+            <Moon size={18} /> Du hast heute {MAX_DAILY} Nachrichten geschickt — morgen wieder!
           </div>
         ) : (
           <>
@@ -136,7 +148,7 @@ export default function ChatPage() {
               disabled={!canSend}
               aria-label="Senden"
             >
-              ➤
+              <Send size={18} />
             </button>
           </>
         )}

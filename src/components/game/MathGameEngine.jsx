@@ -3,6 +3,8 @@ import React, { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useProgress } from '../../hooks/useProgress.jsx'
 import { playCorrect, playWrong, playComplete, speak } from '../../lib/sounds.js'
+import Icon from '../ui/Icon.jsx'
+import StarsRow from '../ui/StarsRow.jsx'
 import styles from './MathGameEngine.module.css'
 
 function calcStars(score, total) {
@@ -86,7 +88,7 @@ export default function MathGameEngine({
     return (
       <div className={styles.page}>
         <div className={styles.header}>
-          <button className={styles.backBtn} onClick={() => navigate('/app')}>←</button>
+          <button className={styles.backBtn} onClick={() => navigate('/app')} aria-label="Zurück"><Icon emoji="←" size={18} /></button>
           <h1 className={styles.title}>{gameTitle}</h1>
           <div />
         </div>
@@ -98,7 +100,7 @@ export default function MathGameEngine({
               className={`${styles.levelCard} ${styles[`lv${lvl}`]}`}
               onClick={() => startLevel(lvl)}
             >
-              <span className={styles.lvStars}>{'⭐'.repeat(lvl)}</span>
+              <span className={styles.lvStars}><StarsRow count={lvl} size={20} /></span>
               <div className={styles.lvInfo}>
                 <span className={styles.lvTitle}>Level {lvl}</span>
                 <span className={styles.lvLabel}>{config[lvl].label}</span>
@@ -118,13 +120,13 @@ export default function MathGameEngine({
       <div className={styles.page}>
         <div className={styles.result}>
           <div className={styles.resultEmoji}>
-            {stars === 3 ? '🏆' : stars === 2 ? '🌟' : '⭐'}
+            <Icon emoji={stars === 3 ? '🏆' : stars === 2 ? '🌟' : '⭐'} size={64} color={stars === 3 ? '#ca8a04' : '#fbbf24'} />
           </div>
           <h2 className={styles.resultTitle}>
             {stars === 3 ? 'Perfekt!' : stars === 2 ? 'Super gemacht!' : 'Weiter üben!'}
           </h2>
           <p className={styles.resultScore}>{score} von {TOTAL} richtig</p>
-          <div className={styles.resultStars}>{'⭐'.repeat(stars)}</div>
+          <div className={styles.resultStars}><StarsRow count={stars} size={28} /></div>
           <div className={styles.resultActions}>
             <button
               className={`${styles.primaryBtn} ${styles.greenBtn}`}
@@ -149,12 +151,13 @@ export default function MathGameEngine({
     <div className={styles.page}>
       {/* Header */}
       <div className={styles.header}>
-        <button className={styles.backBtn} onClick={() => setPhase('levelSelect')}>←</button>
+        <button className={styles.backBtn} onClick={() => setPhase('levelSelect')} aria-label="Zurück"><Icon emoji="←" size={18} /></button>
         <span className={styles.badge}>{gameTitle} · L{level}</span>
         <button
           className={styles.speakBtn}
           onClick={() => speak(speakQuestion(round))}
-        >🔊</button>
+          aria-label="Vorlesen"
+        ><Icon emoji="🔊" size={18} /></button>
       </div>
 
       {/* Progress */}
@@ -195,10 +198,10 @@ export default function MathGameEngine({
       {selected !== null && (
         <>
           <div className={`${styles.feedback} ${selected === round.answer ? styles.feedbackGreen : styles.feedbackRed}`}>
-            <span>{selected === round.answer ? '✅' : '❌'}</span>
-            <span>
+            <Icon emoji={selected === round.answer ? '✅' : '❌'} size={20} />
+            <span style={{ display: 'inline-flex', alignItems: 'center', gap: '0.35rem' }}>
               {selected === round.answer
-                ? 'Richtig! 🎉'
+                ? <>Richtig! <Icon emoji="🎉" size={16} /></>
                 : `Richtig wäre: ${formatOption(round.answer)}`}
             </span>
           </div>
@@ -206,7 +209,7 @@ export default function MathGameEngine({
             className={`${styles.primaryBtn} ${styles.greenBtn}`}
             onClick={handleWeiter}
           >
-            {idx + 1 >= TOTAL ? 'Ergebnis ansehen 🏆' : 'Weiter →'}
+            {idx + 1 >= TOTAL ? <>Ergebnis ansehen <Icon emoji="🏆" size={16} color="#fff" /></> : 'Weiter →'}
           </button>
         </>
       )}

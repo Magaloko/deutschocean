@@ -1,6 +1,7 @@
 import React from 'react'
 import { NavLink } from 'react-router-dom'
 import { useAuth } from '../../hooks/useAuth.jsx'
+import Icon from '../ui/Icon.jsx'
 import styles from './MobileNav.module.css'
 
 export default function MobileNav() {
@@ -13,7 +14,7 @@ export default function MobileNav() {
         end
         className={({ isActive }) => `${styles.item} ${isActive ? styles.itemActive : ''}`}
       >
-        <span className={styles.icon}>🏠</span>
+        <span className={styles.icon}><Icon emoji="🏠" size={22} /></span>
         <span className={styles.label}>Spielen</span>
       </NavLink>
 

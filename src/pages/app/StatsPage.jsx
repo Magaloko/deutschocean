@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../../hooks/useAuth.jsx'
 import { MISSIONS, BADGES } from '../../lib/gameData.js'
 import ProgressBar from '../../components/ui/ProgressBar.jsx'
+import Icon from '../../components/ui/Icon.jsx'
 import styles from './StatsPage.module.css'
 
 const LEVEL_LABELS = { 0: 'Für Kleine', 1: 'Anfänger', 2: 'Profi' }
@@ -68,7 +69,9 @@ export default function StatsPage() {
     <div className={`${styles.page} fade-in`}>
       {/* Header */}
       <div className={styles.header}>
-        <button className={styles.backBtn} onClick={() => navigate('/app')}>←</button>
+        <button className={styles.backBtn} onClick={() => navigate('/app')} aria-label="Zurück">
+          <Icon emoji="←" size={22} />
+        </button>
         <h1 className={styles.heading}>Mein Fortschritt</h1>
         <div />
       </div>
@@ -77,29 +80,31 @@ export default function StatsPage() {
       <div className={styles.heroRow}>
         <div className={styles.heroCard}>
           <div className={styles.heroNum}>{xp}</div>
-          <div className={styles.heroLabel}>⚡ XP gesamt</div>
+          <div className={styles.heroLabel}><Icon emoji="⚡" size={14} /> XP gesamt</div>
         </div>
         <div className={styles.heroCard}>
           <div className={styles.heroNum}>{stars}</div>
-          <div className={styles.heroLabel}>⭐ Sterne</div>
+          <div className={styles.heroLabel}><Icon emoji="⭐" size={14} /> Sterne</div>
         </div>
         <div className={styles.heroCard}>
           <div className={styles.heroNum}>{streak}</div>
-          <div className={styles.heroLabel}>🔥 Tage-Streak</div>
+          <div className={styles.heroLabel}><Icon emoji="🔥" size={14} /> Tage-Streak</div>
         </div>
         <div className={styles.heroCard}>
           <div className={styles.heroNum}>{totalPlayed}/{totalGames}</div>
-          <div className={styles.heroLabel}>🎮 Spiele</div>
+          <div className={styles.heroLabel}><Icon emoji="🎮" size={14} /> Spiele</div>
         </div>
         <div className={styles.heroCard}>
           <div className={styles.heroNum}>{hintsUsed}</div>
-          <div className={styles.heroLabel}>💡 Tipps genutzt</div>
+          <div className={styles.heroLabel}><Icon emoji="💡" size={14} /> Tipps genutzt</div>
         </div>
       </div>
 
       {/* Level progress */}
       <section className={styles.section}>
-        <h2 className={styles.sectionTitle}>🏆 Level-Fortschritt</h2>
+        <h2 className={styles.sectionTitle}>
+          <Icon emoji="🏆" size={22} /> Level-Fortschritt
+        </h2>
         <div className={styles.levelCard}>
           <div className={styles.levelRow}>
             <span className={styles.levelBig}>Level {level}</span>
@@ -109,7 +114,9 @@ export default function StatsPage() {
         </div>
         {nextBadge && (
           <div className={styles.nextBadge}>
-            <span className={styles.nextBadgeIcon}>{nextBadge.icon}</span>
+            <span className={styles.nextBadgeIcon}>
+              <Icon emoji={nextBadge.icon} size={28} color="#f59e0b" />
+            </span>
             <div>
               <div className={styles.nextBadgeLabel}>Nächstes Abzeichen: {nextBadge.label}</div>
               <div className={styles.nextBadgeSub}>Bei {nextBadge.xpRequired} XP ({Math.max(0, nextBadge.xpRequired - xp)} noch nötig)</div>
@@ -120,7 +127,9 @@ export default function StatsPage() {
 
       {/* Level stats bars */}
       <section className={styles.section}>
-        <h2 className={styles.sectionTitle}>📊 Aufgaben nach Schwierigkeit</h2>
+        <h2 className={styles.sectionTitle}>
+          <Icon emoji="📊" size={22} /> Aufgaben nach Schwierigkeit
+        </h2>
         <div className={styles.barList}>
           {levelStats.map(({ lvl, label, total, done }) => (
             <div key={lvl} className={styles.barItem}>
@@ -145,16 +154,23 @@ export default function StatsPage() {
       {/* Most played games */}
       {gameStats.length > 0 && (
         <section className={styles.section}>
-          <h2 className={styles.sectionTitle}>🎮 Meistgespielte Spiele</h2>
+          <h2 className={styles.sectionTitle}>
+            <Icon emoji="🎮" size={22} /> Meistgespielte Spiele
+          </h2>
           <div className={styles.gameList}>
             {gameStats.map((g) => (
               <div key={g.title} className={styles.gameRow}>
-                <span className={styles.gameIcon}>{g.icon}</span>
+                <span className={styles.gameIcon}>
+                  <Icon emoji={g.icon} size={26} color={g.color} />
+                </span>
                 <div className={styles.gameInfo}>
                   <div className={styles.gameTitle}>
                     {g.title}
-                    {/* ⚠️ tag appears once weakGames is populated via Sprint 1 */}
-                    {g.weak && <span className={styles.weakTag}>⚠️ Üben</span>}
+                    {g.weak && (
+                      <span className={styles.weakTag}>
+                        <Icon emoji="⚠️" size={14} /> Üben
+                      </span>
+                    )}
                   </div>
                   <div className={styles.gameSubTrack}>
                     <div
@@ -173,11 +189,15 @@ export default function StatsPage() {
       {/* Badges */}
       {earnedBadges.length > 0 && (
         <section className={styles.section}>
-          <h2 className={styles.sectionTitle}>🎖️ Abzeichen ({earnedBadges.length}/{BADGES.length})</h2>
+          <h2 className={styles.sectionTitle}>
+            <Icon emoji="🎖️" size={22} /> Abzeichen ({earnedBadges.length}/{BADGES.length})
+          </h2>
           <div className={styles.badgeGrid}>
             {earnedBadges.map(b => (
               <div key={b.id} className={styles.badgeCard}>
-                <div className={styles.badgeIcon}>{b.icon}</div>
+                <div className={styles.badgeIcon}>
+                  <Icon emoji={b.icon} size={32} color="#f59e0b" />
+                </div>
                 <div className={styles.badgeName}>{b.label}</div>
               </div>
             ))}

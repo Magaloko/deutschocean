@@ -4,6 +4,8 @@ import { useNavigate } from 'react-router-dom'
 import Card from '../../../components/ui/Card.jsx'
 import Button from '../../../components/ui/Button.jsx'
 import Badge from '../../../components/ui/Badge.jsx'
+import Icon from '../../../components/ui/Icon.jsx'
+import StarsRow from '../../../components/ui/StarsRow.jsx'
 import { NOMEN_SAETZE } from '../../../lib/gameData.js'
 import { useProgress } from '../../../hooks/useProgress.jsx'
 import { useAdaptivity } from '../../../hooks/useAdaptivity.js'
@@ -102,12 +104,14 @@ export default function NomenFinder() {
   if (phase === 'result') {
     return (
       <div className={styles.resultPage}>
-        <div className={styles.resultEmoji}>{score === tasks.length ? '🏹' : '⭐'}</div>
+        <div className={styles.resultEmoji}>
+          <Icon emoji={score === tasks.length ? '🏹' : '⭐'} size={64} color={score === tasks.length ? '#4f46e5' : '#fbbf24'} />
+        </div>
         <h1 className={styles.resultTitle}>{score === tasks.length ? 'Alle Nomen gefunden!' : 'Weiter üben!'}</h1>
         <p className={styles.resultSub}>{score}/{tasks.length} Sätze korrekt</p>
         <div className={styles.resultStats}>
           <Badge color="purple">+{score * 5} XP</Badge>
-          <Badge color="yellow">{'⭐'.repeat(score === tasks.length ? 3 : score >= tasks.length * 0.6 ? 2 : 1)}</Badge>
+          <Badge color="yellow"><StarsRow count={score === tasks.length ? 3 : score >= tasks.length * 0.6 ? 2 : 1} /></Badge>
         </div>
         <div className={styles.resultActions}>
           <Button onClick={handleFinish} loading={saving} size="lg">Speichern</Button>
@@ -120,9 +124,9 @@ export default function NomenFinder() {
   return (
     <div className={`${styles.gamePage} fade-in`}>
       <div className={styles.gameHeader}>
-        <Button variant="ghost" size="sm" onClick={() => navigate('/app')}>← Zurück</Button>
+        <Button variant="ghost" size="sm" onClick={() => navigate('/app')}><Icon emoji="←" size={14} /> Zurück</Button>
         <div className={styles.gameInfo}>
-          <span className={styles.gameEmoji}>🏹</span>
+          <span className={styles.gameEmoji}><Icon emoji="🏹" size={24} color="#4f46e5" /></span>
           <h1 className={styles.gameTitle}>Nomen-Jäger</h1>
         </div>
         <Badge color="gray">{idx + 1}/{tasks.length}</Badge>
