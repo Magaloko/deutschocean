@@ -68,7 +68,129 @@
   line-height: 1;
   font-family: var(--font-display);
 }
-.heroStatLabel { font-size: 0.72rem; opacity: 0.8; font-weight: 600; }
+.heroStatLabel {
+  font-size: 0.72rem;
+  opacity: 0.8;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+.heroStatLabel svg { flex-shrink: 0; }
+.heroSub { display: inline-flex; align-items: center; gap: 0.3rem; flex-wrap: wrap; }
+.heroTitle { display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap; }
+.heroTitle svg { vertical-align: -4px; flex-shrink: 0; }
+
+/* ── Welten Grid (A: Welten-Struktur) ── */
+.sectionHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.75rem;
+}
+.sectionHint { font-size: 0.8rem; color: var(--text-muted); font-weight: 600; }
+
+.weltenGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 0.9rem;
+}
+.weltCard {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem 1.1rem;
+  border-radius: var(--radius-xl);
+  color: #fff;
+  text-decoration: none;
+  overflow: hidden;
+  min-height: 110px;
+  transition: transform 0.15s, box-shadow 0.15s;
+  box-shadow: 0 4px 14px rgba(0,0,0,0.08);
+}
+.weltCard::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 85% 20%, rgba(255,255,255,0.18), transparent 55%);
+  pointer-events: none;
+}
+.weltCard:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 26px rgba(0,0,0,0.18);
+}
+.weltIconWrap {
+  flex-shrink: 0;
+  width: 68px; height: 68px;
+  border-radius: var(--radius-lg);
+  background: rgba(255,255,255,0.22);
+  backdrop-filter: blur(4px);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid rgba(255,255,255,0.25);
+}
+.weltBody { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 0.25rem; }
+.weltTitle { font-size: 1.05rem; font-weight: 800; letter-spacing: -0.2px; }
+.weltSub   { font-size: 0.78rem; opacity: 0.85; }
+.weltStats { font-size: 0.72rem; opacity: 0.9; font-weight: 600; display: flex; gap: 0.35rem; }
+.weltDot   { opacity: 0.7; }
+.weltBar {
+  height: 5px;
+  background: rgba(255,255,255,0.25);
+  border-radius: 999px;
+  overflow: hidden;
+  margin-top: 0.35rem;
+}
+.weltBarFill {
+  height: 100%;
+  background: rgba(255,255,255,0.95);
+  border-radius: 999px;
+  transition: width 0.3s ease-out;
+}
+.weltFachTag {
+  margin-top: 0.3rem;
+  font-size: 0.68rem;
+  font-weight: 600;
+  opacity: 0.9;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  background: rgba(0,0,0,0.12);
+  padding: 0.15rem 0.5rem;
+  border-radius: 999px;
+  align-self: flex-start;
+}
+.weltArrow {
+  font-size: 1.4rem;
+  font-weight: 900;
+  opacity: 0.7;
+  flex-shrink: 0;
+  z-index: 1;
+}
+.weltCard:hover .weltArrow { opacity: 1; transform: translateX(4px); transition: all 0.2s; }
+
+@media (max-width: 540px) {
+  .weltenGrid { grid-template-columns: 1fr; }
+}
+.modulePill { align-items: center; }
+.modulePill svg { flex-shrink: 0; }
+.reviewLabel,
+.recommendedLabel,
+.featuredBadge,
+.levelLockBadge,
+.sectionTitle { display: inline-flex; align-items: center; gap: 0.4rem; }
+.reviewIcon,
+.badgeIcon,
+.featuredIcon,
+.gameIconBig,
+.comingSoonEmoji,
+.lockIcon { display: inline-flex; align-items: center; justify-content: center; }
+.gamePlayBtn,
+.featuredPlayBtn { display: inline-flex; align-items: center; justify-content: center; gap: 0.35rem; }
+.weakIndicator { display: inline-flex; align-items: center; justify-content: center; }
+.tabs button { display: inline-flex; align-items: center; gap: 0.3rem; }
 .heroStatDiv   { width: 1px; background: rgba(255,255,255,0.2); margin: 0.5rem 0; align-self: stretch; }
 
 .xpBarWrap {
