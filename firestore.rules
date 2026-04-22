@@ -6,16 +6,32 @@ rules_version = '2';
 // - users/{uid}                — Profil des angemeldeten Users (Gast oder mit Account)
 // - posts/{postId}             — Blog-Posts (öffentlich lesbar, nur Admin schreibt)
 //
-// Prinzip: Jeder User kann nur SEINE eigenen Daten lesen/schreiben. Niemand
-// anderer. Blog-Posts sind öffentlich, aber nur durch Admin beschreibbar.
+// Prinzip: Jeder User kann nur SEINE eigenen Daten lesen/schreiben. Admins
+// (per E-Mail-Match) dürfen alle User-Daten lesen — aber nie schreiben.
+// Blog-Posts sind öffentlich, nur Admin beschreibbar.
+//
+// ⚠️ Admin-E-Mails müssen in `src/lib/admins.js` UND hier identisch gepflegt werden.
 
 service cloud.firestore {
   match /databases/{database}/documents {
 
+    // ── Helper: ist der Request-User Admin? ─────────────────────────────
+    function isAdmin() {
+      return request.auth != null
+        && request.auth.token.email != null
+        && request.auth.token.email in [
+          'dadakaev10@gmail.com'
+        ];
+    }
+
     // ── User-Profile ─────────────────────────────────────────────────────
     match /users/{uid} {
-      // Nur der angemeldete User darf sein eigenes Profil lesen
-      allow read: if request.auth != null && request.auth.uid == uid;
+      // Lesen: eigenes Profil ODER Admin
+      allow read: if request.auth != null
+                  && (request.auth.uid == uid || isAdmin());
+
+      // List (collection query): nur Admin
+      allow list: if isAdmin();
 
       // Create: beim Anlegen muss uid mit auth.uid übereinstimmen
       allow create: if request.auth != null
@@ -36,12 +52,8 @@ service cloud.firestore {
       // Öffentlich lesbar (auch ohne Login)
       allow read: if true;
 
-      // Nur Admin-UIDs dürfen schreiben. Trag hier deine Admin-UID(s) ein.
-      // (UID in Firebase Console → Authentication → Users → "Nutzer-UID".)
-      allow write: if request.auth != null
-                   && request.auth.uid in [
-                     // 'DEINE-ADMIN-UID-HIER'
-                   ];
+      // Nur Admins dürfen schreiben
+      allow write: if isAdmin();
     }
 
     // ── Fallback: alles andere verbieten ──────────────────────────────────

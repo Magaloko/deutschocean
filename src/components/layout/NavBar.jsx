@@ -5,7 +5,7 @@ import { useAuth } from '../../hooks/useAuth.jsx'
 import Icon from '../ui/Icon.jsx'
 
 export default function NavBar() {
-  const { profile } = useAuth()
+  const { profile, isAdmin } = useAuth()
 
   return (
     <nav className={styles.nav}>
@@ -29,6 +29,11 @@ export default function NavBar() {
           <NavLink to="/app/chat" className={({ isActive }) => isActive ? styles.linkActive : styles.link}>
             <Icon emoji="💬" size={16} /> Chat
           </NavLink>
+          {isAdmin && (
+            <NavLink to="/admin" className={({ isActive }) => isActive ? styles.linkActive : styles.link}>
+              <Icon emoji="🛠" size={16} /> Admin
+            </NavLink>
+          )}
         </div>
 
         <div className={styles.right}>

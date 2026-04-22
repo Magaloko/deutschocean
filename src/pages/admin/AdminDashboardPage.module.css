@@ -1,0 +1,139 @@
+.page { padding: 2rem; display: flex; flex-direction: column; gap: 1.5rem; }
+.topBar { display: flex; justify-content: space-between; align-items: baseline; }
+.heading { font-size: 1.8rem; font-weight: 900; margin: 0; color: var(--text); }
+.subtle  { color: var(--text-muted); font-size: 0.85rem; }
+
+.empty { color: var(--text-muted); }
+
+.errorBox {
+  background: #fef2f2;
+  border: 1px solid #fca5a5;
+  border-left: 4px solid #dc2626;
+  border-radius: var(--radius-lg);
+  padding: 1rem 1.25rem;
+  color: #7f1d1d;
+}
+.errorHint { font-size: 0.85rem; margin-top: 0.5rem; color: #991b1b; }
+.errorHint code {
+  background: rgba(220,38,38,0.1);
+  padding: 0.1rem 0.35rem;
+  border-radius: 4px;
+  font-size: 0.8rem;
+}
+
+/* KPI Grid ----------------------------------------------------------------- */
+.kpiGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: 0.75rem;
+}
+.kpiCard {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-top: 3px solid var(--accent, #4f46e5);
+  border-radius: var(--radius-lg);
+  padding: 1rem 1.1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+.kpiValue { font-size: 1.75rem; font-weight: 900; color: var(--accent, #4f46e5); font-variant-numeric: tabular-nums; }
+.kpiLabel { font-size: 0.78rem; color: var(--text-muted); font-weight: 700; letter-spacing: 0.02em; }
+
+/* Split Row: Module-Verteilung + Top 10 ----------------------------------- */
+.splitSection {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+@media (max-width: 900px) {
+  .splitSection { grid-template-columns: 1fr; }
+}
+
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+.cardHeader { display: flex; justify-content: space-between; align-items: baseline; }
+.cardTitle { margin: 0; font-size: 1.05rem; font-weight: 800; color: var(--text); }
+.cardLink  { font-size: 0.85rem; color: var(--primary); text-decoration: none; font-weight: 700; }
+.cardLink:hover { text-decoration: underline; }
+
+/* Module-Bar -------------------------------------------------------------- */
+.moduleRow { display: flex; flex-direction: column; gap: 0.3rem; }
+.moduleLabel {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--text);
+}
+.moduleCount { color: var(--text-muted); font-variant-numeric: tabular-nums; }
+.moduleBar {
+  height: 10px;
+  background: #e5e7eb;
+  border-radius: 999px;
+  overflow: hidden;
+}
+.moduleBarFill { height: 100%; border-radius: 999px; transition: width 0.35s ease; }
+
+/* Top-XP List ------------------------------------------------------------ */
+.topList { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 0.4rem; }
+.topRow {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.4rem 0.5rem;
+  border-radius: var(--radius);
+  font-size: 0.9rem;
+}
+.topRow:hover { background: rgba(79, 70, 229, 0.06); }
+.topRank {
+  width: 22px;
+  text-align: right;
+  font-weight: 800;
+  color: var(--text-muted);
+  font-variant-numeric: tabular-nums;
+}
+.topAvatar { font-size: 1.2rem; }
+.topName { flex: 1; font-weight: 700; color: var(--text); display: flex; align-items: center; gap: 0.4rem; }
+.topXp  { font-weight: 800; color: var(--primary); font-variant-numeric: tabular-nums; }
+.anonTag {
+  font-size: 0.65rem;
+  color: #78350f;
+  background: #fef3c7;
+  padding: 0.05rem 0.4rem;
+  border-radius: 999px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+}
+
+/* Activity List ---------------------------------------------------------- */
+.activityList { display: flex; flex-direction: column; gap: 0.25rem; }
+.activityRow {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  padding: 0.55rem 0.5rem;
+  border-radius: var(--radius);
+  border-bottom: 1px solid var(--border);
+}
+.activityRow:last-child { border-bottom: none; }
+.activityRow:hover { background: rgba(79, 70, 229, 0.04); }
+.avatar { font-size: 1.4rem; flex-shrink: 0; }
+.activityInfo { flex: 1; display: flex; flex-direction: column; gap: 0.1rem; min-width: 0; }
+.activityName {
+  font-weight: 700;
+  color: var(--text);
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+.activityMeta { font-size: 0.78rem; color: var(--text-muted); }
+.activityTime { font-size: 0.78rem; color: var(--text-muted); white-space: nowrap; font-variant-numeric: tabular-nums; }

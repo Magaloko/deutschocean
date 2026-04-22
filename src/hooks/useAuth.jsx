@@ -8,9 +8,11 @@ import {
 } from 'firebase/auth'
 import { doc, getDoc, setDoc, updateDoc, onSnapshot, deleteDoc } from 'firebase/firestore'
 import { auth, db, FIREBASE_CONFIGURED } from '../lib/firebase.js'
+import { isAdminEmail } from '../lib/admins.js'
 
 const AuthContext = createContext(null)
 const LEGACY_KEY  = 'deutschocean_user'
+const SAFETY_TIMEOUT_MS = 4500
 const googleProvider = new GoogleAuthProvider()
 
 function requireFirebase() {
@@ -108,12 +110,28 @@ async function updateStreak(fbUser, currentProfile) {
   })
 }
 
+// Fallback-Profil aus localStorage (Pending-Guest) oder leerem Default —
+// wird benutzt, wenn Firestore offline/blockiert ist, damit Gast-Login nicht
+// unendlich auf onSnapshot wartet.
+function localFallbackProfile(fbUser) {
+  const pending = localStorage.getItem('pendingGuestProfile')
+  if (pending) {
+    try {
+      const { name, avatar, schoolModule } = JSON.parse(pending)
+      return makeProfile(fbUser.uid, name, avatar, schoolModule, fbUser.isAnonymous)
+    } catch { /* ignore */ }
+  }
+  return makeProfile(fbUser.uid, fbUser.displayName, '🐬', 'volksschule', fbUser.isAnonymous)
+}
+
 export function AuthProvider({ children }) {
   const [profile,  setProfileState] = useState(null)
   const [loading,  setLoading]      = useState(true)
   const unsubRef        = useRef(null)
   const profileRef      = useRef(null)
   const streakUpdatedRef = useRef(false)
+  const safetyTimerRef   = useRef(null)
+  const snapshotFiredRef = useRef(false)
 
   useEffect(() => {
     if (!FIREBASE_CONFIGURED) {
@@ -124,11 +142,13 @@ export function AuthProvider({ children }) {
 
     const unsubAuth = onAuthStateChanged(auth, (fbUser) => {
       ;(async () => {
-        // Tear down previous Firestore listener
+        // Tear down previous Firestore listener & safety timer
         if (unsubRef.current) { unsubRef.current(); unsubRef.current = null }
+        if (safetyTimerRef.current) { clearTimeout(safetyTimerRef.current); safetyTimerRef.current = null }
 
-        // Reset streak flag for new session
+        // Reset flags for new session
         streakUpdatedRef.current = false
+        snapshotFiredRef.current = false
 
         if (!fbUser) {
           setProfileState(null)
@@ -136,34 +156,54 @@ export function AuthProvider({ children }) {
           return
         }
 
+        // Safety timeout: falls onSnapshot nie feuert (Rules-Block, Offline, …),
+        // nach SAFETY_TIMEOUT_MS auf lokales Fallback-Profil wechseln, damit die
+        // App nicht im Loading-Spinner hängen bleibt.
+        safetyTimerRef.current = setTimeout(() => {
+          if (!snapshotFiredRef.current) {
+            console.warn('[auth] Firestore-Snapshot hat nicht geantwortet — Fallback-Profil aktiviert.')
+            setProfileState(localFallbackProfile(fbUser))
+            setLoading(false)
+          }
+        }, SAFETY_TIMEOUT_MS)
+
         try {
           // Ensure Firestore document exists, then subscribe
           await ensureFirestoreProfile(fbUser)
           const userRef = doc(db, 'users', fbUser.uid)
-          unsubRef.current = onSnapshot(userRef, (snap) => {
-            const data = snap.exists() ? snap.data() : null
-            if (data) localStorage.removeItem('pendingGuestProfile')
-            setProfileState(data)
-            setLoading(false)
-            // Update streak once per session (first snapshot only)
-            if (data && !streakUpdatedRef.current) {
-              streakUpdatedRef.current = true
-              updateStreak(fbUser, data).catch(console.error)
-            }
-          })
+          unsubRef.current = onSnapshot(
+            userRef,
+            (snap) => {
+              snapshotFiredRef.current = true
+              if (safetyTimerRef.current) { clearTimeout(safetyTimerRef.current); safetyTimerRef.current = null }
+              const data = snap.exists() ? snap.data() : null
+              if (data) localStorage.removeItem('pendingGuestProfile')
+              setProfileState(data)
+              setLoading(false)
+              // Update streak once per session (first snapshot only)
+              if (data && !streakUpdatedRef.current) {
+                streakUpdatedRef.current = true
+                updateStreak(fbUser, data).catch(console.error)
+              }
+            },
+            (err) => {
+              // onSnapshot-Fehler (z.B. Rules-Block, Netzwerk): Fallback-Profil
+              // statt Endlos-Spinner.
+              console.error('[auth] onSnapshot error:', err.code || err.message)
+              if (!snapshotFiredRef.current) {
+                snapshotFiredRef.current = true
+                if (safetyTimerRef.current) { clearTimeout(safetyTimerRef.current); safetyTimerRef.current = null }
+                setProfileState(localFallbackProfile(fbUser))
+                setLoading(false)
+              }
+            },
+          )
         } catch (err) {
           console.error('Auth state error:', err)
+          if (safetyTimerRef.current) { clearTimeout(safetyTimerRef.current); safetyTimerRef.current = null }
           // Firestore temporarily offline — use localStorage fallback so the
           // user can still access the app. Firestore will sync on next load.
-          const pending = localStorage.getItem('pendingGuestProfile')
-          if (fbUser && pending) {
-            try {
-              const { name, avatar, schoolModule } = JSON.parse(pending)
-              setProfileState(makeProfile(fbUser.uid, name, avatar, schoolModule, fbUser.isAnonymous))
-            } catch { setProfileState(null) }
-          } else {
-            setProfileState(null)
-          }
+          setProfileState(localFallbackProfile(fbUser))
           setLoading(false)
         }
       })()
@@ -172,6 +212,7 @@ export function AuthProvider({ children }) {
     return () => {
       unsubAuth()
       if (unsubRef.current) unsubRef.current()
+      if (safetyTimerRef.current) clearTimeout(safetyTimerRef.current)
     }
   }, [])
 
@@ -270,9 +311,15 @@ export function AuthProvider({ children }) {
 
   const user = profile ? { uid: profile.uid, displayName: profile.name } : null
 
+  // Admin-Status leitet sich aus der E-Mail des angemeldeten Firebase-Users
+  // ab (anonyme Gäste haben keine E-Mail → nie Admin). Zusätzlich wird das
+  // Firestore-Flag profile.isAdmin respektiert, falls jemand es manuell setzt.
+  const authEmail = auth?.currentUser?.email || null
+  const isAdmin   = Boolean(profile?.isAdmin) || isAdminEmail(authEmail)
+
   return (
     <AuthContext.Provider value={{
-      user, profile, loading,
+      user, profile, loading, isAdmin, authEmail,
       loginAnonymously, login, loginWithGoogle,
       register, upgradeWithEmail, upgradeWithGoogle,
       logout, setProfile, deleteAccount,

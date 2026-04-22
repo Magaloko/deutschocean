@@ -32,7 +32,7 @@ export default function NPCCard({ npc, color = '#4f46e5', variant = 'greeting' }
           <span className={styles.name}>{npc.name}</span>
           <span className={styles.role}>{npc.role}</span>
         </div>
-        <p className={styles.message}>„{message}"</p>
+        <p className={styles.message}>„{message}“</p>
       </div>
     </div>
   )

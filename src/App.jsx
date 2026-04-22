@@ -40,9 +40,11 @@ const BlogPostPublicPage = lazy(() => import('./pages/blog/BlogPostPublicPage.js
 const BlogPostPage       = lazy(() => import('./pages/blog/BlogPostPage.jsx'))
 
 // Admin
-const AdminLayout        = lazy(() => import('./pages/admin/AdminLayout.jsx'))
-const AdminBlogListPage  = lazy(() => import('./pages/admin/AdminBlogListPage.jsx'))
-const BlogEditorPage     = lazy(() => import('./pages/admin/BlogEditorPage.jsx'))
+const AdminLayout          = lazy(() => import('./pages/admin/AdminLayout.jsx'))
+const AdminDashboardPage   = lazy(() => import('./pages/admin/AdminDashboardPage.jsx'))
+const AdminUsersPage       = lazy(() => import('./pages/admin/AdminUsersPage.jsx'))
+const AdminBlogListPage    = lazy(() => import('./pages/admin/AdminBlogListPage.jsx'))
+const BlogEditorPage       = lazy(() => import('./pages/admin/BlogEditorPage.jsx'))
 const MehrWeniger     = lazy(() => import('./pages/app/games/mathe/MehrWeniger.jsx'))
 const MinusRakete     = lazy(() => import('./pages/app/games/mathe/MinusRakete.jsx'))
 const Zahlenfolge     = lazy(() => import('./pages/app/games/mathe/Zahlenfolge.jsx'))
@@ -134,6 +136,8 @@ export default function App() {
 
           {/* Admin */}
           <Route path="admin" element={<AdminLayout />}>
+            <Route index element={<AdminDashboardPage />} />
+            <Route path="users" element={<AdminUsersPage />} />
             <Route path="blog" element={<AdminBlogListPage />} />
             <Route path="blog/neu" element={<BlogEditorPage />} />
             <Route path="blog/:id" element={<BlogEditorPage />} />

@@ -48,15 +48,27 @@
 .navLink:hover { background: rgba(255,255,255,.07); color: #fff; }
 .navLinkActive { background: rgba(79,70,229,.3); color: #a5b4fc; }
 
+.sidebarFooter {
+  margin-top: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  border-top: 1px solid rgba(255,255,255,.06);
+  padding-top: 0.9rem;
+}
+.sidebarEmail {
+  font-size: 0.72rem;
+  color: rgba(255,255,255,.5);
+  font-family: monospace;
+  word-break: break-all;
+  line-height: 1.3;
+}
 .backToApp {
   font-size: 0.78rem;
   font-weight: 700;
   color: rgba(255,255,255,.3);
   text-decoration: none;
   padding: 0.4rem 0;
-  border-top: 1px solid rgba(255,255,255,.06);
-  padding-top: 1rem;
-  margin-top: auto;
   transition: color .15s;
 }
 .backToApp:hover { color: rgba(255,255,255,.6); }

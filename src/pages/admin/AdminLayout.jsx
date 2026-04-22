@@ -1,14 +1,14 @@
 import React from 'react'
-import { Outlet, Link, Navigate, useLocation } from 'react-router-dom'
+import { Outlet, Link, Navigate, NavLink } from 'react-router-dom'
 import { useAuth } from '../../hooks/useAuth.jsx'
 import styles from './AdminLayout.module.css'
 
 export default function AdminLayout() {
-  const { profile, loading } = useAuth()
-  const { pathname } = useLocation()
+  const { profile, loading, isAdmin, authEmail } = useAuth()
 
   if (loading) return null
-  if (!profile?.isAdmin) return <Navigate to="/app" replace />
+  if (!profile) return <Navigate to="/start" replace />
+  if (!isAdmin) return <Navigate to="/app" replace />
 
   return (
     <div className={styles.layout}>
@@ -21,13 +21,28 @@ export default function AdminLayout() {
           </svg>
           <span>Admin</span>
         </Link>
+
         <nav className={styles.nav}>
-          <Link to="/admin/blog"
-            className={`${styles.navLink} ${pathname.startsWith('/admin/blog') ? styles.navLinkActive : ''}`}>
-            📝 Blog-Artikel
-          </Link>
+          <NavLink to="/admin" end className={({ isActive }) => `${styles.navLink} ${isActive ? styles.navLinkActive : ''}`}>
+            📊 Dashboard
+          </NavLink>
+          <NavLink to="/admin/users" className={({ isActive }) => `${styles.navLink} ${isActive ? styles.navLinkActive : ''}`}>
+            👥 User
+          </NavLink>
+          <NavLink to="/admin/blog" className={({ isActive }) => `${styles.navLink} ${isActive ? styles.navLinkActive : ''}`}>
+            📝 Blog
+          </NavLink>
         </nav>
-        <Link to="/app" className={styles.backToApp}>← Zurück zur App</Link>
+
+        {authEmail && (
+          <div className={styles.sidebarFooter}>
+            <div className={styles.sidebarEmail} title={authEmail}>{authEmail}</div>
+            <Link to="/app" className={styles.backToApp}>← Zurück zur App</Link>
+          </div>
+        )}
+        {!authEmail && (
+          <Link to="/app" className={styles.backToApp}>← Zurück zur App</Link>
+        )}
       </aside>
       <main className={styles.main}>
         <Outlet />

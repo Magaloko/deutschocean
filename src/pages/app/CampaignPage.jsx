@@ -22,6 +22,9 @@ export default function CampaignPage() {
 
   const campaign = getCampaignById(campaignId)
 
+  // Alle Hooks VOR etwaigen early returns (Rules of Hooks).
+  const [showCelebration, setShowCelebration] = useState(false)
+
   // Auto-mark "startedAt" beim ersten Besuch (für Dashboard-Sortierung)
   useEffect(() => {
     if (!campaign || !profile) return
@@ -50,8 +53,6 @@ export default function CampaignPage() {
   const { status, currentStepIdx, completedSteps, totalSteps } = getCampaignStatus(campaign, profile)
   const claimed = Boolean(campaignProgress[campaign.id]?.claimedAt)
   const completed = profile?.completedMissions ?? []
-
-  const [showCelebration, setShowCelebration] = useState(false)
 
   async function handleClaim() {
     await claimReward(campaign)
