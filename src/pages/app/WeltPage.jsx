@@ -1,11 +1,17 @@
-import React, { useMemo } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import { useParams, Link, Navigate, useNavigate } from 'react-router-dom'
 import { useAuth } from '../../hooks/useAuth.jsx'
 import Icon from '../../components/ui/Icon.jsx'
 import ProgressBar from '../../components/ui/ProgressBar.jsx'
 import { MISSIONS } from '../../lib/gameData.js'
-import { WELTEN, GAME_ROUTES, getWeltById, isWeltForModule } from '../../lib/weltenData.js'
+import { GAME_ROUTES, getWeltById, isWeltForModule } from '../../lib/weltenData.js'
+import { playUnlock } from '../../lib/sounds.js'
 import styles from './WeltPage.module.css'
+
+// Persistenter Key pro Welt: merkt sich, welche Level beim letzten Besuch
+// bereits freigeschaltet waren. Diff beim Mount → Animation für neu
+// freigeschaltete Level.
+const UNLOCK_MEMORY_KEY = (weltId) => `weltUnlocks:${weltId}`
 
 // Level-Gate: das unterste in der Welt vorhandene Level ist immer offen.
 // Höhere Level schalten frei, sobald das vorherige Level mindestens einmal
@@ -57,6 +63,44 @@ export default function WeltPage() {
     () => (welt ? groupMissionsByLevel(welt.gameTypes, completed) : {}),
     [welt, completed],
   )
+
+  // Unlock-Detection: beim ersten Render vergleichen wir aktuell
+  // freigeschaltete Level mit dem Stand aus localStorage. Neu freigeschaltete
+  // Level werden als "newlyUnlocked" gemarkiert, animieren kurz und spielen
+  // den Unlock-Sound.
+  const [newlyUnlocked, setNewlyUnlocked] = useState(new Set())
+  useEffect(() => {
+    if (!welt) return
+    const unlockedNow = Object.keys(groupedByLevel)
+      .map(Number)
+      .filter((lvl) => isLevelUnlocked(lvl, groupedByLevel))
+
+    let stored = []
+    try {
+      const raw = localStorage.getItem(UNLOCK_MEMORY_KEY(welt.id))
+      if (raw) stored = JSON.parse(raw)
+    } catch { /* ignore corrupt storage */ }
+
+    const storedSet = new Set(stored)
+    const fresh = unlockedNow.filter((lvl) => !storedSet.has(lvl))
+
+    // Initial-Besuch einer Welt: unlockedNow auf stored schreiben ohne Fanfare,
+    // sonst würden ALLE verfügbaren Level als "neu" gefeiert.
+    if (stored.length === 0) {
+      localStorage.setItem(UNLOCK_MEMORY_KEY(welt.id), JSON.stringify(unlockedNow))
+      return
+    }
+
+    if (fresh.length === 0) return
+
+    setNewlyUnlocked(new Set(fresh))
+    playUnlock()
+    localStorage.setItem(UNLOCK_MEMORY_KEY(welt.id), JSON.stringify(unlockedNow))
+
+    // Animation läuft 2 s, dann Markierung entfernen (rein kosmetisch)
+    const t = setTimeout(() => setNewlyUnlocked(new Set()), 2200)
+    return () => clearTimeout(t)
+  }, [welt, groupedByLevel])
 
   if (!welt) return <Navigate to="/app" replace />
   if (!isWeltForModule(welt, schoolModule)) {
@@ -115,14 +159,21 @@ export default function WeltPage() {
         const levelDone  = games.reduce((s, g) => s + g.completedCount, 0)
         const levelTotal = games.reduce((s, g) => s + g.variants.length, 0)
 
+        const isNew = newlyUnlocked.has(lvl)
+
         return (
-          <section key={lvl} className={styles.levelSection}>
+          <section key={lvl} className={`${styles.levelSection} ${isNew ? styles.levelNewlyUnlocked : ''}`}>
             <div className={styles.levelHeader}>
               <div className={styles.levelPill} style={{ background: `${welt.color}18`, borderColor: `${welt.color}40` }}>
                 <Icon emoji={meta.emoji} size={16} color={welt.color} />
                 <span style={{ color: welt.color, fontWeight: 800 }}>{meta.label}</span>
               </div>
               <span className={styles.levelProgress}>{levelDone}/{levelTotal} erledigt</span>
+              {isNew && (
+                <span className={styles.levelNewBadge} style={{ background: welt.color }}>
+                  <Icon emoji="🔓" size={12} color="#fff" /> Neu freigeschaltet!
+                </span>
+              )}
               {!unlocked && (
                 <span className={styles.levelLockBadge}>
                   <Icon emoji="🔒" size={14} /> Noch gesperrt
