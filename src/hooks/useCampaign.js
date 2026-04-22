@@ -24,6 +24,14 @@ export function useCampaign() {
     })
   }, [profile])
 
+  const makeChoice = useCallback(async (campaignId, stepId, optionId) => {
+    if (!profile || !auth.currentUser) return
+    await updateDoc(doc(db, 'users', auth.currentUser.uid), {
+      [`campaignProgress.${campaignId}.choices.${stepId}`]: optionId,
+      updatedAt: new Date().toISOString(),
+    })
+  }, [profile])
+
   const claimReward = useCallback(async (campaign) => {
     if (!profile || !auth.currentUser) return
     const already = profile.campaignProgress?.[campaign.id]?.claimedAt
@@ -48,6 +56,7 @@ export function useCampaign() {
     campaignProgress: profile?.campaignProgress ?? {},
     startCampaign,
     claimReward,
+    makeChoice,
     claiming,
   }
 }

@@ -7,6 +7,9 @@ import Badge from '../../../components/ui/Badge.jsx'
 import Input from '../../../components/ui/Input.jsx'
 import Icon from '../../../components/ui/Icon.jsx'
 import StarsRow from '../../../components/ui/StarsRow.jsx'
+import StrategyPicker from '../../../components/game/StrategyPicker.jsx'
+import Debriefing from '../../../components/game/Debriefing.jsx'
+import { useStrategy } from '../../../hooks/useStrategy.js'
 import { CHAOS_WOERTER } from '../../../lib/gameData.js'
 import { useProgress } from '../../../hooks/useProgress.jsx'
 import { useAdaptivity } from '../../../hooks/useAdaptivity.js'
@@ -43,6 +46,7 @@ export default function BuchstabenChaos() {
   const { difficulty, wrongCount, recordAnswer } = useAdaptivity(initialDifficulty)
   const { hint, showHint, dismissHint, hintsUsedCount } = useHints(HINTS, difficulty, wrongCount)
   const { mood, message, react: ozzReact }       = useOzzy()
+  const { strategy, pickStrategy }               = useStrategy()
 
   const prevDiffRef = useRef(initialDifficulty)
 
@@ -89,29 +93,52 @@ export default function BuchstabenChaos() {
 
   async function handleFinish() {
     const stars = score === TOTAL ? 3 : score >= TOTAL * 0.6 ? 2 : 1
+    const xpEarned = Math.round(score * 2 * (strategy?.xpMultiplier ?? 1))
     playComplete()
     ozzReact('celebrate')
-    await completeSession({ missionId: 'buchstaben-chaos-1', xpEarned: score * 2, stars, correct: score, total: TOTAL, hintsUsed: hintsUsedCount })
+    await completeSession({ missionId: 'buchstaben-chaos-1', xpEarned, stars, correct: score, total: TOTAL, hintsUsed: hintsUsedCount })
     navigate('/app')
   }
 
-  if (phase === 'result') {
+  if (!strategy) {
     return (
-      <div className={styles.resultPage}>
-        <div className={styles.resultEmoji}>
-          <Icon emoji={score === TOTAL ? '🔤' : '⭐'} size={64} color={score === TOTAL ? '#f97316' : '#fbbf24'} />
+      <div className={`${styles.gamePage} fade-in`}>
+        <div className={styles.gameHeader}>
+          <Button variant="ghost" size="sm" onClick={() => navigate('/app')}><Icon emoji="←" size={14} /> Zurück</Button>
+          <div className={styles.gameInfo}>
+            <span className={styles.gameEmoji}><Icon emoji="🔤" size={24} color="#f97316" /></span>
+            <h1 className={styles.gameTitle}>Buchstaben-Chaos</h1>
+          </div>
+          <div />
         </div>
-        <h1 className={styles.resultTitle}>{score === TOTAL ? 'Chaos gemeistert!' : 'Fast!'}</h1>
-        <p className={styles.resultSub}>{score}/{TOTAL} Wörter gelöst</p>
-        <div className={styles.resultStats}>
-          <Badge color="purple">+{score * 2} XP</Badge>
-          <Badge color="yellow"><StarsRow count={score === TOTAL ? 3 : score >= TOTAL * 0.6 ? 2 : 1} /></Badge>
-        </div>
-        <div className={styles.resultActions}>
-          <Button onClick={handleFinish} loading={saving} size="lg">Speichern</Button>
-          <Button variant="secondary" onClick={() => navigate('/app')} size="lg">Andere Missionen</Button>
-        </div>
+        <StrategyPicker gameTitle="Buchstaben-Chaos" onSelect={pickStrategy} />
       </div>
+    )
+  }
+
+  if (phase === 'result') {
+    const stars = score === TOTAL ? 3 : score >= TOTAL * 0.6 ? 2 : 1
+    const xpEarned = Math.round(score * 2 * (strategy?.xpMultiplier ?? 1))
+    const highlights = []
+    if (score === TOTAL) highlights.push('Perfekt! Alle Wörter sortiert.')
+    else highlights.push(`${score} von ${TOTAL} Wörtern gelöst.`)
+    if (hintsUsedCount > 0) highlights.push(`${hintsUsedCount}× Tipps genutzt.`)
+    return (
+      <Debriefing
+        gameTitle="Buchstaben-Chaos"
+        icon={score === TOTAL ? '🔤' : '⭐'}
+        color="#f97316"
+        stars={stars}
+        xpEarned={xpEarned}
+        score={score}
+        total={TOTAL}
+        hintsUsed={hintsUsedCount}
+        strategy={strategy}
+        highlights={highlights}
+        nextTip={score < TOTAL ? 'Sprich das Wort laut aus — hören hilft beim Buchstaben-Sortieren.' : 'Hast du es schon mit Express-Modus versucht?'}
+        onContinue={handleFinish}
+        saving={saving}
+      />
     )
   }
 

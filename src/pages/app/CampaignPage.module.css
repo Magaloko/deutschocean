@@ -92,6 +92,81 @@
   background: #f9fafb;
   opacity: 0.7;
 }
+.stepCard.stepChoice {
+  border-style: dashed;
+}
+
+.choiceTag {
+  margin-left: auto;
+  font-size: 0.68rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--accent);
+  background: color-mix(in srgb, var(--accent) 14%, transparent);
+  padding: 0.15rem 0.6rem;
+  border-radius: 999px;
+}
+
+.choiceBox {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-top: 0.3rem;
+}
+.choiceQuestion {
+  font-weight: 700;
+  color: var(--text);
+  margin: 0;
+  font-size: 0.9rem;
+}
+.choiceOptions {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+.choiceOption {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  background: var(--surface);
+  border: 2px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 0.65rem 0.85rem;
+  font-size: 0.88rem;
+  font-weight: 700;
+  cursor: pointer;
+  text-align: left;
+  font-family: inherit;
+  transition: transform 0.15s, border-color 0.15s, box-shadow 0.15s;
+}
+.choiceOption:hover {
+  border-color: var(--accent);
+  transform: translateX(3px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+}
+
+.choiceMade {
+  background: color-mix(in srgb, var(--accent) 8%, transparent);
+  border-left: 3px solid var(--accent);
+  border-radius: 0.5rem;
+  padding: 0.6rem 0.85rem;
+  margin-top: 0.35rem;
+}
+.choiceMadeHead {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.88rem;
+  color: var(--accent);
+}
+.choiceMadeText {
+  margin: 0.25rem 0 0;
+  font-size: 0.82rem;
+  color: var(--text);
+  font-style: italic;
+  line-height: 1.45;
+}
 
 .stepBadge {
   flex-shrink: 0;

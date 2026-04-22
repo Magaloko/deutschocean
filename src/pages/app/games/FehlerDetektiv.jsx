@@ -6,6 +6,9 @@ import Button from '../../../components/ui/Button.jsx'
 import Badge from '../../../components/ui/Badge.jsx'
 import Icon from '../../../components/ui/Icon.jsx'
 import StarsRow from '../../../components/ui/StarsRow.jsx'
+import StrategyPicker from '../../../components/game/StrategyPicker.jsx'
+import Debriefing from '../../../components/game/Debriefing.jsx'
+import { useStrategy } from '../../../hooks/useStrategy.js'
 import { FEHLER_DETEKTIV_TASKS } from '../../../lib/gameData.js'
 import { useProgress } from '../../../hooks/useProgress.jsx'
 import { useAdaptivity } from '../../../hooks/useAdaptivity.js'
@@ -45,6 +48,7 @@ export default function FehlerDetektiv() {
   const { difficulty, wrongCount, recordAnswer } = useAdaptivity(initialDifficulty)
   const { hint, showHint, dismissHint, hintsUsedCount } = useHints(HINTS, difficulty, wrongCount)
   const { mood, message, react: ozzReact }       = useOzzy()
+  const { strategy, pickStrategy }               = useStrategy()
 
   const prevDiffRef = useRef(initialDifficulty)
 
@@ -148,31 +152,57 @@ export default function FehlerDetektiv() {
 
   async function handleFinish() {
     const stars = score === TOTAL ? 3 : score >= TOTAL * 0.6 ? 2 : 1
+    const xpEarned = Math.round(score * 5 * (strategy?.xpMultiplier ?? 1))
     playComplete()
     ozzReact('celebrate')
-    await completeSession({ missionId: 'fehler-detektiv-1', xpEarned: score * 5, stars, correct: score, total: TOTAL, hintsUsed: hintsUsedCount })
+    await completeSession({ missionId: 'fehler-detektiv-1', xpEarned, stars, correct: score, total: TOTAL, hintsUsed: hintsUsedCount })
     navigate('/app')
   }
 
-  if (phase === 'result') {
+  // Strategy-Picker vor der Session
+  if (!strategy) {
     return (
-      <div className={styles.resultPage}>
-        <div className={styles.resultEmoji}>
-          <Icon emoji={score === TOTAL ? '🏆' : score >= 2 ? '⭐' : '🌟'} size={64} color={score === TOTAL ? '#f59e0b' : '#fbbf24'} />
+      <div className={`${styles.gamePage} fade-in`}>
+        <div className={styles.gameHeader}>
+          <Button variant="ghost" size="sm" onClick={() => navigate('/app')}><Icon emoji="←" size={14} /> Zurück</Button>
+          <div className={styles.gameInfo}>
+            <span className={styles.gameEmoji}><Icon emoji="🔍" size={24} color="#ef4444" /></span>
+            <h1 className={styles.gameTitle}>Fehler-Detektiv</h1>
+          </div>
+          <div />
         </div>
-        <h1 className={styles.resultTitle}>
-          {score === TOTAL ? 'Perfekt!' : score >= 2 ? 'Sehr gut!' : 'Weiter üben!'}
-        </h1>
-        <p className={styles.resultSub}>{score} von {TOTAL} Aufgaben richtig</p>
-        <div className={styles.resultStats}>
-          <Badge color="purple">+{score * 5} XP</Badge>
-          <Badge color="yellow"><StarsRow count={score === TOTAL ? 3 : score >= 2 ? 2 : 1} /></Badge>
-        </div>
-        <div className={styles.resultActions}>
-          <Button onClick={handleFinish} loading={saving} size="lg">Ergebnis speichern</Button>
-          <Button variant="secondary" onClick={() => navigate('/app')} size="lg">Andere Missionen</Button>
-        </div>
+        <StrategyPicker gameTitle="Fehler-Detektiv" onSelect={pickStrategy} />
       </div>
+    )
+  }
+
+  if (phase === 'result') {
+    const stars = score === TOTAL ? 3 : score >= TOTAL * 0.6 ? 2 : 1
+    const xpEarned = Math.round(score * 5 * (strategy?.xpMultiplier ?? 1))
+    const highlights = []
+    if (score === TOTAL) highlights.push('Perfekt! Alle Fehler gefunden.')
+    else highlights.push(`${score} von ${TOTAL} Sätzen fehlerfrei.`)
+    if (failedIds.length > 0) highlights.push(`${failedIds.length} Aufgaben nochmal geübt.`)
+    if (hintsUsedCount > 0) highlights.push(`${hintsUsedCount}× Tipps genutzt.`)
+    const nextTip = score < TOTAL
+      ? 'Lies jeden Satz langsam. Nomen werden groß — das ist oft der Schlüssel.'
+      : 'Super Quote! Probier nächstes Mal Express-Modus für doppelt XP.'
+    return (
+      <Debriefing
+        gameTitle="Fehler-Detektiv"
+        icon={score === TOTAL ? '🏆' : '🔍'}
+        color="#ef4444"
+        stars={stars}
+        xpEarned={xpEarned}
+        score={score}
+        total={TOTAL}
+        hintsUsed={hintsUsedCount}
+        strategy={strategy}
+        highlights={highlights}
+        nextTip={nextTip}
+        onContinue={handleFinish}
+        saving={saving}
+      />
     )
   }
 

@@ -9,6 +9,7 @@ import { playFanfare } from '../../lib/sounds.js'
 import {
   getCampaignById,
   getCampaignStatus,
+  getStepChoice,
   isCampaignForModule,
 } from '../../lib/campaignsData.js'
 import styles from './CampaignPage.module.css'
@@ -17,7 +18,7 @@ export default function CampaignPage() {
   const { campaignId } = useParams()
   const { profile }    = useAuth()
   const navigate       = useNavigate()
-  const { startCampaign, claimReward, claiming, campaignProgress } = useCampaign()
+  const { startCampaign, claimReward, makeChoice, claiming, campaignProgress } = useCampaign()
 
   const campaign = getCampaignById(campaignId)
 
@@ -92,7 +93,12 @@ export default function CampaignPage() {
       {/* Schritte */}
       <div className={styles.steps}>
         {campaign.steps.map((step, idx) => {
-          const isDone     = completed.includes(step.missionId)
+          const isChoiceStep = step.type === 'choice'
+          const existingChoice = isChoiceStep ? getStepChoice(campaign, step.id, profile) : null
+          const isDone =
+            isChoiceStep
+              ? Boolean(existingChoice)
+              : completed.includes(step.missionId)
           const isCurrent  = !isDone && idx === currentStepIdx
           const isLocked   = !isDone && idx > currentStepIdx
           const connector  = idx < campaign.steps.length - 1
@@ -100,12 +106,12 @@ export default function CampaignPage() {
           return (
             <React.Fragment key={step.id}>
               <div
-                className={`${styles.stepCard} ${isDone ? styles.stepDone : ''} ${isCurrent ? styles.stepCurrent : ''} ${isLocked ? styles.stepLocked : ''}`}
+                className={`${styles.stepCard} ${isDone ? styles.stepDone : ''} ${isCurrent ? styles.stepCurrent : ''} ${isLocked ? styles.stepLocked : ''} ${isChoiceStep ? styles.stepChoice : ''}`}
                 style={{ '--accent': campaign.color }}
               >
                 <div className={styles.stepBadge}>
                   {isDone
-                    ? <Icon emoji="✓" size={22} color="#fff" />
+                    ? <Icon emoji={isChoiceStep ? '⚖️' : '✓'} size={22} color="#fff" />
                     : isLocked
                       ? <Icon emoji="🔒" size={20} color="#9ca3af" />
                       : <span className={styles.stepNum}>{idx + 1}</span>}
@@ -115,18 +121,50 @@ export default function CampaignPage() {
                   <div className={styles.stepHeader}>
                     <Icon emoji={step.icon} size={22} color={campaign.color} />
                     <h2 className={styles.stepTitle}>{step.title}</h2>
+                    {isChoiceStep && (
+                      <span className={styles.choiceTag}>Entscheidung</span>
+                    )}
                   </div>
 
-                  <p className={styles.stepStory}>
-                    {isDone ? step.storyOutro : step.storyIntro}
-                  </p>
+                  <p className={styles.stepStory}>{step.storyIntro}</p>
 
-                  {isCurrent && (
+                  {/* Choice-Step: Optionen anzeigen (wenn current) oder Ergebnis */}
+                  {isChoiceStep && isCurrent && (
+                    <div className={styles.choiceBox}>
+                      <p className={styles.choiceQuestion}>{step.question}</p>
+                      <div className={styles.choiceOptions}>
+                        {step.options.map((opt) => (
+                          <button
+                            key={opt.id}
+                            type="button"
+                            className={styles.choiceOption}
+                            style={{ '--accent': campaign.color }}
+                            onClick={() => makeChoice(campaign.id, step.id, opt.id)}
+                          >
+                            <Icon emoji={opt.icon} size={22} color={campaign.color} />
+                            <span>{opt.label}</span>
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                  {isChoiceStep && existingChoice && (
+                    <div className={styles.choiceMade}>
+                      <div className={styles.choiceMadeHead}>
+                        <Icon emoji={existingChoice.icon} size={18} color={campaign.color} />
+                        <strong>{existingChoice.label}</strong>
+                      </div>
+                      <p className={styles.choiceMadeText}>{existingChoice.reaction}</p>
+                    </div>
+                  )}
+
+                  {/* Mission-Step */}
+                  {!isChoiceStep && isCurrent && (
                     <Link to={step.route} className={styles.stepPlayBtn} style={{ background: campaign.color }}>
                       <Icon emoji="▶" size={14} color="#fff" /> {step.gameLabel} starten
                     </Link>
                   )}
-                  {isDone && (
+                  {!isChoiceStep && isDone && (
                     <div className={styles.stepDoneBadge}>
                       <Icon emoji="✅" size={14} color="#10b981" /> Erledigt
                     </div>
