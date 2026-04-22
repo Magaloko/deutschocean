@@ -9,6 +9,31 @@
   gap: 0;
 }
 
+.masteryGrid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.6rem;
+  margin-top: 0.5rem;
+  padding: 0 16px;
+}
+.masteryCell {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  padding: 0.7rem 0.9rem;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+.masteryCellHeader {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.82rem;
+  font-weight: 700;
+}
+.masteryCellTitle { color: var(--text); }
+
 /* ── Header ── */
 .header {
   display: flex;

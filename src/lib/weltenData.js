@@ -7,6 +7,12 @@
 // Fach-Welten (Roboter/Coden/Mini-Boss/Cool) kommen aus fachData.js und
 // werden im Dashboard per `isFach: true` gerendert (anderer Routing-Pfad).
 
+// Jede Welt hat einen Tutor-NPC mit eigener Persönlichkeit.
+// Prensky Kap. 10 ("Embedded Knowledge"): NPCs sind verkleidete Lehrer,
+// die in der Story kontextuelle Hinweise geben.
+//
+// `npc.quotes` — Liste kurzer Sprüche, zufällig auswählbar.
+// `npc.greeting` — Begrüßung beim Welt-Eintritt.
 export const WELTEN = [
   {
     id: 'wahrnehmung',
@@ -17,6 +23,18 @@ export const WELTEN = [
     gradient: 'linear-gradient(135deg, #ec4899 0%, #f9a8d4 100%)',
     gameTypes: ['farbenJaeger', 'tierGeraeusche', 'memorySpiel', 'wasFehlt', 'falscherGegenstand'],
     modules: ['kindergarten', 'volksschule', 'hauptschule'],
+    npc: {
+      name: 'Kapitänin Wilma',
+      emoji: '🧑‍✈️',
+      role: 'Wahrnehmungs-Kapitänin',
+      greeting: 'Ahoi! Halt die Augen offen und die Ohren gespitzt — hier trainierst du deine Sinne!',
+      quotes: [
+        'Schau ganz genau hin!',
+        'Manchmal steckt der Unterschied im Detail.',
+        'Ohren auf — was hörst du?',
+        'Merk dir, was du siehst!',
+      ],
+    },
   },
   {
     id: 'tiere-welt',
@@ -27,6 +45,17 @@ export const WELTEN = [
     gradient: 'linear-gradient(135deg, #14b8a6 0%, #5eead4 100%)',
     gameTypes: ['tierWissen', 'fahrzeugLenker', 'fruechtZaehlen'],
     modules: ['kindergarten', 'volksschule'],
+    npc: {
+      name: 'Ranger Leo',
+      emoji: '🧑‍🌾',
+      role: 'Tier-Ranger',
+      greeting: 'Willkommen! Hier entdecken wir Tiere und die Welt um uns herum.',
+      quotes: [
+        'Tiere sind clever — und du auch!',
+        'Jedes Tier hat seine Geschichte.',
+        'Die Natur ist voller Überraschungen.',
+      ],
+    },
   },
   {
     id: 'gefuehle',
@@ -37,6 +66,17 @@ export const WELTEN = [
     gradient: 'linear-gradient(135deg, #a855f7 0%, #d8b4fe 100%)',
     gameTypes: ['emotionenSpiel', 'emotionenKarten', 'emojiGeschichte', 'emojiBaukasten'],
     modules: ['kindergarten', 'volksschule'],
+    npc: {
+      name: 'Theatermeisterin Lotta',
+      emoji: '🧑‍🎨',
+      role: 'Gefühls-Expertin',
+      greeting: 'Hallo! Hier üben wir Gefühle zu erkennen — bei uns und bei anderen.',
+      quotes: [
+        'Gefühle sind wichtig — du auch!',
+        'Jeder fühlt anders. Das ist okay.',
+        'Was siehst du im Gesicht?',
+      ],
+    },
   },
   {
     id: 'rechtschreibung',
@@ -47,6 +87,18 @@ export const WELTEN = [
     gradient: 'linear-gradient(135deg, #ef4444 0%, #fca5a5 100%)',
     gameTypes: ['buchstabenChaos', 'silbenPuzzle', 'regelRaupe', 'fehlerDetektiv', 'diktat'],
     modules: ['volksschule', 'hauptschule'],
+    npc: {
+      name: 'Inspektor Müller',
+      emoji: '🕵️',
+      role: 'Chef-Detektiv',
+      greeting: 'Guten Tag! Ich brauche einen scharfsinnigen Detektiv, um Fehler aufzuspüren. Bist du dabei?',
+      quotes: [
+        'Hmm, da stimmt was nicht mit dem Satz!',
+        'Nomen werden groß — eine goldene Regel.',
+        'Lies laut vor — oft hört man den Fehler.',
+        'Ein echter Detektiv übersieht kein Detail.',
+      ],
+    },
   },
   {
     id: 'grammatik',
@@ -57,6 +109,17 @@ export const WELTEN = [
     gradient: 'linear-gradient(135deg, #10b981 0%, #6ee7b7 100%)',
     gameTypes: ['nomenFinder', 'wortFamilien', 'satzBuilder', 'personenbeschreibung'],
     modules: ['volksschule', 'hauptschule'],
+    npc: {
+      name: 'Wortmeister Otto',
+      emoji: '🧑‍🏫',
+      role: 'Sprach-Experte',
+      greeting: 'Willkommen! Jedes Wort hat seinen Platz im Satz — lass uns das erkunden.',
+      quotes: [
+        'Nomen sind Dinge, Personen, Orte.',
+        'Jeder Satz hat ein Subjekt und ein Verb.',
+        'Wörter bilden Familien — hörst du sie?',
+      ],
+    },
   },
   {
     id: 'mathe',
@@ -67,6 +130,18 @@ export const WELTEN = [
     gradient: 'linear-gradient(135deg, #6366f1 0%, #a5b4fc 100%)',
     gameTypes: ['zahlenstrahl', 'mehrWeniger', 'wuerfelRechnen', 'minusRakete', 'zahlenfolge', 'miniMarkt', 'einmaleinsBlitz'],
     modules: ['kindergarten', 'volksschule', 'hauptschule'],
+    npc: {
+      name: 'Professorin Zahl',
+      emoji: '🧑‍🔬',
+      role: 'Mathe-Professorin',
+      greeting: 'Hallo! Zahlen sind wie Freunde — je öfter du sie siehst, desto vertrauter werden sie.',
+      quotes: [
+        'Denk an den Zahlenstrahl!',
+        'Plus = mehr. Minus = weniger.',
+        'Probier es mit den Fingern.',
+        'Jede Rechnung ist ein kleines Rätsel.',
+      ],
+    },
   },
 ]
 

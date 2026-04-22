@@ -1,0 +1,57 @@
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  background: color-mix(in srgb, var(--rank-color) 12%, transparent);
+  border: 2px solid color-mix(in srgb, var(--rank-color) 35%, transparent);
+  border-radius: 999px;
+  padding: 0.35rem 0.75rem;
+  font-family: inherit;
+}
+.size_sm { padding: 0.25rem 0.55rem; gap: 0.35rem; }
+.size_lg { padding: 0.6rem 1rem; gap: 0.7rem; border-radius: var(--radius-lg); }
+
+.iconWrap {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.body { display: flex; flex-direction: column; gap: 0.15rem; min-width: 0; }
+
+.labelSm { font-size: 0.72rem; font-weight: 700; color: var(--rank-color); letter-spacing: 0.02em; }
+.labelMd { font-size: 0.88rem; font-weight: 800; color: var(--rank-color); letter-spacing: -0.01em; }
+.labelLg { font-size: 1.15rem; font-weight: 900; color: var(--rank-color); letter-spacing: -0.02em; font-family: var(--font-display, inherit); }
+
+.progressRow {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+.bar {
+  flex: 1;
+  height: 4px;
+  min-width: 60px;
+  max-width: 140px;
+  background: rgba(0,0,0,0.08);
+  border-radius: 999px;
+  overflow: hidden;
+}
+.fill {
+  height: 100%;
+  background: var(--rank-color);
+  border-radius: 999px;
+  transition: width 0.4s ease-out;
+}
+.hint {
+  font-size: 0.65rem;
+  color: var(--text-muted);
+  font-weight: 600;
+  white-space: nowrap;
+}
+.maxedOut {
+  font-size: 0.68rem;
+  color: var(--rank-color);
+  font-weight: 700;
+}

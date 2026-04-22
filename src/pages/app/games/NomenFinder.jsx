@@ -6,6 +6,9 @@ import Button from '../../../components/ui/Button.jsx'
 import Badge from '../../../components/ui/Badge.jsx'
 import Icon from '../../../components/ui/Icon.jsx'
 import StarsRow from '../../../components/ui/StarsRow.jsx'
+import StrategyPicker from '../../../components/game/StrategyPicker.jsx'
+import Debriefing from '../../../components/game/Debriefing.jsx'
+import { useStrategy } from '../../../hooks/useStrategy.js'
 import { NOMEN_SAETZE } from '../../../lib/gameData.js'
 import { useProgress } from '../../../hooks/useProgress.jsx'
 import { useAdaptivity } from '../../../hooks/useAdaptivity.js'
@@ -41,6 +44,7 @@ export default function NomenFinder() {
   const { difficulty, wrongCount, recordAnswer } = useAdaptivity(initialDifficulty)
   const { hint, showHint, dismissHint, hintsUsedCount } = useHints(HINTS, difficulty, wrongCount)
   const { mood, message, react: ozzReact }       = useOzzy()
+  const { strategy, pickStrategy }               = useStrategy()
 
   const prevDiffRef = useRef(initialDifficulty)
 
@@ -131,29 +135,62 @@ export default function NomenFinder() {
 
   async function handleFinish() {
     const stars = score === tasks.length ? 3 : score >= tasks.length * 0.6 ? 2 : 1
+    const baseXP = score * 5
+    const xpEarned = Math.round(baseXP * (strategy?.xpMultiplier ?? 1))
     playComplete()
     ozzReact('celebrate')
-    await completeSession({ missionId: 'nomen-1', xpEarned: score * 5, stars, correct: score, total: tasks.length, hintsUsed: hintsUsedCount })
+    await completeSession({ missionId: 'nomen-1', xpEarned, stars, correct: score, total: tasks.length, hintsUsed: hintsUsedCount })
     navigate('/app')
   }
 
-  if (phase === 'result') {
+  // Prensky: Spieler wählt bewusst seinen Lernmodus vor der Session.
+  if (!strategy) {
     return (
-      <div className={styles.resultPage}>
-        <div className={styles.resultEmoji}>
-          <Icon emoji={score === tasks.length ? '🏹' : '⭐'} size={64} color={score === tasks.length ? '#4f46e5' : '#fbbf24'} />
+      <div className={`${styles.gamePage} fade-in`}>
+        <div className={styles.gameHeader}>
+          <Button variant="ghost" size="sm" onClick={() => navigate('/app')}><Icon emoji="←" size={14} /> Zurück</Button>
+          <div className={styles.gameInfo}>
+            <span className={styles.gameEmoji}><Icon emoji="🏹" size={24} color="#4f46e5" /></span>
+            <h1 className={styles.gameTitle}>Nomen-Jäger</h1>
+          </div>
+          <div />
         </div>
-        <h1 className={styles.resultTitle}>{score === tasks.length ? 'Alle Nomen gefunden!' : 'Weiter üben!'}</h1>
-        <p className={styles.resultSub}>{score}/{tasks.length} Sätze korrekt</p>
-        <div className={styles.resultStats}>
-          <Badge color="purple">+{score * 5} XP</Badge>
-          <Badge color="yellow"><StarsRow count={score === tasks.length ? 3 : score >= tasks.length * 0.6 ? 2 : 1} /></Badge>
-        </div>
-        <div className={styles.resultActions}>
-          <Button onClick={handleFinish} loading={saving} size="lg">Speichern</Button>
-          <Button variant="secondary" onClick={() => navigate('/app')} size="lg">Andere Missionen</Button>
-        </div>
+        <StrategyPicker gameTitle="Nomen-Jäger" onSelect={pickStrategy} />
       </div>
+    )
+  }
+
+  if (phase === 'result') {
+    const stars = score === tasks.length ? 3 : score >= tasks.length * 0.6 ? 2 : 1
+    const baseXP = score * 5
+    const xpEarned = Math.round(baseXP * (strategy?.xpMultiplier ?? 1))
+    const accuracy = tasks.length > 0 ? score / tasks.length : 0
+    const highlights = []
+    if (accuracy === 1) highlights.push('Perfekt! Du hast alle Nomen sicher erkannt.')
+    else if (accuracy >= 0.6) highlights.push(`${score} von ${tasks.length} Sätzen richtig.`)
+    else highlights.push(`Noch Übung nötig — ${score} richtig, ${tasks.length - score} offen.`)
+    if (failedIds.length > 0) highlights.push(`${failedIds.length} Sätze nochmal geübt.`)
+    if (hintsUsedCount > 0) highlights.push(`${hintsUsedCount}× Tipps genutzt — das hilft beim Lernen.`)
+    const nextTip = accuracy < 0.8
+      ? 'Nomen erkennst du, wenn "ein/eine/der/die/das" davor passt: ein Hund, eine Schule.'
+      : 'Super! Versuch nächstes Mal Express-Modus — doppelt XP!'
+
+    return (
+      <Debriefing
+        gameTitle="Nomen-Jäger"
+        icon={score === tasks.length ? '🏹' : '⭐'}
+        color="#4f46e5"
+        stars={stars}
+        xpEarned={xpEarned}
+        score={score}
+        total={tasks.length}
+        hintsUsed={hintsUsedCount}
+        strategy={strategy}
+        highlights={highlights}
+        nextTip={nextTip}
+        onContinue={handleFinish}
+        saving={saving}
+      />
     )
   }
 

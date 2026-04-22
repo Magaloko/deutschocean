@@ -3,8 +3,11 @@ import { useParams, Link, Navigate, useNavigate } from 'react-router-dom'
 import { useAuth } from '../../hooks/useAuth.jsx'
 import Icon from '../../components/ui/Icon.jsx'
 import ProgressBar from '../../components/ui/ProgressBar.jsx'
+import MasteryBadge from '../../components/ui/MasteryBadge.jsx'
+import NPCCard from '../../components/ui/NPCCard.jsx'
 import { MISSIONS } from '../../lib/gameData.js'
 import { GAME_ROUTES, getWeltById, isWeltForModule } from '../../lib/weltenData.js'
+import { getWeltMastery } from '../../lib/masteryData.js'
 import { playUnlock } from '../../lib/sounds.js'
 import styles from './WeltPage.module.css'
 
@@ -121,6 +124,7 @@ export default function WeltPage() {
   const allGames     = levels.flatMap((lvl) => groupedByLevel[lvl])
   const totalVariants = allGames.reduce((sum, g) => sum + g.variants.length, 0)
   const doneVariants  = allGames.reduce((sum, g) => sum + g.completedCount, 0)
+  const mastery = getWeltMastery(welt, profile)
 
   return (
     <div className={`${styles.page} fade-in`}>
@@ -146,6 +150,14 @@ export default function WeltPage() {
           </div>
         </div>
       </div>
+
+      <div className={styles.masteryRow}>
+        <MasteryBadge mastery={mastery} size="lg" showProgress />
+      </div>
+
+      {welt.npc && (
+        <NPCCard npc={welt.npc} color={welt.color} variant={mastery.plays === 0 ? 'greeting' : 'quote'} />
+      )}
 
       <div className={styles.progressWrap}>
         <ProgressBar value={doneVariants} max={Math.max(totalVariants, 1)} color="green" />

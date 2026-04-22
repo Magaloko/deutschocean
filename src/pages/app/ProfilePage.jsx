@@ -4,7 +4,10 @@ import { useNavigate, Link } from 'react-router-dom'
 import { useAuth } from '../../hooks/useAuth.jsx'
 import ProgressBar from '../../components/ui/ProgressBar.jsx'
 import Icon from '../../components/ui/Icon.jsx'
+import MasteryBadge from '../../components/ui/MasteryBadge.jsx'
 import { BADGES } from '../../lib/gameData.js'
+import { WELTEN, isWeltForModule } from '../../lib/weltenData.js'
+import { getWeltMastery, getOverallMastery } from '../../lib/masteryData.js'
 import styles from './ProfilePage.module.css'
 
 const AVATARS = ['🐬', '🦁', '🦊', '🐸', '🦄', '🐧', '🦋', '🐼', '🦖', '🐙']
@@ -86,6 +89,12 @@ export default function ProfilePage() {
 
   const mod = MODULES.find(m => m.id === profile.schoolModule) ?? MODULES[1]
 
+  const overallMastery = getOverallMastery(profile)
+  const weltMasteries = WELTEN
+    .filter((w) => isWeltForModule(w, profile.schoolModule))
+    .map((w) => ({ welt: w, mastery: getWeltMastery(w, profile) }))
+    .filter((wm) => wm.mastery.plays > 0)   // Nur Welten, in denen schon gespielt wurde
+
   return (
     <div className={`${styles.page} fade-in`}>
       {/* ── Header ── */}
@@ -138,6 +147,29 @@ export default function ProfilePage() {
           <span className={styles.upgradeArrow}>→</span>
         </Link>
       )}
+
+      {/* ── Mastery: Overall + per Welt ── */}
+      <section className={styles.section}>
+        <h2 className={styles.sectionTitle}>
+          <Icon emoji="🎖️" size={22} /> Dein Rang
+        </h2>
+        <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '0.75rem' }}>
+          <MasteryBadge mastery={overallMastery} size="lg" showProgress={false} />
+        </div>
+        {weltMasteries.length > 0 && (
+          <div className={styles.masteryGrid}>
+            {weltMasteries.map(({ welt, mastery }) => (
+              <div key={welt.id} className={styles.masteryCell}>
+                <div className={styles.masteryCellHeader}>
+                  <Icon emoji={welt.icon} size={18} color={welt.color} />
+                  <span className={styles.masteryCellTitle}>{welt.title}</span>
+                </div>
+                <MasteryBadge mastery={mastery} size="sm" showProgress />
+              </div>
+            ))}
+          </div>
+        )}
+      </section>
 
       {/* ── Stats ── */}
       <div className={styles.statsGrid}>
