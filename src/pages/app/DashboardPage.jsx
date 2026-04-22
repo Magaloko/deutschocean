@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react'
+import React, { useMemo, useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { useAuth } from '../../hooks/useAuth.jsx'
 import { useRecommendedPosts } from '../../hooks/useRecommendedPosts.js'
@@ -6,12 +6,18 @@ import PostCard from '../../components/blog/PostCard.jsx'
 import Badge from '../../components/ui/Badge.jsx'
 import ProgressBar from '../../components/ui/ProgressBar.jsx'
 import Icon from '../../components/ui/Icon.jsx'
+import CelebrationOverlay from '../../components/ui/CelebrationOverlay.jsx'
 import { MISSIONS, BADGES } from '../../lib/gameData.js'
 import { FAECHER } from '../../lib/fachData.js'
 import { WELTEN, GAME_ROUTES, isWeltForModule } from '../../lib/weltenData.js'
 import { CAMPAIGNS, getCampaignStatus, isCampaignForModule } from '../../lib/campaignsData.js'
 import { isDueToday } from '../../lib/spacedRepetition.js'
+import { playStreak } from '../../lib/sounds.js'
 import styles from './DashboardPage.module.css'
+
+// SessionStorage-Key verhindert, dass die Streak-Celebration bei jeder
+// Dashboard-Rückkehr feuert — nur 1× pro Browser-Session.
+const STREAK_CELEBRATED_KEY = 'streakCelebratedOn'
 
 const MODULE_META = {
   kindergarten: { emoji: '🧒', label: 'Kindergarten',    color: '#ec4899' },
@@ -65,6 +71,23 @@ export default function DashboardPage() {
   const recommendedPosts = useRecommendedPosts(profile)
   const spacedRepetition = profile?.spacedRepetition ?? {}
 
+  // Streak-Celebration: bei Streak ≥ 3 einmal pro Session feiern.
+  // Markiert via sessionStorage — überlebt Navigation innerhalb des Tabs,
+  // startet beim Schließen/Öffnen des Tabs neu.
+  const [showStreakCelebration, setShowStreakCelebration] = useState(false)
+  useEffect(() => {
+    if (streakDays < 3) return
+    const today = new Date().toISOString().slice(0, 10)
+    if (sessionStorage.getItem(STREAK_CELEBRATED_KEY) === today) return
+    sessionStorage.setItem(STREAK_CELEBRATED_KEY, today)
+    // Kurze Verzögerung, damit das Dashboard zuerst rendert
+    const t = setTimeout(() => {
+      setShowStreakCelebration(true)
+      playStreak()
+    }, 600)
+    return () => clearTimeout(t)
+  }, [streakDays])
+
   const dueForReview = useMemo(() => {
     return MISSIONS.filter((m) => {
       const sr = spacedRepetition[m.id]
@@ -99,6 +122,16 @@ export default function DashboardPage() {
 
   return (
     <div className={`${styles.page} fade-in`}>
+      {showStreakCelebration && (
+        <CelebrationOverlay
+          icon="🔥"
+          title={`${streakDays} Tage in Folge!`}
+          subtitle="Unaufhaltbar! Mach weiter so — du bist spitze."
+          color="#ef4444"
+          autoDismissMs={4200}
+          onDismiss={() => setShowStreakCelebration(false)}
+        />
+      )}
 
       {/* ── Hero ── */}
       <div className={styles.hero}>

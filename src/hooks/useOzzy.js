@@ -33,6 +33,18 @@ const LEVEL_DOWN_MESSAGES = [
   'Du schaffst das — einfachere Aufgaben! 🌟',
 ]
 
+const KOMBO_MESSAGES = [
+  '3 in Folge! Du bist in Flow! 🔥',
+  'Hattrick! Weiter so! ⚡',
+  'Unaufhaltbar! 💫',
+]
+
+const STREAK_MESSAGES = [
+  'Schon wieder da! 🔥',
+  'Täglicher Profi! 🌟',
+  'Deine Serie lebt! ✨',
+]
+
 function pick(arr) {
   return arr[Math.floor(Math.random() * arr.length)]
 }
@@ -73,12 +85,20 @@ export function useOzzy() {
         setMood('levelDown')
         setMessage(pick(LEVEL_DOWN_MESSAGES))
         break
+      case 'kombo':
+        setMood('celebrate')
+        setMessage(pick(KOMBO_MESSAGES))
+        break
+      case 'streak':
+        setMood('celebrate')
+        setMessage(pick(STREAK_MESSAGES))
+        break
       default:
         setMood('idle')
         setMessage(null)
     }
-    // Auto-reset to idle after 2s (except celebrate which stays 3s)
-    const delay = event === 'celebrate' ? 3000 : 2000
+    // Auto-reset to idle after 2s (celebrate/kombo/streak stay longer)
+    const delay = ['celebrate', 'kombo', 'streak'].includes(event) ? 3000 : 2000
     timerRef.current = setTimeout(() => {
       setMood('idle')
       setMessage(null)

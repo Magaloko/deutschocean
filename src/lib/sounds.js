@@ -142,3 +142,46 @@ export function playComplete() {
   tone(784,  t + 0.2,  0.08)
   tone(1047, t + 0.32, 0.35)  // C6 – hoher Abschluss-Ton
 }
+
+/** Große Fanfare für Kampagnen-Abschluss oder seltene Errungenschaften.
+ *  Zwei aufsteigende Akkord-Läufe mit längerem Finale. */
+export function playFanfare() {
+  const c = getCtx()
+  if (!c) return
+  const t = c.currentTime
+  // Erster Lauf
+  tone(523,  t,        0.1,  'triangle')  // C5
+  tone(659,  t + 0.12, 0.1,  'triangle')  // E5
+  tone(784,  t + 0.24, 0.1,  'triangle')  // G5
+  tone(1047, t + 0.36, 0.15, 'triangle')  // C6
+  // Zweiter Lauf (höher)
+  tone(784,  t + 0.6,  0.1,  'triangle')
+  tone(1047, t + 0.72, 0.1,  'triangle')
+  tone(1319, t + 0.84, 0.1,  'triangle')  // E6
+  tone(1568, t + 0.96, 0.5,  'triangle')  // G6 — Finale
+  // Akkord-Unterton zum Abschluss
+  tone(523,  t + 0.96, 0.5,  'sine', 0.12)
+  tone(659,  t + 0.96, 0.5,  'sine', 0.12)
+}
+
+/** Streak-Jingle: heller, fröhlicher 4-Ton-Lauf */
+export function playStreak() {
+  const c = getCtx()
+  if (!c) return
+  const t = c.currentTime
+  tone(659,  t,        0.08)  // E5
+  tone(988,  t + 0.08, 0.08)  // B5
+  tone(1175, t + 0.16, 0.08)  // D6
+  tone(1568, t + 0.26, 0.2)   // G6
+}
+
+/** Unlock-Sound: aufsteigendes „Schloss-öffnet"-Motiv */
+export function playUnlock() {
+  const c = getCtx()
+  if (!c) return
+  const t = c.currentTime
+  tone(440,  t,        0.08, 'triangle')
+  tone(659,  t + 0.09, 0.08, 'triangle')
+  tone(880,  t + 0.18, 0.08, 'triangle')
+  tone(1175, t + 0.28, 0.22, 'triangle')
+}

@@ -1,9 +1,11 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useParams, useNavigate, Link, Navigate } from 'react-router-dom'
 import { useAuth } from '../../hooks/useAuth.jsx'
 import { useCampaign } from '../../hooks/useCampaign.js'
 import Icon from '../../components/ui/Icon.jsx'
 import Button from '../../components/ui/Button.jsx'
+import CelebrationOverlay from '../../components/ui/CelebrationOverlay.jsx'
+import { playFanfare } from '../../lib/sounds.js'
 import {
   getCampaignById,
   getCampaignStatus,
@@ -48,8 +50,12 @@ export default function CampaignPage() {
   const claimed = Boolean(campaignProgress[campaign.id]?.claimedAt)
   const completed = profile?.completedMissions ?? []
 
+  const [showCelebration, setShowCelebration] = useState(false)
+
   async function handleClaim() {
     await claimReward(campaign)
+    playFanfare()
+    setShowCelebration(true)
   }
 
   return (
@@ -140,6 +146,17 @@ export default function CampaignPage() {
           )
         })}
       </div>
+
+      {showCelebration && (
+        <CelebrationOverlay
+          icon="🏆"
+          title={campaign.reward.title}
+          subtitle={`+${campaign.reward.xp} XP — ${campaign.reward.message}`}
+          color={campaign.color}
+          autoDismissMs={5500}
+          onDismiss={() => setShowCelebration(false)}
+        />
+      )}
 
       {/* Belohnung */}
       {status === 'complete' && (

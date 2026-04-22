@@ -17,6 +17,17 @@
   justify-content: center;
 }
 
+.routeEnter {
+  animation: routeIn 0.32s cubic-bezier(0.2, 0, 0, 1) both;
+}
+@keyframes routeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0);    }
+}
+@media (prefers-reduced-motion: reduce) {
+  .routeEnter { animation: none; }
+}
+
 @media (max-width: 640px) {
   .main { padding: 1.25rem 1rem 6rem; }
 }

@@ -1,5 +1,5 @@
 import React from 'react'
-import { Outlet, Navigate } from 'react-router-dom'
+import { Outlet, Navigate, useLocation } from 'react-router-dom'
 import NavBar from './NavBar.jsx'
 import MobileNav from './MobileNav.jsx'
 import { useAuth } from '../../hooks/useAuth.jsx'
@@ -8,6 +8,7 @@ import styles from './AppLayout.module.css'
 
 export default function AppLayout() {
   const { profile, loading } = useAuth()
+  const location = useLocation()
 
   if (loading) {
     return (
@@ -24,7 +25,8 @@ export default function AppLayout() {
   return (
     <div className={styles.layout}>
       <NavBar />
-      <main className={styles.main}>
+      {/* key on pathname forces remount → triggers routeEnter animation */}
+      <main key={location.pathname} className={`${styles.main} ${styles.routeEnter}`}>
         <Outlet />
       </main>
       <MobileNav />
