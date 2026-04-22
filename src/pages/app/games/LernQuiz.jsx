@@ -212,6 +212,13 @@ export default function LernQuiz({ fachId, fachLabel, fachEmoji, fachColor, leve
           {currentQ.shuffledOptions[selected]?.correct
             ? <span className={styles.feedbackCorrect} style={{ display: 'inline-flex', alignItems: 'center', gap: '0.4rem' }}><Icon emoji="🎉" size={18} /> Richtig! Weiter so!</span>
             : <span className={styles.feedbackWrong} style={{ display: 'inline-flex', alignItems: 'center', gap: '0.4rem' }}><Icon emoji="❌" size={18} /> Nicht ganz — die grüne Antwort war richtig!</span>}
+          {/* Optionale Erklärung aus den Frage-Daten — didaktischer Lern-Hinweis. */}
+          {currentQ.erklaerung && (
+            <div className={styles.explanationBox}>
+              <Icon emoji="💡" size={16} color="#f59e0b" />
+              <span>{currentQ.erklaerung}</span>
+            </div>
+          )}
           <button className={styles.nextBtn} style={{ background: fachColor, display: 'inline-flex', alignItems: 'center', gap: '0.4rem' }} onClick={handleNext}>
             {idx + 1 >= total ? <><Icon emoji="📊" size={16} color="#fff" /> Ergebnis sehen</> : 'Weiter →'}
           </button>

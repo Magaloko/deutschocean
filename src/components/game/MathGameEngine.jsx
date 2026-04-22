@@ -205,6 +205,15 @@ export default function MathGameEngine({
                 : `Richtig wäre: ${formatOption(round.answer)}`}
             </span>
           </div>
+          {/* Optional: Erklärung aus den Round-Daten. Spiele können per
+              `explanation` einen Lern-Hinweis mitschicken — sowohl bei
+              richtig (Verstärken) als auch falsch (Erklären) nützlich. */}
+          {round.explanation && (
+            <div className={styles.explanation}>
+              <Icon emoji="💡" size={16} color="#f59e0b" />
+              <span>{round.explanation}</span>
+            </div>
+          )}
           <button
             className={`${styles.primaryBtn} ${styles.greenBtn}`}
             onClick={handleWeiter}

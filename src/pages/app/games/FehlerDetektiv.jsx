@@ -53,7 +53,16 @@ export default function FehlerDetektiv() {
   const [selected, setSelected]   = useState(new Set())
   const [checked, setChecked]     = useState(false)
   const [score, setScore]         = useState(0)
-  const [phase, setPhase]         = useState('playing') // 'playing' | 'result'
+  const [phase, setPhase]         = useState('playing') // 'playing' | 'retry' | 'result'
+
+  // Wrong-Answer-Retry: Aufgaben, bei denen der Spieler nicht alle Fehler
+  // erwischt oder falsche markiert hat, werden am Ende der Session noch
+  // einmal gestellt — zum Einprägen, ohne Score-Effekt.
+  const [failedIds, setFailedIds] = useState([])
+  const [retryQueue, setRetryQueue] = useState([])
+  const [retryIdx, setRetryIdx] = useState(0)
+
+  const currentTask = phase === 'retry' ? retryQueue[retryIdx] : tasks[taskIdx]
 
   // Ozzy reaction on difficulty change
   useEffect(() => {
@@ -64,11 +73,19 @@ export default function FehlerDetektiv() {
     }
   }, [difficulty, ozzReact])
 
-  const task = tasks[taskIdx]
-  if (!task) return null
+  if (!currentTask) return null
+  const task = currentTask
 
   const words      = task.text.split(' ')
   const errorWords = new Set(task.errors.map((e) => e.word))
+
+  // Analyse der Auswahl nach "Überprüfen": was hat der Spieler getroffen,
+  // was falsch markiert, was übersehen? Wird für die didaktische
+  // Rückmeldung genutzt.
+  const hits       = checked ? new Set([...selected].filter((w) => errorWords.has(w)))       : new Set()
+  const falsePos   = checked ? new Set([...selected].filter((w) => !errorWords.has(w)))      : new Set()
+  const missed     = checked ? new Set([...errorWords].filter((w) => !selected.has(w)))      : new Set()
+  const perfectRun = checked && hits.size === errorWords.size && falsePos.size === 0
 
   function toggleWord(word) {
     if (checked) return
@@ -83,20 +100,49 @@ export default function FehlerDetektiv() {
     const correct =
       task.errors.every((e) => selected.has(e.word)) &&
       [...selected].every((w) => errorWords.has(w))
-    if (correct) { setScore((s) => s + 1); playCorrect(); ozzReact('correct') }
-    else         { playWrong(); ozzReact('wrong') }
+    if (correct) {
+      // Nur in der Hauptrunde zählt ein Treffer für den Score.
+      if (phase === 'playing') setScore((s) => s + 1)
+      playCorrect(); ozzReact('correct')
+    } else {
+      playWrong(); ozzReact('wrong')
+      // In der Hauptrunde merken wir uns die Aufgabe für die Retry-Phase.
+      if (phase === 'playing' && !failedIds.includes(task.id)) {
+        setFailedIds((ids) => [...ids, task.id])
+      }
+    }
     recordAnswer(correct)
     setChecked(true)
     dismissHint()
   }
 
   function handleNext() {
-    if (taskIdx + 1 >= TOTAL) { setPhase('result') }
-    else {
-      setTaskIdx((i) => i + 1)
-      setSelected(new Set())
-      setChecked(false)
-      dismissHint()
+    dismissHint()
+    setSelected(new Set())
+    setChecked(false)
+
+    if (phase === 'playing') {
+      if (taskIdx + 1 >= TOTAL) {
+        // Hauptrunde fertig → Retry-Phase starten, falls es Fehler gab.
+        const toRetry = tasks.filter((t) => failedIds.includes(t.id))
+        if (toRetry.length > 0) {
+          setRetryQueue(toRetry)
+          setRetryIdx(0)
+          setPhase('retry')
+        } else {
+          setPhase('result')
+        }
+      } else {
+        setTaskIdx((i) => i + 1)
+      }
+      return
+    }
+
+    // phase === 'retry'
+    if (retryIdx + 1 >= retryQueue.length) {
+      setPhase('result')
+    } else {
+      setRetryIdx((i) => i + 1)
     }
   }
 
@@ -138,8 +184,19 @@ export default function FehlerDetektiv() {
           <span className={styles.gameEmoji}><Icon emoji="🔍" size={24} color="#ef4444" /></span>
           <h1 className={styles.gameTitle}>Fehler-Detektiv</h1>
         </div>
-        <Badge color="gray">{taskIdx + 1}/{TOTAL}</Badge>
+        <Badge color="gray">
+          {phase === 'retry'
+            ? `Üben ${retryIdx + 1}/${retryQueue.length}`
+            : `${taskIdx + 1}/${TOTAL}`}
+        </Badge>
       </div>
+
+      {phase === 'retry' && (
+        <div className={styles.retryBanner}>
+          <Icon emoji="🎯" size={18} color="#f59e0b" />
+          <span>Lass uns die Fehler nochmal üben!</span>
+        </div>
+      )}
 
       <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '-0.5rem' }}>
         <OzzyMascot mood={mood} message={message} />
@@ -166,8 +223,12 @@ export default function FehlerDetektiv() {
             const isSelected = selected.has(clean)
             const isError    = errorWords.has(clean)
             let cls = styles.token
-            if (checked) cls += isError ? ` ${styles.tokenError}` : ` ${styles.tokenOk}`
-            else if (isSelected) cls += ` ${styles.tokenSelected}`
+            if (checked) {
+              if (hits.has(clean))           cls += ` ${styles.tokenHit}`
+              else if (falsePos.has(clean))  cls += ` ${styles.tokenFalsePos}`
+              else if (missed.has(clean))    cls += ` ${styles.tokenMissed}`
+              else                           cls += ` ${styles.tokenOk}`
+            } else if (isSelected) cls += ` ${styles.tokenSelected}`
             return (
               <span key={i}>
                 <button className={cls} onClick={() => toggleWord(clean)} disabled={checked}>{clean}</button>
@@ -179,17 +240,39 @@ export default function FehlerDetektiv() {
 
         {checked && (
           <div className={`${styles.feedback} fade-in`}>
+            <p className={styles.feedbackSummary}>
+              {perfectRun ? (
+                <>
+                  <Icon emoji="✅" size={18} color="#10b981" />
+                  <strong>Perfekt!</strong> Du hast alle {errorWords.size} Fehler gefunden.
+                </>
+              ) : (
+                <>
+                  <Icon emoji="💡" size={18} color="#f59e0b" />
+                  Du hast <strong>{hits.size} von {errorWords.size}</strong> Fehlern gefunden
+                  {falsePos.size > 0 && <> · {falsePos.size} zu viel markiert</>}
+                </>
+              )}
+            </p>
             <p className={styles.feedbackTitle}>Richtig geschrieben:</p>
             <p className={styles.corrected}>{task.corrected}</p>
             <div className={styles.errorList}>
-              {task.errors.map((e) => (
-                <div key={e.word} className={styles.errorItem}>
-                  <span className={styles.errorWrong}>{e.word}</span>
-                  <span className={styles.errorArrow}>→</span>
-                  <span className={styles.errorRight}>{e.correct}</span>
-                  <span className={styles.errorReason}>{e.reason}</span>
-                </div>
-              ))}
+              {task.errors.map((e) => {
+                const wasCaught = hits.has(e.word)
+                return (
+                  <div key={e.word} className={`${styles.errorItem} ${wasCaught ? styles.errorItemHit : styles.errorItemMissed}`}>
+                    <span className={styles.errorStatus}>
+                      {wasCaught
+                        ? <Icon emoji="✓" size={14} color="#10b981" />
+                        : <Icon emoji="⚠️" size={14} color="#f59e0b" />}
+                    </span>
+                    <span className={styles.errorWrong}>{e.word}</span>
+                    <span className={styles.errorArrow}>→</span>
+                    <span className={styles.errorRight}>{e.correct}</span>
+                    <span className={styles.errorReason}>{e.reason}</span>
+                  </div>
+                )
+              })}
             </div>
           </div>
         )}
@@ -197,16 +280,26 @@ export default function FehlerDetektiv() {
         <div className={styles.actions}>
           {!checked
             ? <Button onClick={handleCheck} disabled={selected.size === 0} size="lg">Überprüfen</Button>
-            : <Button onClick={handleNext} size="lg">{taskIdx + 1 >= TOTAL ? 'Ergebnis ansehen' : 'Weiter →'}</Button>
+            : (
+              <Button onClick={handleNext} size="lg">
+                {phase === 'retry'
+                  ? (retryIdx + 1 >= retryQueue.length ? 'Ergebnis ansehen' : 'Weiter üben →')
+                  : (taskIdx + 1 >= TOTAL
+                      ? (failedIds.length > 0 ? 'Jetzt nochmal üben →' : 'Ergebnis ansehen')
+                      : 'Weiter →')}
+              </Button>
+            )
           }
         </div>
       </Card>
 
-      <div className={styles.progressDots}>
-        {tasks.map((_, i) => (
-          <div key={i} className={`${styles.dot} ${i < taskIdx ? styles.dotDone : i === taskIdx ? styles.dotActive : ''}`} />
-        ))}
-      </div>
+      {phase === 'playing' && (
+        <div className={styles.progressDots}>
+          {tasks.map((_, i) => (
+            <div key={i} className={`${styles.dot} ${i < taskIdx ? styles.dotDone : i === taskIdx ? styles.dotActive : ''}`} />
+          ))}
+        </div>
+      )}
     </div>
   )
 }

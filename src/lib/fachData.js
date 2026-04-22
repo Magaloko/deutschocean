@@ -6,14 +6,14 @@
 // ── ROBOTER-SCHULE (AI ChatBots + Agentic AI For Dummies) ────────────────
 export const ROBOTER_FRAGEN = {
   0: [
-    { q: 'Was ist ein Chatbot?', options: ['Ein Roboter aus Metall', 'Ein Computerprogramm das Fragen beantwortet', 'Ein Spielzeug', 'Ein Haustier'], a: 1 },
-    { q: 'Was bedeutet "KI"?', options: ['Kleine Idee', 'Künstliche Intelligenz', 'Kinder Internet', 'Kreatives Institut'], a: 1 },
-    { q: 'Wie redet man mit einem Chatbot?', options: ['Man ruft ihn an', 'Man winkt ihm zu', 'Man tippt oder spricht mit ihm', 'Man schickt einen Brief'], a: 2 },
-    { q: 'Welches davon ist ein bekannter KI-Assistent?', options: ['Pikachu', 'Siri', 'Mario', 'Sonic'], a: 1 },
-    { q: 'Was braucht eine KI um zu lernen?', options: ['Essen und Schlafen', 'Viele Beispiele und Daten', 'Einen Lehrer der aufpasst', 'Urlaub'], a: 1 },
-    { q: 'Kann eine KI Fehler machen?', options: ['Nein, KI ist immer perfekt', 'Ja, manchmal gibt sie falsche Antworten', 'Nur wenn man sie ärgert', 'Nein, sie weiß alles'], a: 1 },
-    { q: 'Wo begegnest du täglich einer KI?', options: ['Nur im Raumschiff', 'Beim Suchen im Internet', 'Nur im Krankenhaus', 'Niemals'], a: 1 },
-    { q: 'Was ist ein "Sprachassistent"?', options: ['Ein Lehrer für Sprachen', 'Eine KI die Sprachbefehle versteht', 'Ein Übersetzer-Buch', 'Ein Mikrofon'], a: 1 },
+    { q: 'Was ist ein Chatbot?', options: ['Ein Roboter aus Metall', 'Ein Computerprogramm das Fragen beantwortet', 'Ein Spielzeug', 'Ein Haustier'], a: 1, erklaerung: 'Ein Chatbot ist nur Software — er hat keinen Körper, antwortet aber wie ein Gespräch.' },
+    { q: 'Was bedeutet "KI"?', options: ['Kleine Idee', 'Künstliche Intelligenz', 'Kinder Internet', 'Kreatives Institut'], a: 1, erklaerung: 'KI = Künstliche Intelligenz. "Künstlich" heißt: von Menschen gemacht, nicht echt natürlich.' },
+    { q: 'Wie redet man mit einem Chatbot?', options: ['Man ruft ihn an', 'Man winkt ihm zu', 'Man tippt oder spricht mit ihm', 'Man schickt einen Brief'], a: 2, erklaerung: 'Die meisten Chatbots verstehen Text (tippen) — moderne auch gesprochene Sprache.' },
+    { q: 'Welches davon ist ein bekannter KI-Assistent?', options: ['Pikachu', 'Siri', 'Mario', 'Sonic'], a: 1, erklaerung: 'Siri ist Apples KI-Assistent. Pikachu und Mario sind Spiel-Figuren.' },
+    { q: 'Was braucht eine KI um zu lernen?', options: ['Essen und Schlafen', 'Viele Beispiele und Daten', 'Einen Lehrer der aufpasst', 'Urlaub'], a: 1, erklaerung: 'KI lernt aus Beispielen — je mehr Daten, desto besser wird sie.' },
+    { q: 'Kann eine KI Fehler machen?', options: ['Nein, KI ist immer perfekt', 'Ja, manchmal gibt sie falsche Antworten', 'Nur wenn man sie ärgert', 'Nein, sie weiß alles'], a: 1, erklaerung: 'KI rät oft richtig, aber nicht immer. Deshalb sollte man ihre Antworten prüfen.' },
+    { q: 'Wo begegnest du täglich einer KI?', options: ['Nur im Raumschiff', 'Beim Suchen im Internet', 'Nur im Krankenhaus', 'Niemals'], a: 1, erklaerung: 'Google, YouTube-Empfehlungen, Sprachassistenten — überall steckt KI drin.' },
+    { q: 'Was ist ein "Sprachassistent"?', options: ['Ein Lehrer für Sprachen', 'Eine KI die Sprachbefehle versteht', 'Ein Übersetzer-Buch', 'Ein Mikrofon'], a: 1, erklaerung: 'Sprachassistenten wie Siri oder Alexa erkennen deine Stimme und reagieren.' },
   ],
   1: [
     { q: 'Was ist ein "Prompt"?', options: ['Ein Frühstück', 'Eine Frage oder Anweisung an die KI', 'Ein Fehler im Programm', 'Ein Spielzeug-Bot'], a: 1 },

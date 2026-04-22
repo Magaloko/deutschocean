@@ -17,7 +17,10 @@ function buildRounds(level, cfg) {
     const answer = randInt(1, maxA - b)
     const a      = b + answer
     const options = generateOptions(answer, 1, Math.max(a - 1, answer + 3))
-    rounds.push({ a, b, options, answer })
+    rounds.push({
+      a, b, options, answer,
+      explanation: `Rechne rückwärts: von ${a} ausgehend ${b} Schritte zurück = ${answer}.`,
+    })
   }
   return rounds
 }
