@@ -6,7 +6,7 @@ import ProgressBar from '../../components/ui/ProgressBar.jsx'
 import MasteryBadge from '../../components/ui/MasteryBadge.jsx'
 import NPCCard from '../../components/ui/NPCCard.jsx'
 import { MISSIONS } from '../../lib/gameData.js'
-import { GAME_ROUTES, getWeltById, isWeltForModule } from '../../lib/weltenData.js'
+import { GAME_ROUTES, getWeltById, isWeltForModule, getMaxMissionLevel } from '../../lib/weltenData.js'
 import { getWeltMastery } from '../../lib/masteryData.js'
 import { playUnlock } from '../../lib/sounds.js'
 import styles from './WeltPage.module.css'
@@ -28,10 +28,13 @@ function isLevelUnlocked(lvl, groupedByLevel) {
   return prev.some((g) => g.completedCount > 0)
 }
 
-function groupMissionsByLevel(gameTypes, completed) {
+function groupMissionsByLevel(gameTypes, completed, schoolModule) {
+  const maxLevel = getMaxMissionLevel(schoolModule)
   const byLevel = {}
   for (const m of MISSIONS) {
     if (!gameTypes.includes(m.type)) continue
+    // KiGa sieht keine Level-1/2 Missionen (z.B. Einmaleins, Minus, MiniMarkt).
+    if ((m.level ?? 0) > maxLevel) continue
     if (!byLevel[m.level]) byLevel[m.level] = new Map()
     const slot = byLevel[m.level]
     if (!slot.has(m.type)) slot.set(m.type, { ...m, variants: [], completedCount: 0 })
@@ -63,8 +66,8 @@ export default function WeltPage() {
   const schoolModule = profile?.schoolModule || 'volksschule'
 
   const groupedByLevel = useMemo(
-    () => (welt ? groupMissionsByLevel(welt.gameTypes, completed) : {}),
-    [welt, completed],
+    () => (welt ? groupMissionsByLevel(welt.gameTypes, completed, schoolModule) : {}),
+    [welt, completed, schoolModule],
   )
 
   // Unlock-Detection: beim ersten Render vergleichen wir aktuell

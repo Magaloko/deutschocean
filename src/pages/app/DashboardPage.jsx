@@ -9,7 +9,7 @@ import Icon from '../../components/ui/Icon.jsx'
 import CelebrationOverlay from '../../components/ui/CelebrationOverlay.jsx'
 import { MISSIONS, BADGES } from '../../lib/gameData.js'
 import { FAECHER } from '../../lib/fachData.js'
-import { WELTEN, GAME_ROUTES, isWeltForModule } from '../../lib/weltenData.js'
+import { WELTEN, GAME_ROUTES, isWeltForModule, getMaxMissionLevel } from '../../lib/weltenData.js'
 import { CAMPAIGNS, getCampaignStatus, isCampaignForModule } from '../../lib/campaignsData.js'
 import { isDueToday } from '../../lib/spacedRepetition.js'
 import { playStreak } from '../../lib/sounds.js'
@@ -26,13 +26,17 @@ const MODULE_META = {
 }
 
 // Zählt Varianten + gelöste Varianten über alle Missionen einer Welt.
-function getWeltProgress(welt, completed) {
+// Berücksichtigt das Schulmodul: für KiGa-Kinder werden nur Level-0-Missionen
+// gezählt (sonst hieße die Mathe-Welt "0/21 — würde KiGa frustrieren).
+function getWeltProgress(welt, completed, schoolModule) {
+  const maxLevel = getMaxMissionLevel(schoolModule)
   let total = 0
   let done  = 0
   let gameCount = 0
   const seenTypes = new Set()
   for (const m of MISSIONS) {
     if (!welt.gameTypes.includes(m.type)) continue
+    if ((m.level ?? 0) > maxLevel) continue
     if (!seenTypes.has(m.type)) { seenTypes.add(m.type); gameCount++ }
     total++
     if (completed.includes(m.id)) done++
@@ -40,10 +44,13 @@ function getWeltProgress(welt, completed) {
   return { total, done, gameCount }
 }
 
-function getTagesaufgabe(completed) {
+function getTagesaufgabe(completed, schoolModule) {
+  const maxLevel = getMaxMissionLevel(schoolModule)
   const all = []
   for (const m of MISSIONS) {
     if (!GAME_ROUTES[m.type]) continue
+    // KiGa darf keine Tagesaufgabe für Einmaleins/Subtraktion bekommen.
+    if ((m.level ?? 0) > maxLevel) continue
     const alreadySeen = all.find((g) => g.type === m.type)
     if (!alreadySeen) all.push(m)
   }
@@ -89,13 +96,15 @@ export default function DashboardPage() {
   }, [streakDays])
 
   const dueForReview = useMemo(() => {
+    const maxLevel = getMaxMissionLevel(schoolModule)
     return MISSIONS.filter((m) => {
+      if ((m.level ?? 0) > maxLevel) return false
       const sr = spacedRepetition[m.id]
       return sr && isDueToday(sr.nextReview) && GAME_ROUTES[m.type]
     }).slice(0, 4)
-  }, [spacedRepetition])
+  }, [spacedRepetition, schoolModule])
 
-  const featured = useMemo(() => getTagesaufgabe(completed), [completed])
+  const featured = useMemo(() => getTagesaufgabe(completed, schoolModule), [completed, schoolModule])
 
   // Nur Welten, die für das aktuelle Schulmodul sichtbar sind.
   const visibleWelten = useMemo(
@@ -308,7 +317,7 @@ export default function DashboardPage() {
         </div>
         <div className={styles.weltenGrid}>
           {visibleWelten.map((welt) => {
-            const { total, done, gameCount } = getWeltProgress(welt, completed)
+            const { total, done, gameCount } = getWeltProgress(welt, completed, schoolModule)
             const pct = total > 0 ? Math.round((done / total) * 100) : 0
             return (
               <Link

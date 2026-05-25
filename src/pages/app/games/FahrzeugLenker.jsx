@@ -6,7 +6,7 @@ import Icon from '../../../components/ui/Icon.jsx'
 import StarsRow from '../../../components/ui/StarsRow.jsx'
 import { FAHRZEUG_WELTEN } from '../../../lib/gameData.js'
 import { useProgress } from '../../../hooks/useProgress.jsx'
-import { playCorrect, playWrong, playComplete } from '../../../lib/sounds.js'
+import { playCorrect, playWrong, playComplete, speak } from '../../../lib/sounds.js'
 import styles from './Game.module.css'
 
 const TOTAL_ROUNDS = 8
@@ -52,6 +52,8 @@ export default function FahrzeugLenker() {
     const r = genRound(welt)
     setRound(r)
     setLastResult(null)
+    // KiGa-Hilfe: Ziel-Wort vorlesen damit Nicht-Leser wissen, was zu fangen ist
+    speak(`Fang das ${r.target.word}!`)
     const t = setTimeout(() => setGameState('falling'), 600)
     return () => clearTimeout(t)
   }, [gameState, welt])
@@ -197,10 +199,24 @@ export default function FahrzeugLenker() {
       {/* Scene */}
       <div className={styles.vehicleScene} style={{ background: welt.sceneBg }}>
 
-        {/* Target word bar */}
+        {/* Target word bar — mit Vorlese-Button für Nicht-Leser */}
         <div className={styles.vehicleTargetBar}>
           {round
-            ? <><span>Finde:</span><span>{round.target.emoji}</span><strong>{round.target.word}</strong></>
+            ? (
+              <>
+                <span>Finde:</span>
+                <span>{round.target.emoji}</span>
+                <strong>{round.target.word}</strong>
+                <button
+                  onClick={() => speak(`Fang das ${round.target.word}!`)}
+                  aria-label="Vorlesen"
+                  style={{
+                    background: 'none', border: 'none', cursor: 'pointer',
+                    fontSize: '1rem', padding: '0.15rem 0.3rem', marginLeft: '0.25rem',
+                  }}
+                >🔊</button>
+              </>
+            )
             : <span>Bereit…</span>
           }
         </div>

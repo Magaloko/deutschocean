@@ -190,3 +190,20 @@ export function isWeltForModule(welt, schoolModule) {
 export function getWeltById(id) {
   return WELTEN.find((w) => w.id === id)
 }
+
+// Schwierigkeits-Obergrenze pro Schulmodul.
+// Kindergarten sieht nur Level 0 (z.B. zählen, vergleichen) — keine
+// Subtraktion (Level 1) oder Einmaleins (Level 2).
+// Volksschule und Hauptschule sehen alle Level.
+//
+// Wenn schoolModule unbekannt ist, wird volksschule angenommen (Default).
+export function getMaxMissionLevel(schoolModule) {
+  if (schoolModule === 'kindergarten') return 0
+  return 2
+}
+
+// Filtert eine Missions-Liste auf das, was für ein Modul angemessen ist.
+export function filterMissionsForModule(missions, schoolModule) {
+  const max = getMaxMissionLevel(schoolModule)
+  return missions.filter((m) => (m.level ?? 0) <= max)
+}

@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import Card from '../../../components/ui/Card.jsx'
 import Button from '../../../components/ui/Button.jsx'
@@ -7,7 +7,7 @@ import Icon from '../../../components/ui/Icon.jsx'
 import StarsRow from '../../../components/ui/StarsRow.jsx'
 import { TIER_WISSEN_FRAGEN } from '../../../lib/gameData.js'
 import { useProgress } from '../../../hooks/useProgress.jsx'
-import { playCorrect, playWrong, playComplete } from '../../../lib/sounds.js'
+import { playCorrect, playWrong, playComplete, speak } from '../../../lib/sounds.js'
 import styles from './Game.module.css'
 
 function shuffle(arr) { return [...arr].sort(() => Math.random() - 0.5) }
@@ -36,6 +36,19 @@ export default function TierWissen() {
   const frage   = fragen[idx]
   const answered = selected !== null
 
+  // Auto-Vorlesen für KiGa-Kinder die nicht lesen können:
+  // Frage + alle Antwort-Optionen werden bei jeder neuen Frage gesprochen.
+  useEffect(() => {
+    if (phase !== 'playing' || !frage) return
+    const text = `${frage.frage} ${frage.options.map(o => o.text).join(', oder ')}.`
+    const t = setTimeout(() => speak(text), 400)
+    return () => clearTimeout(t)
+  }, [idx, phase, frage])
+
+  function speakAll() {
+    if (!frage) return
+    speak(`${frage.frage} ${frage.options.map(o => o.text).join(', oder ')}.`)
+  }
 
   function startLevel(lvl) {
     const filtered = TIER_WISSEN_FRAGEN.filter(f => f.difficulty === lvl)
@@ -168,8 +181,18 @@ export default function TierWissen() {
           <div className={styles.tierWissenAnimalName}>{frage.tierName}</div>
         </div>
 
-        {/* Frage */}
-        <p className={styles.tierWissenFrage}>{frage.frage}</p>
+        {/* Frage + Vorlese-Button für Nicht-Leser */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', justifyContent: 'center' }}>
+          <p className={styles.tierWissenFrage} style={{ margin: 0 }}>{frage.frage}</p>
+          <button
+            onClick={speakAll}
+            aria-label="Vorlesen"
+            style={{
+              background: 'none', border: 'none', cursor: 'pointer',
+              fontSize: '1.25rem', padding: '0.25rem',
+            }}
+          >🔊</button>
+        </div>
 
         {/* Antwort-Buttons */}
         <div className={styles.tierWissenChoices}>
