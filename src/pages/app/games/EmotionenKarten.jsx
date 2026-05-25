@@ -125,19 +125,25 @@ export default function EmotionenKarten() {
       // Spiel beendet
       playComplete()
       setPhase('result')
-      const stars = calcStars(score + (confirmed && isLastCorrect() ? 0 : 0), TOTAL)
-      completeSession({ missionId: kat.missionId, xpEarned: 20, stars })
+      // BUG-FIX: vorher war hier `score + (confirmed && isLastCorrect() ? 0 : 0)`
+      // mit immer +0 — sinnloser Code. `score` ist bereits in handleConfirm/
+      // handleSingleSelect aktualisiert. Zusätzlich fehlten correct/total/
+      // hintsUsed und XP war hardcodiert auf 20 (jetzt: 5 XP pro richtige Antwort
+      // + 5 Basis-XP, max 45 XP bei 8/8).
+      const stars = calcStars(score, TOTAL)
+      completeSession({
+        missionId: kat.missionId,
+        xpEarned: score * 5 + 5,
+        stars,
+        correct: score,
+        total: TOTAL,
+      })
     } else {
       setIdx(i => i + 1)
       setSelected(null)
       setSelectedSet(new Set())
       setConfirmed(false)
     }
-  }
-
-  function isLastCorrect() {
-    // helper — not needed for score since we track in handleConfirm/handleSingle
-    return false
   }
 
   // ── Feedback-Text ─────────────────────────────────────────────────────────

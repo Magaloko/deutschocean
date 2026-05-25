@@ -75,7 +75,16 @@ export default function MathGameEngine({
     if (idx + 1 >= TOTAL) {
       playComplete()
       const stars = calcStars(score, TOTAL)
-      completeSession({ missionId: cfg.missionId, xpEarned: score * 2 + 5, stars })
+      // BUG-FIX: correct + total fehlten — dadurch konnte Spaced Repetition
+      // und Weakness-Tracking für ALLE Mathe-Spiele die Accuracy nicht berechnen.
+      completeSession({
+        missionId: cfg.missionId,
+        xpEarned: score * 2 + 5,
+        stars,
+        correct: score,
+        total: TOTAL,
+        hintsUsed: 0,
+      })
       setPhase('result')
     } else {
       setIdx(i => i + 1)

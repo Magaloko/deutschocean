@@ -121,11 +121,18 @@ export default function FruechtZaehlen() {
   function handleWeiter() {
     if (idx + 1 >= TOTAL) {
       playComplete()
+      // BUG-FIX: `score` ist bereits in handleSelect via `setScore(s => s + 1)`
+      // aktualisiert worden. Vorher wurde noch ein "lastCorrect"-Bonus addiert,
+      // wodurch die letzte richtige Antwort doppelt gezählt wurde.
+      const stars = calcStars(score, TOTAL)
+      completeSession({
+        missionId: cfg.missionId,
+        xpEarned: score * 2 + 5,
+        stars,
+        correct: score,
+        total: TOTAL,
+      })
       setPhase('result')
-      const lastCorrect = selected === round.count ? 1 : 0
-      const finalScore = score + lastCorrect
-      const stars = calcStars(finalScore, TOTAL)
-      completeSession({ missionId: cfg.missionId, xpEarned: finalScore * 2 + 5, stars })
     } else {
       setIdx(i => i + 1)
       setSelected(null)
