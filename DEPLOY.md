@@ -42,7 +42,7 @@ Bisher nicht erforderlich — alle Abfragen lesen nur Einzeldokumente per UID.
 
 **Vercel Dashboard → deutschocean → Settings → Environment Variables**
 
-Folgende 6 Keys müssen für **alle** Environments (Production, Preview, Development) gesetzt sein:
+Folgende 7 Keys müssen für **alle** Environments (Production, Preview, Development) gesetzt sein:
 
 ```
 VITE_FIREBASE_API_KEY=AIzaSyAnCk-g5Y8MlsQJQb-4dwH1no3tBZe-hGU
